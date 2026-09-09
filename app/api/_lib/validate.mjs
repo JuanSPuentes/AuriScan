@@ -28,7 +28,8 @@ export function avisosVault(informe) {
     ...(informe?.observacion_visual?.signos || []).flatMap((s) => s.zonas || []),
     ...(informe?.hipotesis_diagnostica?.sistemas || []).flatMap((s) => s.zonas || []),
   ];
-  for (const z of zs) if (!zonaConocida(z)) avisos.push(`zona no reconocida: "${z}"`);
+  const zonaGenerica = (z) => /^(general|generalizad|toda[- ]la[- ]auricul|difus)/i.test(String(z || ""));
+  for (const z of zs) if (!zonaGenerica(z) && !zonaConocida(z)) avisos.push(`zona no reconocida: "${z}"`);
   for (const p of informe?.evaluacion_protocolo?.puntos || []) {
     if (p.id && !vaultTiene(p.id)) avisos.push(`punto sin nota en el cerebro: "${p.id}"`);
   }

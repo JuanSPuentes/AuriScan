@@ -18,7 +18,8 @@
       "estado": "sin_intervencion",
       "agujas_detectadas": 0,
       "color_general": "rojo_focal",
-      "descripcion": "Oreja derecha sin agujas. Enrojecimiento focal rojo brillante en la parte alta de la oreja, sobre la raíz superior del antihélix y la fosa triangular. Alguna telangiectasia fina en esa zona y leve descamación en el borde. El resto del pabellón, de coloración rosada normal."
+      "descripcion": "Sin agujas. Recorrido: hélix de color rosado normal; raíz superior del antihélix y fosa triangular con enrojecimiento focal rojo brillante, alguna telangiectasia fina y leve descamación en el borde adyacente. Antihélix (cuerpo y cola), concha superior e inferior, cresta y pared de la concha, trago, cisura intertrágica, antitrago y lóbulo de coloración rosada uniforme, sin relieve ni descamación.",
+      "hallazgos_normales": ["hélix", "antihélix (cuerpo y cola)", "concha superior", "concha inferior", "trago", "cisura intertrágica", "antitrago", "lóbulo"]
     },
     "signos": [
       {

@@ -87,11 +87,13 @@ function refrescar() {
 // --- 3 · analizar ---------------------------------------------------
 $("#analizar").addEventListener("click", async () => {
   $("#analizar").disabled = true;
-  setEstado("Analizando la imagen con la IA… (puede tardar 30–90 s, no cierres la página)");
+  setEstado("Preparando el análisis… (30–90 s, no cierres la página)");
   const t0 = Date.now();
+  const fase = (s) => s < 22 ? "Observando la oreja región por región" : s < 45 ? "Redactando el informe con el manual de Oleson" : "Revisando el informe";
   const timer = setInterval(() => {
     if (estado.hidden) return;
-    setEstado(`Analizando… ${Math.round((Date.now() - t0) / 1000)} s`);
+    const s = Math.round((Date.now() - t0) / 1000);
+    setEstado(`${fase(s)}… ${s} s`);
   }, 1000);
   try {
     const r = await fetch("/api/analizar", {

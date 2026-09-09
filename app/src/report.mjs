@@ -184,6 +184,9 @@ function narrativaHTML(inf, logoDataUrl) {
     <p><b>Coloración predominante:</b> ${esc((ov.caracteristicas_generales?.color_general || "—").replace(/_/g, " "))}.
        ${esc(ov.caracteristicas_generales?.descripcion || "")}</p>
     ${ov.signos?.length ? signos : "<p>Coloración homogénea, sin signos focales relevantes.</p>"}
+    ${ov.caracteristicas_generales?.hallazgos_normales?.length
+      ? `<p class="pa"><b>Regiones sin alteración:</b> ${ov.caracteristicas_generales.hallazgos_normales.map(esc).join(", ")}.</p>`
+      : ""}
 
     <h3>2 · Hipótesis: sistemas implicados</h3>
     <p class="dx"><b>${esc(hd.diagnostico_principal || "—")}</b></p>

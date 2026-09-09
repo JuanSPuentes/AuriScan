@@ -138,8 +138,14 @@
             },
             "descripcion": {
               "type": "string",
-              "maxLength": 900,
-              "description": "2-4 frases: qué se ve (color y su ubicación, relieve, textura, venas, descamación, agujas si las hay)."
+              "maxLength": 1300,
+              "description": "Recorrido de la oreja: color general y por regiones, relieve, textura, venas, descamación, agujas. 3-6 frases."
+            },
+            "hallazgos_normales": {
+              "type": "array",
+              "items": { "type": "string" },
+              "maxItems": 22,
+              "description": "Zonas revisadas SIN alteración (hallazgos negativos). Refuerza que el recorrido fue completo."
             }
           }
         },
