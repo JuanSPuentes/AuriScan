@@ -23,7 +23,7 @@ Sin datos del paciente, sin base de datos. IA: Alibaba (Qwen), región US.
 
 `cerebro/` es un **vault de Obsidian** (67 notas `.md` enlazadas) destilado del manual de
 **Terry Oleson — *Auriculoterapia*, 3.ª ed.** Se construyó leyendo el PDF escaneado del libro
-(sin OCR de pago). Cubre los capítulos 3–7 y parte del 9. Una nota por concepto (un punto, una
+(sin OCR de pago). Cubre los capítulos 3–7 y el 9 completo (protocolos por condición). Una nota por concepto (un punto, una
 zona, un signo, un sistema, un protocolo). **La doctora puede editarlo en Obsidian.**
 
 Por cada consulta viajan solo las ~20 notas relevantes (~8k tokens), no el libro entero.
