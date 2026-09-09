@@ -73,7 +73,7 @@ Los campos `zona_auricular`, `puntos_relacionados`, `ejes` y `senales_visuales` 
 - [x] Cap. 6 — Procedimientos de tratamiento (selección de puntos, lineamientos, precauciones, impedimentos, métodos)
 - [x] Cap. 7.2–7.6 — Representaciones somatotópicas (musculoesquelético, cabeza/cara/cuello, órganos, endocrino, nervioso, funcionales) — 6 notas consolidadas
 - [ ] Cap. 8 — Estudios de casos clínicos
-- [~] Cap. 9 — Protocolos por condición: hechos §9.4, 9.6, 9.7, 9.8, 9.9, 9.10 + índice de las 20 categorías; resto pendiente
+- [x] Cap. 9 — Protocolos por condición: §9.1–9.20 completo (18 notas en `protocolos/`)
 - [ ] Cap. 2 — Perspectivas teóricas (lenguaje de "razonamiento")
 - [ ] Apéndices / glosario
 

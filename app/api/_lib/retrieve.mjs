@@ -75,7 +75,8 @@ export function recuperar(obs = {}) {
   const zset = new Set(zonas);
   for (const n of notes) {
     if (!(ADMITE_ZONA.has(n.tipo) || RESUMEN_SOMATOTOPIA.has(n.id))) continue;
-    if ((n.zona_auricular || []).some((z) => zset.has(norm(z)))) add(n.id, "zona");
+    if ((n.zona_auricular || []).some((z) => zset.has(norm(z))))
+      add(n.id, n.tipo === "protocolo" ? "protocolo-zona" : "zona");
   }
   const noResueltos = [];
   for (const p of puntos) {
@@ -87,8 +88,8 @@ export function recuperar(obs = {}) {
 
   const prio = (motivos) => Math.min(...motivos.map((m) =>
     m === "nucleo" ? 0 : m.startsWith("enlace-nucleo") ? 1 : m.startsWith("punto") ? 2
-      : m.startsWith("signo") ? 3 : m.startsWith("enlace") ? 4 : 5)); // zona = lo último (es amplia)
-  const MAX_NOTAS = Number(process.env.RAG_MAX_NOTAS || 22);
+      : m.startsWith("signo") ? 3 : m === "protocolo-zona" ? 3 : m.startsWith("enlace") ? 5 : 6)); // zona genérica = lo último
+  const MAX_NOTAS = Number(process.env.RAG_MAX_NOTAS || 26);
   const picked = [...sel.entries()]
     .map(([id, motivos]) => ({ n: byId[id], r: prio(motivos) }))
     .sort((a, b) => a.r - b.r || a.n.id.localeCompare(b.n.id))

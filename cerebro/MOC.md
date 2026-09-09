@@ -74,10 +74,10 @@ estado: borrador
 - [[Metodos de estimulacion auricular]] — acupresión, agujas, semillas, tonificación/dispersión
 - [[Puntos de los organos Yin]] — Pulmón, Corazón, Hígado, Bazo, Riñón
 
-## Protocolos por condición (cap. 9)
+## Protocolos por condición (cap. 9 completo)
 
 - [[Protocolos por condicion]] — índice de las 20 categorías + cómo leerlos + pronóstico
-- [[Distres y tension]] — el cluster del caso ejemplo (estrés, fatiga crónica, psicosomático, insomnio)
-- [[Alteraciones psicologicas]] — ansiedad, depresión, TOC, neurastenia, memoria, pesadillas
-- [[Trastornos sensoriales auriculares]] — visión, tinnitus, audición, vértigo
-- [[Dolor de cabeza y cuello]] — cefaleas tensionales, migraña, ATM, tortícolis
+- [[Adicciones y desintoxicacion]] · [[Dolor de miembros y espalda]] · [[Dolor de cabeza y cuello]] · [[Odontalgias]] · [[Trastornos neurologicos]]
+- [[Distres y tension]] · [[Alteraciones psicologicas]] · [[Trastornos sensoriales auriculares]]
+- [[Trastornos de nariz y garganta]] · [[Trastornos de la piel y el cabello]] · [[Trastornos cardiacos y circulatorios]] · [[Trastornos respiratorios]]
+- [[Trastornos gastrointestinales]] · [[Trastornos urinarios y de organos abdominales]] · [[Alteraciones ginecologicas]] · [[Trastornos glandulares y sexuales]] · [[Inflamaciones alergias y enfermedades generales]]
