@@ -1,0 +1,7 @@
+# Normalizar finales de línea a LF en el repo (evita el lío CRLF/LF del cerebro)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.ogg binary

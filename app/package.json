@@ -1,0 +1,27 @@
+{
+  "name": "auriculoterapia-pwa",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/prepare.mjs && vite build",
+    "preview": "vite preview",
+    "prepare-data": "node scripts/prepare.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "local": "node scripts/servidor-local.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "vite-plugin-pwa": "^0.20.0"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "_nota": "PROVISIONAL. Posición de cada punto sobre la ilustración GENÉRICA de la oreja (no la foto real). Coordenadas normalizadas 0..1 con origen arriba-izquierda, para una oreja IZQUIERDA vista lateral (como Reporte.jpeg). Se ajustan cuando exista el SVG final. La plantilla del PDF usa este archivo; NO lo produce la IA. Clave = codigo_za; alias por nombre para robustez.",
+  "_frame": { "oreja": "izquierda", "vista": "lateral", "origen": "arriba-izquierda", "rango": [0, 1] },
+  "puntos": {
+    "HX1/CC1": { "nombre": "Punto Cero", "x": 0.40, "y": 0.44 },
+    "FT2":     { "nombre": "Shen Men", "x": 0.44, "y": 0.24 },
+    "HI4/AH7": { "nombre": "Punto Autónomo Simpático", "x": 0.34, "y": 0.40, "oculto": true },
+    "HI7/HX7": { "nombre": "Punto Alergia", "x": 0.46, "y": 0.06 },
+    "PC2/CI4": { "nombre": "Punto Tálamo", "x": 0.50, "y": 0.62, "oculto": true },
+    "IT2":     { "nombre": "Punto Endocrino", "x": 0.60, "y": 0.70 },
+    "ST3":     { "nombre": "Punto Maestro Oscilación", "x": 0.64, "y": 0.66, "oculto": true },
+    "TG2":     { "nombre": "Punto Tranquilizador", "x": 0.64, "y": 0.60 },
+    "LO4":     { "nombre": "Punto Maestro Sensorial", "x": 0.55, "y": 0.85 },
+    "LO1":     { "nombre": "Punto Maestro Cerebral", "x": 0.63, "y": 0.88 },
+    "AT3":     { "nombre": "Occipucio", "x": 0.50, "y": 0.66 },
+    "AT2":     { "nombre": "Sienes", "x": 0.52, "y": 0.70 },
+    "AT1":     { "nombre": "Frente", "x": 0.56, "y": 0.73 },
+    "AH1":     { "nombre": "Columna cervical (cola antihélix)", "x": 0.46, "y": 0.58 },
+    "AH3":     { "nombre": "Columna dorsal (cuerpo antihélix)", "x": 0.40, "y": 0.48 },
+    "FE2":     { "nombre": "Hombro", "x": 0.30, "y": 0.30 },
+    "CI4":     { "nombre": "Corazón / Pulmón", "x": 0.44, "y": 0.60 },
+    "CC1":     { "nombre": "Estómago", "x": 0.42, "y": 0.52 }
+  },
+  "fallback_por_zona": {
+    "_nota": "Si un punto no está en la tabla, la plantilla lo coloca en el centroide de su zona.",
+    "helix": { "x": 0.30, "y": 0.20 },
+    "antihelix": { "x": 0.42, "y": 0.50 },
+    "fosa-triangular": { "x": 0.44, "y": 0.26 },
+    "fosa-escafoidea": { "x": 0.28, "y": 0.35 },
+    "concha-superior": { "x": 0.42, "y": 0.46 },
+    "concha-inferior": { "x": 0.46, "y": 0.60 },
+    "trago": { "x": 0.64, "y": 0.58 },
+    "antitrago": { "x": 0.52, "y": 0.68 },
+    "cisura-intertragica": { "x": 0.60, "y": 0.70 },
+    "lobulo": { "x": 0.56, "y": 0.86 }
+  }
+}

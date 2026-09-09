@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.1",
+  "meta": {
+    "modo": "oreja_limpia",
+    "oreja": "no_determinada",
+    "vista": "no_determinada",
+    "motivo": "No especificado",
+    "calidad_imagen": "insuficiente"
+  },
+  "analisis_viable": false,
+  "advertencias": [
+    "La imagen está desenfocada y no permite identificar las regiones del pabellón auricular.",
+    "No se distingue el borde del hélix ni la concha con suficiente nitidez."
+  ],
+  "observacion_visual": {
+    "caracteristicas_generales": {
+      "estado": "indeterminado",
+      "agujas_detectadas": 0,
+      "descripcion": "No es posible describir la oreja con fiabilidad a partir de esta imagen.",
+      "color_general": "no_determinado"
+    },
+    "signos": []
+  },
+  "hipotesis_diagnostica": {
+    "diagnostico_principal": "No procede: imagen insuficiente para el análisis.",
+    "resumen": "Se requiere una nueva fotografía nítida, bien iluminada y centrada en el pabellón auricular.",
+    "sistemas": []
+  },
+  "evaluacion_protocolo": {
+    "puntos": [],
+    "criterios_oleson": [],
+    "valoracion_global": "No evaluable."
+  },
+  "pronostico": {
+    "respuesta_esperada": "no_determinada",
+    "sesiones_estimadas": {
+      "min": 1,
+      "max": 1
+    },
+    "frecuencia": "No procede."
+  },
+  "infografico": {
+    "titulo": "Imagen insuficiente",
+    "razonamiento": "La calidad de la imagen no permite realizar el análisis auricular.",
+    "conclusion": "Repetir la toma: oreja centrada, enfocada, con buena luz natural y sin sombras."
+  },
+  "limitaciones": [
+    "No se realizó análisis clínico por calidad de imagen insuficiente."
+  ],
+  "nivel_de_confianza_global": "baja",
+  "disclaimer": "Este material es de apoyo y de carácter educativo. Debe ser corroborado por un profesional experto. No constituye un diagnóstico."
+}

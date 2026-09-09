@@ -1,0 +1,564 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://auriculoterapia-pwa/contrato/informe.schema.json",
+  "title": "Informe de análisis auricular",
+  "description": "Contrato entre la salida del modelo y el renderizador del PDF (foto + infográfico + narrativa). Una sola fuente de verdad. Campos marcados [backend] los rellena /api/analizar; el resto los produce la IA. Metodología: signo visible (color, ubicación, venas, descamación) -> zona de la oreja -> sistema corporal implicado -> puntos a tratar -> validación por un profesional.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "meta",
+    "analisis_viable",
+    "observacion_visual",
+    "hipotesis_diagnostica",
+    "evaluacion_protocolo",
+    "pronostico",
+    "infografico",
+    "limitaciones",
+    "disclaimer"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1"
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modo",
+        "oreja",
+        "vista",
+        "motivo",
+        "calidad_imagen"
+      ],
+      "properties": {
+        "caso_id": {
+          "type": "string",
+          "description": "[backend]"
+        },
+        "fecha": {
+          "type": "string",
+          "format": "date",
+          "description": "[backend]"
+        },
+        "generado_en": {
+          "type": "string",
+          "format": "date-time",
+          "description": "[backend]"
+        },
+        "modelo_ia": {
+          "type": "string",
+          "description": "[backend]"
+        },
+        "modo": {
+          "enum": [
+            "con_agujas",
+            "oreja_limpia"
+          ]
+        },
+        "oreja": {
+          "enum": [
+            "izquierda",
+            "derecha",
+            "no_determinada"
+          ]
+        },
+        "vista": {
+          "enum": [
+            "lateral",
+            "frontal",
+            "posterior_mastoidea",
+            "oblicua",
+            "no_determinada"
+          ]
+        },
+        "motivo": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "Etiqueta corta del sistema o cuadro principal implicado (p. ej. 'Sistema musculoesquelético', 'Ansiedad/estrés'). 'No especificado' solo si de verdad no hay ninguna orientación. No es dato del paciente."
+        },
+        "calidad_imagen": {
+          "enum": [
+            "buena",
+            "regular",
+            "insuficiente"
+          ]
+        }
+      }
+    },
+    "analisis_viable": {
+      "type": "boolean",
+      "description": "false SOLO si la imagen no es una oreja legible (borrosa, cortada, no es una oreja). Una oreja limpia con signos sutiles SÍ es viable: se hace la lectura somatotópica con la confianza que corresponda."
+    },
+    "advertencias": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observacion_visual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caracteristicas_generales",
+        "signos"
+      ],
+      "properties": {
+        "caracteristicas_generales": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "estado",
+            "agujas_detectadas",
+            "color_general",
+            "descripcion"
+          ],
+          "properties": {
+            "estado": {
+              "enum": [
+                "post_intervencion",
+                "sin_intervencion",
+                "indeterminado"
+              ]
+            },
+            "agujas_detectadas": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "color_general": {
+              "enum": [
+                "rosado_normal",
+                "rojo_difuso",
+                "rojo_focal",
+                "palido",
+                "mixto",
+                "no_determinado"
+              ],
+              "description": "Coloración predominante del pabellón."
+            },
+            "descripcion": {
+              "type": "string",
+              "maxLength": 900,
+              "description": "2-4 frases: qué se ve (color y su ubicación, relieve, textura, venas, descamación, agujas si las hay)."
+            }
+          }
+        },
+        "signos": {
+          "type": "array",
+          "description": "Cada zona con un signo localizado. Si la oreja es homogénea y normal, va vacío y se dice en la descripción.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "signo",
+              "localizacion",
+              "zonas",
+              "interpretacion",
+              "confianza"
+            ],
+            "properties": {
+              "signo": {
+                "type": "string",
+                "description": "'eritema', 'palidez', 'descamación', 'telangiectasias/venas', 'prominencia', 'depresión', 'pliegue', 'pápula', 'nódulo'"
+              },
+              "color": {
+                "enum": [
+                  "rojo_brillante",
+                  "rojo_oscuro",
+                  "purpura",
+                  "blanco",
+                  "palido",
+                  "gris_marron",
+                  "normal"
+                ]
+              },
+              "localizacion": {
+                "type": "string",
+                "description": "Región + altura: 'raíz superior del antihélix, parte alta de la oreja'"
+              },
+              "zonas": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                },
+                "description": "Claves de zona del cerebro (helix, antihelix, raiz-superior, fosa-triangular, concha-inferior, cisura-intertragica, lobulo, ...)."
+              },
+              "extension": {
+                "enum": [
+                  "focal",
+                  "difuso"
+                ]
+              },
+              "interpretacion": {
+                "type": "string",
+                "description": "Qué sugiere según el cerebro: sistema/región y si aparenta agudo o crónico."
+              },
+              "cronicidad": {
+                "enum": [
+                  "agudo",
+                  "cronico",
+                  "subagudo",
+                  "no_determinada"
+                ]
+              },
+              "confianza": {
+                "enum": [
+                  "alta",
+                  "media",
+                  "baja"
+                ]
+              },
+              "fuente": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "hipotesis_diagnostica": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "diagnostico_principal",
+        "resumen",
+        "sistemas"
+      ],
+      "properties": {
+        "diagnostico_principal": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 450,
+          "description": "Titular: el o los sistemas implicados y su aspecto (agudo/crónico), en una frase. Siempre un texto salvo imagen inviable."
+        },
+        "resumen": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        },
+        "sistemas": {
+          "type": "array",
+          "description": "Sistemas corporales que el patrón de signos sugiere desequilibrados. En modo oreja_limpia SIEMPRE al menos uno si hay algún signo localizado; si la oreja es homogénea, va vacío y se explica en 'resumen'. Orden = relevancia.",
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sistema",
+              "titulo",
+              "zonas",
+              "confianza"
+            ],
+            "properties": {
+              "sistema": {
+                "enum": [
+                  "musculoesqueletico",
+                  "digestivo",
+                  "cardiorrespiratorio",
+                  "urogenital",
+                  "neuroendocrino",
+                  "neuro-psicologico",
+                  "sensorial",
+                  "homeostasis-general",
+                  "circulatorio",
+                  "piel",
+                  "otro"
+                ]
+              },
+              "titulo": {
+                "type": "string",
+                "description": "'Sistema musculoesquelético — miembros inferiores'"
+              },
+              "base_observacional": {
+                "type": "string",
+                "maxLength": 400,
+                "description": "Qué signo(s) y en qué zona lo sustentan: 'Eritema focal rojo brillante en la raíz superior del antihélix'."
+              },
+              "zonas": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "region_corporal": {
+                "type": "string",
+                "description": "'Cadera, rodilla, tobillo y pie'"
+              },
+              "estado": {
+                "enum": [
+                  "agudo",
+                  "subagudo",
+                  "cronico",
+                  "no_determinado"
+                ],
+                "description": "Derivado del color: rojo brillante = agudo; rojo oscuro/descamación = crónico."
+              },
+              "hallazgos_probables": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Síntomas que el paciente podría referir."
+              },
+              "puntos_asociados": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Códigos ZA o nombres de puntos del cerebro para este sistema."
+              },
+              "confianza": {
+                "enum": [
+                  "alta",
+                  "media",
+                  "baja"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "evaluacion_protocolo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "puntos",
+        "criterios_oleson",
+        "valoracion_global"
+      ],
+      "properties": {
+        "puntos": {
+          "type": "array",
+          "description": "con_agujas: puntos observados en la foto. oreja_limpia: puntos PROPUESTOS (maestros + los del/los sistema/s identificado/s). Vacío solo si la imagen es inviable.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "orden",
+              "nombre",
+              "categoria",
+              "estado",
+              "justificacion"
+            ],
+            "properties": {
+              "orden": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "id": {
+                "type": "string",
+                "description": "Nombre exacto de la nota del cerebro si existe ('Shen Men', 'Punto Cero')."
+              },
+              "codigo_za": {
+                "type": "string",
+                "description": "FT2, HX1, PC2/CI4, ..."
+              },
+              "nombre": {
+                "type": "string"
+              },
+              "localizacion": {
+                "type": "string"
+              },
+              "categoria": {
+                "enum": [
+                  "maestro",
+                  "anatomico",
+                  "funcional",
+                  "endocrino",
+                  "organo",
+                  "no_identificado"
+                ]
+              },
+              "estado": {
+                "enum": [
+                  "observado",
+                  "propuesto"
+                ]
+              },
+              "sistema": {
+                "enum": [
+                  "musculoesqueletico",
+                  "digestivo",
+                  "cardiorrespiratorio",
+                  "urogenital",
+                  "neuroendocrino",
+                  "neuro-psicologico",
+                  "sensorial",
+                  "homeostasis-general",
+                  "circulatorio",
+                  "piel",
+                  "otro"
+                ]
+              },
+              "reactividad_visible": {
+                "type": "boolean",
+                "description": "¿Hay un signo visible en la zona de este punto?"
+              },
+              "justificacion": {
+                "type": "string",
+                "maxLength": 700
+              }
+            }
+          }
+        },
+        "criterios_oleson": {
+          "type": "array",
+          "description": "Checklist contra los criterios de selección de Oleson (§6.8).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "criterio",
+              "cumple"
+            ],
+            "properties": {
+              "criterio": {
+                "type": "string"
+              },
+              "cumple": {
+                "type": "boolean"
+              },
+              "nota": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "valoracion_global": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "sugerencias": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "pronostico": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "respuesta_esperada",
+        "sesiones_estimadas",
+        "frecuencia"
+      ],
+      "properties": {
+        "respuesta_esperada": {
+          "enum": [
+            "excelente",
+            "buena_a_excelente",
+            "buena",
+            "moderada",
+            "reservada",
+            "no_determinada"
+          ]
+        },
+        "sesiones_estimadas": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max"
+          ],
+          "properties": {
+            "min": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "frecuencia": {
+          "type": "string"
+        },
+        "tiempo_de_respuesta": {
+          "type": "string"
+        },
+        "factores": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "infografico": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "titulo",
+        "razonamiento",
+        "conclusion"
+      ],
+      "description": "Textos de la portada. Los marcadores de la oreja y el panel de sistemas se DERIVAN de evaluacion_protocolo.puntos y de hipotesis_diagnostica.sistemas.",
+      "properties": {
+        "titulo": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "El backend lo recompone con caso_id + motivo."
+        },
+        "razonamiento": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "2-4 frases siguiendo la cadena: color y ubicación de los signos -> zona -> sistema -> puntos propuestos."
+        },
+        "conclusion": {
+          "type": "string",
+          "maxLength": 600
+        }
+      }
+    },
+    "limitaciones": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "nivel_de_confianza_global": {
+      "enum": [
+        "alta",
+        "media",
+        "baja"
+      ]
+    },
+    "disclaimer": {
+      "type": "string",
+      "description": "[backend] Texto fijo obligatorio; el backend lo sobrescribe."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "analisis_viable": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "hipotesis_diagnostica": {
+            "properties": {
+              "sistemas": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

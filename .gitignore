@@ -1,0 +1,36 @@
+# --- secretos ---
+apikye.txt
+**/.env
+**/.env.*
+!**/.env.example
+
+# --- dependencias ---
+**/node_modules/
+
+# --- despliegue ---
+**/.vercel/
+.vercel
+
+# --- referencia pesada (no va a git; ~190 MB) ---
+AURICULOTERAPIA*.pdf
+
+# --- material personal / de prueba (no va a git) ---
+audio*.ogg
+oreja*.jpeg
+oreja*.jpg
+configuracion de accesos.png
+
+# --- build y archivos generados ---
+app/dist/
+app/dev-dist/
+rag/vault-index.json
+rag/context-*.md
+app/api/_lib/vault-index.json
+app/api/_lib/informe.schema.json
+app/api/_lib/coordenadas-oreja.json
+app/public/ejemplo-*.json
+app/scripts/muestra*
+app/scripts/e2e-informe.*
+
+# --- Claude / editor local ---
+.claude/settings.local.json

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1f4e79" />
+  <title>Análisis auricular</title>
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" />
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <h1>Análisis auricular</h1>
+      <p>Sube la foto de un oído y obtén un informe de auriculoterapia en PDF.
+        Material de apoyo — debe ser corroborado por un profesional experto.</p>
+    </header>
+
+    <section class="paso" id="paso-imagen">
+      <h2>1 · La imagen</h2>
+      <label class="dropzone" id="dropzone">
+        <input type="file" accept="image/*" id="file" hidden />
+        <span id="dz-texto">Toca para tomar o elegir una foto del oído</span>
+        <img id="preview" alt="" hidden />
+      </label>
+    </section>
+
+    <section class="paso" id="paso-modo">
+      <h2>2 · El estado de la oreja</h2>
+      <div class="segmento" role="radiogroup" aria-label="Modo">
+        <button type="button" class="op" data-modo="con_agujas" aria-pressed="false">
+          Con agujas puestas<small>La IA interpreta el tratamiento aplicado</small>
+        </button>
+        <button type="button" class="op" data-modo="oreja_limpia" aria-pressed="false">
+          Oreja limpia<small>La IA propone un protocolo</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="paso" id="paso-oreja">
+      <h2>3 · ¿Qué oreja es? <span class="opcional">(opcional)</span></h2>
+      <div class="segmento tres" role="radiogroup" aria-label="Oreja">
+        <button type="button" class="op op-chica" data-oreja="izquierda" aria-pressed="false">Izquierda</button>
+        <button type="button" class="op op-chica" data-oreja="derecha" aria-pressed="false">Derecha</button>
+        <button type="button" class="op op-chica" data-oreja="no_determinada" aria-pressed="true">No indicar</button>
+      </div>
+    </section>
+
+    <section class="paso">
+      <button class="primario" id="analizar" disabled>Analizar</button>
+      <button class="secundario" id="demo">Ver un informe de ejemplo</button>
+      <p class="estado" id="estado" hidden></p>
+    </section>
+
+    <section class="resultado" id="resultado" hidden>
+      <div class="acciones">
+        <h2>Informe</h2>
+        <div class="botones">
+          <button class="primario" id="descargar">Descargar PDF</button>
+          <button class="secundario chico" id="imprimir">Abrir para imprimir / guardar</button>
+        </div>
+      </div>
+      <details class="debug" id="debug" hidden><summary>Detalles técnicos</summary><pre id="debug-pre"></pre></details>
+      <div id="vista-wrap"><iframe id="vista" title="Vista previa del informe" scrolling="no"></iframe></div>
+    </section>
+  </main>
+
+  <script type="module" src="/src/main.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+<title>Auriculoterapia PWA</title>
+<meta name="description" content="Dossier de análisis y arquitectura: foto de un oído → PDF de auriculoterapia, con IA de Alibaba y un cerebro de conocimiento vía RAG.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ground:#F2F5F8;
+  --surface:#FFFFFF;
+  --sunken:#E7EDF3;
+  --ink:#17233B;
+  --ink-soft:#4B5972;
+  --rule:#D3DCE6;
+  --accent:#1F4E79;
+  --accent-bright:#2E6DA8;
+  --accent-wash:#DFEAF4;
+  --attention:#9C5628;
+  --attention-wash:#F1E5D9;
+  --ok:#2C6A4B;
+  --ok-wash:#DEEBE2;
+  --shadow:0 1px 2px rgba(23,35,59,.06),0 6px 20px rgba(23,35,59,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1421;
+    --surface:#141F31;
+    --sunken:#0A1120;
+    --ink:#E3EAF3;
+    --ink-soft:#9CB0C7;
+    --rule:#26344A;
+    --accent:#6EA6D6;
+    --accent-bright:#8FC0E6;
+    --accent-wash:#172740;
+    --attention:#D18B57;
+    --attention-wash:#271C13;
+    --ok:#6DB68D;
+    --ok-wash:#15241C;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1421;
+  --surface:#141F31;
+  --sunken:#0A1120;
+  --ink:#E3EAF3;
+  --ink-soft:#9CB0C7;
+  --rule:#26344A;
+  --accent:#6EA6D6;
+  --accent-bright:#8FC0E6;
+  --accent-wash:#172740;
+  --attention:#D18B57;
+  --attention-wash:#271C13;
+  --ok:#6DB68D;
+  --ok-wash:#15241C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{
+  max-width:1160px;
+  margin:0 auto;
+  padding:0 clamp(18px,4vw,48px);
+}
+.layout{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+}
+@media (min-width:1080px){
+  .layout{grid-template-columns:216px minmax(0,1fr);gap:56px;align-items:start}
+  .toc{position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:56px 0 40px}
+}
+
+/* ---------- masthead ---------- */
+.masthead{
+  padding:clamp(48px,9vw,104px) 0 clamp(30px,5vw,52px);
+  border-bottom:1px solid var(--rule);
+}
+.kicker{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.74rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--accent-bright);
+  margin:0 0 18px;
+}
+h1{
+  font-family:"Spectral",Georgia,serif;
+  font-weight:600;
+  font-size:clamp(2.1rem,5.2vw,3.15rem);
+  line-height:1.08;
+  letter-spacing:-.012em;
+  text-wrap:balance;
+  margin:0 0 20px;
+}
+.standfirst{
+  font-size:clamp(1.02rem,2.1vw,1.18rem);
+  color:var(--ink-soft);
+  max-width:60ch;
+  margin:0;
+}
+.meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 10px;
+  margin-top:26px;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem;
+}
+.meta-row span{
+  border:1px solid var(--rule);
+  border-radius:999px;
+  padding:4px 11px;
+  color:var(--ink-soft);
+}
+
+/* ---------- toc ---------- */
+.toc ol{list-style:none;margin:0;padding:0;counter-reset:toc}
+.toc a{
+  display:block;
+  padding:6px 0;
+  color:var(--ink-soft);
+  text-decoration:none;
+  font-size:.86rem;
+  border-bottom:1px solid transparent;
+  counter-increment:toc;
+}
+.toc a::before{
+  content:counter(toc,decimal-leading-zero);
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.72rem;
+  color:var(--accent-bright);
+  margin-right:9px;
+}
+.toc a:hover{color:var(--ink)}
+.toc .toc-lbl{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.68rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.7;
+  margin:0 0 10px;
+}
+
+/* ---------- main ---------- */
+main{padding:8px 0 96px;min-width:0}
+section{
+  padding:44px 0;
+  border-bottom:1px solid var(--rule);
+  scroll-margin-top:24px;
+}
+section:last-child{border-bottom:none}
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+  margin:0 0 22px;
+}
+.sec-num{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.82rem;
+  color:var(--accent-bright);
+  padding-top:.35em;
+}
+h2{
+  font-family:"Spectral",Georgia,serif;
+  font-weight:600;
+  font-size:clamp(1.5rem,3vw,1.9rem);
+  line-height:1.15;
+  letter-spacing:-.01em;
+  text-wrap:balance;
+  margin:0;
+}
+h3{
+  font-family:"IBM Plex Sans",sans-serif;
+  font-weight:600;
+  font-size:1.05rem;
+  margin:34px 0 12px;
+  color:var(--ink);
+}
+h3 .h3-tag{
+  font-family:"IBM Plex Mono",monospace;
+  font-weight:400;
+  font-size:.7rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-left:10px;
+}
+p{margin:0 0 16px;max-width:68ch}
+main a{color:var(--accent-bright);text-decoration:underline;text-underline-offset:2px}
+strong{font-weight:600}
+code{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.855em;
+  background:var(--sunken);
+  padding:.1em .38em;
+  border-radius:4px;
+  word-break:break-word;
+}
+ul.clean{margin:0 0 16px;padding:0;list-style:none;max-width:68ch}
+ul.clean li{
+  position:relative;
+  padding-left:22px;
+  margin:0 0 9px;
+}
+ul.clean li::before{
+  content:"";
+  position:absolute;
+  left:4px;top:.62em;
+  width:6px;height:6px;
+  border-radius:1px;
+  background:var(--accent);
+  transform:rotate(45deg);
+}
+.lede{
+  font-family:"Spectral",Georgia,serif;
+  font-size:1.16rem;
+  line-height:1.55;
+  color:var(--ink);
+  max-width:62ch;
+  margin:0 0 26px;
+}
+
+/* ---------- decision cards ---------- */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:12px;
+  margin:6px 0 8px;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:16px 16px 15px;
+  box-shadow:var(--shadow);
+}
+.card .c-lbl{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin:0 0 7px;
+}
+.card p{font-size:.92rem;margin:0;max-width:none}
+.card .c-lock{color:var(--ok);font-weight:600}
+
+/* ---------- tables ---------- */
+.tbl-wrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--rule);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:460px}
+th,td{
+  text-align:left;
+  padding:10px 14px;
+  border-bottom:1px solid var(--rule);
+  vertical-align:top;
+}
+thead th{
+  background:var(--sunken);
+  font-family:"IBM Plex Mono",monospace;
+  font-weight:500;
+  font-size:.7rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+tbody tr:last-child td{border-bottom:none}
+td code{background:var(--accent-wash);color:var(--accent-bright)}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- pipeline diagram ---------- */
+.flow{
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  padding:20px;
+  margin:16px 0 8px;
+  box-shadow:var(--shadow);
+}
+.flow h4{
+  margin:0 0 14px;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.7rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--accent-bright);
+}
+.flow + .flow{margin-top:14px}
+.steps{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:stretch;
+}
+.step{
+  flex:1 1 130px;
+  background:var(--ground);
+  border:1px solid var(--rule);
+  border-radius:7px;
+  padding:11px 12px;
+  font-size:.82rem;
+  line-height:1.4;
+  position:relative;
+}
+.step b{
+  display:block;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-bottom:4px;
+}
+.step.free{border-color:var(--ok);}
+.step.free b{color:var(--ok)}
+.step.paid{border-color:var(--accent-bright)}
+.step.paid b{color:var(--accent-bright)}
+.flow-note{
+  margin:13px 0 0;
+  font-size:.82rem;
+  color:var(--ink-soft);
+}
+.flow-note .tok{font-family:"IBM Plex Mono",monospace;color:var(--ink)}
+
+/* ---------- callouts ---------- */
+.callout{
+  border:1px solid var(--rule);
+  border-left:3px solid var(--accent);
+  background:var(--surface);
+  border-radius:0 8px 8px 0;
+  padding:15px 18px;
+  margin:20px 0;
+}
+.callout.warn{border-left-color:var(--attention);background:var(--attention-wash)}
+.callout.warn .co-lbl{color:var(--attention)}
+.callout .co-lbl{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.68rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--accent-bright);
+  margin:0 0 6px;
+}
+.callout p{margin:0;font-size:.92rem;max-width:64ch}
+.callout p + p{margin-top:8px}
+
+/* ---------- code block ---------- */
+pre{
+  background:var(--sunken);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:16px 18px;
+  overflow-x:auto;
+  margin:14px 0 20px;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.82rem;
+  line-height:1.55;
+}
+pre code{background:none;padding:0;font-size:1em}
+.cmt{color:var(--ink-soft)}
+.key{color:var(--accent-bright)}
+
+/* ---------- checklist ---------- */
+.roadmap{list-style:none;margin:8px 0;padding:0;max-width:68ch}
+.roadmap li{
+  display:flex;
+  gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid var(--rule);
+  font-size:.93rem;
+  align-items:flex-start;
+}
+.roadmap li:last-child{border-bottom:none}
+.roadmap .box{
+  flex:none;
+  width:17px;height:17px;
+  border-radius:4px;
+  border:1.5px solid var(--rule);
+  margin-top:2px;
+  display:grid;
+  place-items:center;
+  font-size:.72rem;
+  font-weight:700;
+}
+.roadmap li.done .box{background:var(--ok);border-color:var(--ok);color:#fff}
+.roadmap li.done .box::after{content:"✓"}
+.roadmap li.now .box{border-color:var(--accent-bright);border-style:solid}
+.roadmap li.now .box::after{content:"•";color:var(--accent-bright);font-size:1.1rem;line-height:0}
+.roadmap li.done span{color:var(--ink-soft)}
+.phase-tag{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  flex:none;
+  padding-top:3px;
+  width:66px;
+}
+
+/* ---------- questions ---------- */
+.q{
+  display:flex;
+  gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid var(--rule);
+  max-width:70ch;
+}
+.q:last-child{border-bottom:none}
+.q .qn{
+  font-family:"Spectral",serif;
+  font-size:1.3rem;
+  color:var(--accent-bright);
+  flex:none;
+  line-height:1;
+  padding-top:2px;
+}
+.q p{margin:0;font-size:.93rem}
+.q .who{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:.68rem;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--ink-soft);
+  display:block;
+  margin-top:4px;
+}
+
+footer{
+  padding:34px 0 60px;
+  color:var(--ink-soft);
+  font-size:.82rem;
+}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+
+::selection{background:var(--accent);color:#fff}
+a:focus-visible,.toc a:focus-visible{outline:2px solid var(--accent-bright);outline-offset:3px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+html{scroll-behavior:smooth}
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="kicker">Dossier de análisis · v1 · 2026-09-08</p>
+    <h1>Auriculoterapia&nbsp;PWA</h1>
+    <p class="standfirst">Una app web donde una médica sube la foto de un oído y descarga un PDF: un infográfico de puntos auriculares y un informe clínico, razonados con el manual de Terry Oleson. Este documento fija las decisiones, la arquitectura y —el punto que abrió la conversación— cómo consultar ese libro sin pagar su peso en cada petición.</p>
+    <div class="meta-row">
+      <span>Fase: prueba</span>
+      <span>Deploy: Vercel</span>
+      <span>IA: Alibaba Model Studio</span>
+      <span>Sin base de datos</span>
+      <span>Usuario: 1 médica</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="layout">
+
+  <nav class="toc" aria-label="Índice">
+    <p class="toc-lbl">Contenido</p>
+    <ol>
+      <li><a href="#resumen">Qué se construye</a></li>
+      <li><a href="#decisiones">Decisiones cerradas</a></li>
+      <li><a href="#pdf">El libro de referencia y su coste</a></li>
+      <li><a href="#cerebro">El cerebro de conocimiento</a></li>
+      <li><a href="#arquitectura">Arquitectura</a></li>
+      <li><a href="#alibaba">Alibaba: conexión y modelos</a></li>
+      <li><a href="#salida">El PDF de salida</a></li>
+      <li><a href="#riesgos">Riesgos</a></li>
+      <li><a href="#ruta">Hoja de ruta</a></li>
+      <li><a href="#preguntas">Preguntas abiertas</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="resumen">
+      <div class="sec-head"><span class="sec-num">01</span><h2>Qué se construye</h2></div>
+      <p class="lede">Foto de un oído &rarr; análisis con IA de visión &rarr; un JSON estructurado &rarr; un PDF de dos partes: infográfico + informe clínico completo. Todo el conocimiento de auriculoterapia vive en un <em>vault</em> de Obsidian editable por la doctora; la IA recibe en cada consulta solo una fracción.</p>
+
+      <div class="flow">
+        <h4>Flujo por consulta</h4>
+        <div class="steps">
+          <div class="step"><b>Entrada</b>Foto del oído + selector «¿tiene agujas puestas?»</div>
+          <div class="step"><b>Visión</b>Qwen-VL describe zonas, signos de piel y agujas</div>
+          <div class="step"><b>Recuperación</b>Se traen del cerebro las notas relevantes (~10–15k tokens)</div>
+          <div class="step"><b>Redacción</b>Qwen-VL genera el JSON del informe</div>
+          <div class="step"><b>PDF</b>Se compone en el navegador y se descarga</div>
+        </div>
+      </div>
+
+      <h3>Los dos modos de entrada</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Modo</th><th>Qué hace la IA</th><th>Fiabilidad</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Con agujas</strong><br>(post-tratamiento)</td><td>Localiza las agujas, las mapea a puntos, infiere qué cuadro trata ese protocolo, lo evalúa y da pronóstico. Es el flujo de <code>reporte.md</code>.</td><td>Media — mapear aguja&rarr;punto es acotado</td></tr>
+            <tr><td><strong>Oreja limpia</strong></td><td>Observa color, textura y relieve; plantea hipótesis diagnóstica y <strong>propone</strong> un protocolo de puntos.</td><td>Baja — proponer puntos desde signos visuales es lo más incierto</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Ambos modos producen el mismo esquema JSON; cambia el enfoque del <em>prompt</em>. La nota obligatoria de «corroborar con un profesional experto» cubre la incertidumbre, y la usuaria es médica.</p>
+    </section>
+
+    <section id="decisiones">
+      <div class="sec-head"><span class="sec-num">02</span><h2>Decisiones cerradas</h2></div>
+      <p>Acordadas en la conversación de análisis. No se implementa nada todavía.</p>
+      <div class="cards">
+        <div class="card"><p class="c-lbl">Plataforma</p><p>PWA, <strong>siempre online</strong> (depende de Alibaba). Deploy en Vercel. <span class="c-lock">Sin base de datos.</span></p></div>
+        <div class="card"><p class="c-lbl">Usuario</p><p>Una <strong>médica</strong>. Herramienta de apoyo a la decisión, no autoconsulta del paciente.</p></div>
+        <div class="card"><p class="c-lbl">Entrada</p><p>Foto de un oído. <strong>Dos modos</strong>: con agujas puestas / oreja limpia (selector manual).</p></div>
+        <div class="card"><p class="c-lbl">Salida</p><p>PDF descargable: página 1 con la <strong>foto real</strong> + mapa esquemático + <strong>sistemas implicados</strong>; páginas siguientes, informe clínico. Paleta azul.</p></div>
+        <div class="card"><p class="c-lbl">Razonamiento (v1.1)</p><p><strong>Color y ubicación del signo → zona de la oreja → sistema corporal → puntos a tratar → validación.</strong> Metodología somatotópica de Oleson / la doctora.</p></div>
+        <div class="card"><p class="c-lbl">Conocimiento</p><p><strong>Vault de Obsidian</strong> («el cerebro») consultado por <strong>RAG</strong>. El libro se procesa una sola vez.</p></div>
+        <div class="card"><p class="c-lbl">Datos del paciente</p><p><span class="c-lock">Anónimo.</span> El usuario sube la foto y descarga el PDF, nada más. Sin nombres, sin historial, sin base de datos.</p></div>
+        <div class="card"><p class="c-lbl">Nota obligatoria</p><p>«Este material debe ser <strong>corroborado por un profesional experto</strong>» en el PDF (instrucción de la doctora).</p></div>
+      </div>
+    </section>
+
+    <section id="pdf">
+      <div class="sec-head"><span class="sec-num">03</span><h2>El libro de referencia y su coste</h2></div>
+      <p class="lede">La preocupación que abrió el proyecto: los informes se hacen «teniendo en cuenta ese PDF», y no se quiere pagar su subida en cada consulta.</p>
+
+      <h3>Qué es realmente el archivo <span class="h3-tag">hallazgo</span></h3>
+      <ul class="clean">
+        <li><code>AURICULOTERAPIA … Terry Oleson 3a edicion.pdf</code> — <strong>386 páginas, escaneadas</strong> (productor: «Epson Scan 2»), <strong>sin capa de texto</strong>, 198 MB.</li>
+        <li>Hoy ninguna IA puede «leerlo»: son imágenes. Hay que digitalizarlo <strong>una vez</strong> antes de que sirva.</li>
+        <li>Subir el libro entero por consulta serían <strong>~600 000 tokens</strong> por llamada: inviable en coste, latencia y ventana de contexto.</li>
+      </ul>
+
+      <h3>La solución: procesar una vez, consultar una fracción</h3>
+      <p>El libro se convierte una sola vez en el <a href="#cerebro">cerebro</a> (notas <code>.md</code>). En cada consulta viajan solo las notas relevantes.</p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Versión de recuperación</th><th>Cómo funciona</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td><strong>v1 — en uso</strong></td><td>Búsqueda por metadatos + grafo: la IA-visión dice qué zonas/signos/puntos ve → se traen esas notas y las que enlazan. Determinista.</td><td class="num">prototipo hecho (<code>rag/compile.mjs</code> + <code>rag/retrieve.mjs</code>)</td></tr>
+            <tr><td>v2 — si v1 se queda corta</td><td>+ capa de <em>embeddings</em> con un modelo <strong>local</strong> (corre en Python)</td><td class="num">coste 0 (local)</td></tr>
+            <tr><td>v3 — producción</td><td><code>text-embedding-v4</code> + Upstash Vector o DashVector</td><td class="num">céntimos</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flow">
+        <h4>Construcción del cerebro — una sola vez</h4>
+        <div class="steps">
+          <div class="step free"><b>Render</b>~370 páginas del PDF a imagen — local, gratis</div>
+          <div class="step free"><b>Transcripción</b>Claude lee y transcribe — sin OCR de Alibaba</div>
+          <div class="step free"><b>Estructura</b>Notas <code>.md</code> con enlaces y cita de página</div>
+          <div class="step free"><b>Validación</b>La doctora revisa y corrige en Obsidian</div>
+        </div>
+        <p class="flow-note">Coste Alibaba del <em>build</em>: <span class="tok">0 USD</span>. Lo hace Claude leyendo el PDF directamente.</p>
+      </div>
+
+      <div class="callout">
+        <p class="co-lbl">Coste real por consulta — medido con el prototipo</p>
+        <p>Prototipo RAG ejecutado sobre las 67 notas. Contexto ensamblado por consulta: <span class="num">~15,5–21k tokens</span> (núcleo ~3,9k + recuperado ~9–14k), más la imagen (~1–2k). Todos los puntos y enlaces resuelven. Del orden de <strong>céntimos por informe</strong>.</p>
+        <p>El vault completo son hoy solo <span class="num">~26–31k tokens</span>: enviar «casi todo» con <em>context cache</em> también es viable. El RAG selectivo rinde de verdad cuando el vault crezca (resto del cap. 9, cap. 8, ampliaciones de la doctora).</p>
+      </div>
+    </section>
+
+    <section id="cerebro">
+      <div class="sec-head"><span class="sec-num">04</span><h2>El cerebro de conocimiento</h2></div>
+      <p>Un vault de Obsidian en <code>C:\oidos\cerebro\</code>. Es la <strong>fuente de verdad</strong>: la doctora lee y corrige notas; un paso de <em>build</em> deriva de ahí lo que la IA recibe. Skill instalado para sintaxis correcta: <code>obsidian-markdown</code> (de <code>kepano/obsidian-skills</code>).</p>
+
+      <h3>Estructura</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Carpeta</th><th>Contenido</th></tr></thead>
+          <tbody>
+            <tr><td><code>puntos/</code></td><td>Un punto auricular por nota — localización, función, indicaciones</td></tr>
+            <tr><td><code>ejes/</code></td><td>Los 4 ejes diagnósticos — marco fijo del informe</td></tr>
+            <tr><td><code>semiologia/</code></td><td>Signos visibles en la piel y su interpretación — <strong>lo que la IA lee en la foto</strong></td></tr>
+            <tr><td><code>diagnostico/</code></td><td>Procedimientos y principios (cap. 5)</td></tr>
+            <tr><td><code>anatomia/</code></td><td>Regiones y puntos de referencia del pabellón (cap. 3–4)</td></tr>
+            <tr><td><code>protocolos/</code> · <code>criterios/</code></td><td>Combinaciones por condición (cap. 9) · reglas de selección (cap. 6.8)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Frontmatter — claves de recuperación del RAG v1</h3>
+      <pre><code><span class="cmt">---</span>
+<span class="key">tipo</span>: punto | eje | semiologia | diagnostico | anatomia | protocolo | criterio
+<span class="key">aliases</span>: [nombres alternativos]
+<span class="key">zona_auricular</span>: [helix, antihelix, concha-inferior, ...]
+<span class="key">puntos_relacionados</span>: [Shen Men, Punto Cero, ...]
+<span class="key">ejes</span>: [neuro-psicologico | neuroendocrino | sensorial | homeostasis]
+<span class="key">senales_visuales</span>: [eritema, descamacion, ...]   <span class="cmt"># solo semiologia</span>
+<span class="key">fuente</span>: "Oleson 3.a ed. — §5.1, p. 139"
+<span class="key">estado</span>: completo | borrador | stub
+<span class="cmt">---</span></code></pre>
+
+      <h3>Cómo recupera la IA <span class="h3-tag">RAG v1, sin coste</span></h3>
+      <ul class="clean">
+        <li><strong>Núcleo fijo</strong> en cada consulta: <code>Puntos maestros auriculares</code>, las 4 notas de <code>ejes/</code>, <code>Lineamientos para el diagnóstico auricular</code>, <code>Criterios de selección de puntos</code>.</li>
+        <li><strong>Por <code>signos</code></strong>: notas de <code>semiologia/</code> cuyo <code>senales_visuales</code> coincide con lo que la IA vio.</li>
+        <li><strong>Por <code>zonas</code></strong>: notas cuyo <code>zona_auricular</code> coincide.</li>
+        <li><strong>Por <code>puntos_visibles</code></strong>: esas notas de <code>puntos/</code> más las que enlazan.</li>
+      </ul>
+
+      <h3>Los ejes de referencia ↔ puntos maestros de Oleson</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Eje</th><th>Puntos maestros</th><th>Zona</th></tr></thead>
+          <tbody>
+            <tr><td>Homeostasis general</td><td>Punto Cero · Autónomo Simpático · Shen Men</td><td><code>HX1/CC1</code> · <code>HI4/AH7</code> · <code>FT2</code></td></tr>
+            <tr><td>Neuro-psicológico</td><td>Shen Men · Tálamo/Subcórtex · Maestro Cerebral · Tranquilizador</td><td><code>FT2</code> · <code>PC2/CI4</code> · <code>LO1</code> · <code>TG2</code></td></tr>
+            <tr><td>Neuroendocrino</td><td>Endocrino · Alergia · Tálamo</td><td><code>IT2</code> · <code>HI7/HX7</code> · <code>PC2/CI4</code></td></tr>
+            <tr><td>Sensorial</td><td>Maestro Sensorial (Punto Ojo)</td><td><code>LO4</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="flow-note">Confirmado por la doctora: los ejes se usan de forma <strong>variable</strong> — el informe incluye solo los ejes con hallazgos, y la IA puede nombrar otro si el caso lo justifica. Los <strong>puntos</strong> también son variables por paciente.</p>
+
+      <h3>Estado de carga <span class="h3-tag">67 notas</span></h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Capítulo</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Cap. 3 — anatomía, PR 0–17, somatotopía, cuadrantes (16 notas)</td><td>hecho</td></tr>
+            <tr><td>Cap. 4 — zonas y nomenclatura OMS §4.1–4.5, fases de Nogier</td><td>hecho</td></tr>
+            <tr><td>Cap. 5 — procedimientos diagnósticos (semiología + principios)</td><td>hecho</td></tr>
+            <tr><td>Cap. 6 — selección de puntos (6.8), lineamientos (6.15), precauciones, métodos</td><td>hecho</td></tr>
+            <tr><td>Cap. 7 — puntos maestros + somatotopía completa (musculoesquelético, órganos, endocrino, nervioso, funcionales)</td><td>hecho</td></tr>
+            <tr><td>Cap. 9 — protocolos: distrés, psicológicas, sensoriales, cabeza/cuello + índice de las 20 categorías</td><td>parcial</td></tr>
+            <tr><td>Cap. 9 (resto), cap. 8 (casos), cap. 2 (lenguaje teórico), cap. 4.6 (subzonas)</td><td>pendiente</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>El <strong>cap. 1</strong> (Generalidades e historia) se excluye por decisión de la doctora. Con lo cargado, el cerebro <strong>ya sostiene un informe completo estilo <code>reporte.md</code></strong> para el caso ansiedad/estrés.</p>
+    </section>
+
+    <section id="arquitectura">
+      <div class="sec-head"><span class="sec-num">05</span><h2>Arquitectura</h2></div>
+
+      <div class="flow">
+        <h4>Componentes (construidos, en <code>app/</code>)</h4>
+        <div class="steps">
+          <div class="step"><b>PWA · Vite</b><code>index.html</code> + <code>src/main.mjs</code>: subir foto, redimensionar en cliente, selector de modo, vista previa, descargar PDF. Modo <code>?demo=1</code> sin IA</div>
+          <div class="step paid"><b>/api/analizar.mjs</b>Función serverless: paso&nbsp;1 visión → RAG local → paso&nbsp;3 informe → Ajv + sellado. Devuelve <code>{informe, debug}</code> con el coste real</div>
+          <div class="step"><b>app/api/_lib/</b><code>vault-index.json</code> (cerebro compilado) + schema + coordenadas, empaquetados con la función</div>
+        </div>
+        <p class="flow-note">Sin BD. La <code>DASHSCOPE_API_KEY</code> vive <strong>solo</strong> en variables de entorno del servidor. La app se prueba con <code>npm run smoke</code> (pipeline sin gastar IA).</p>
+      </div>
+
+      <h3>Generación del PDF</h3>
+      <ul class="clean">
+        <li>La IA devuelve <strong>un solo JSON</strong>; de él se renderizan tanto el infográfico como el informe. Nunca se contradicen.</li>
+        <li>El infográfico es una <strong>plantilla HTML/SVG</strong> con huecos, no una imagen generada. El arte fijo (marco, oreja, adornos) es un asset; los marcadores y textos son dinámicos.</li>
+        <li>Render en el <strong>cliente</strong> (<code>pdfmake</code> / <code>@react-pdf</code> / <code>html2canvas</code>+<code>jsPDF</code>). No gasta servidor.</li>
+      </ul>
+    </section>
+
+    <section id="alibaba">
+      <div class="sec-head"><span class="sec-num">06</span><h2>Alibaba: conexión y modelos</h2></div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Dato</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Workspace</td><td><code>Auriculoterapia-PWA</code></td></tr>
+            <tr><td>Región</td><td><code>ap-southeast-1</code> (Singapur) — datos fuera de China continental</td></tr>
+            <tr><td>Endpoint OpenAI-compat</td><td><code>…maas.aliyuncs.com/compatible-mode/v1</code></td></tr>
+            <tr><td>Endpoint DashScope</td><td><code>…maas.aliyuncs.com/api/v1</code></td></tr>
+            <tr><td>Clave</td><td><code>sk-ws-…</code>, alcance de workspace</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Modelos elegidos <span class="h3-tag">el workspace expone 165</span></h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Uso</th><th>Modelo</th><th>Cuándo</th></tr></thead>
+          <tbody>
+            <tr><td>Describir la imagen (barato)</td><td><code>qwen3-vl-flash</code></td><td>cada consulta, paso 1</td></tr>
+            <tr><td>Generar el informe (fuerte)</td><td><code>qwen3-vl-plus</code></td><td>cada consulta, paso 2 — ve la foto y las notas</td></tr>
+            <tr><td>OCR del libro</td><td><code>qwen-vl-ocr-2025-11-20</code></td><td>no se usará: lo hace Claude</td></tr>
+            <tr><td>Embeddings (solo RAG v3)</td><td><code>text-embedding-v4</code></td><td>1024 dims, multilingüe</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <p class="co-lbl">Coste por consulta — desglose</p>
+        <p><span class="num">Paso 1</span> describir imagen (<code>qwen3-vl-flash</code>): ~2,1k in / 0,5k out → <span class="num">$0.0003</span>. <span class="num">Paso 3</span> generar informe (<code>qwen3-vl-plus</code>): ~19k in / 3k out → <span class="num">$0.0086</span>. <strong>Total ≈ $0.009 por informe (1 centavo).</strong> Con reintento de validación: ~$0.018.</p>
+        <p>Proyección: 10/día ≈ $2.7/mes · 50/día ≈ $14/mes · 200/día ≈ $54/mes. Cuota gratuita de Model Studio (1M tokens/modelo, 90 días) probablemente cubre toda la prueba. Detalle en <code>costos.md</code>.</p>
+      </div>
+
+      <div class="callout warn">
+        <p class="co-lbl">Seguridad — pendiente</p>
+        <p>La API key se compartió en texto plano (chat y <code>apikye.txt</code>). Para test es aceptable; <strong>rótala antes de salir de prueba</strong>. En la app vive solo como variable de entorno del servidor (<code>DASHSCOPE_API_KEY</code>), nunca en el bundle.</p>
+      </div>
+
+      <div class="callout">
+        <p class="co-lbl">Por verificar</p>
+        <p>Si este endpoint MaaS soporta <em>context cache</em> (descuento por prefijo repetido) · precio por token de cada modelo · capacidades exactas de los modelos posteriores a enero 2026 (<code>qwen3.8</code>, <code>deepseek-v4</code>…). Se prueban 2–3 candidatos de visión y se mide.</p>
+      </div>
+    </section>
+
+    <section id="salida">
+      <div class="sec-head"><span class="sec-num">07</span><h2>El PDF de salida</h2></div>
+
+      <h3>Página 1 — foto real + infográfico <span class="h3-tag">paleta azul</span></h3>
+      <pre><code>Caso HHMM · &lt;sistema o motivo&gt;              <span class="cmt">(ref = fecha+hora, sin datos del paciente)</span>
+┌────────────┐  ┌────────────┐
+│ foto real  │  │  mapa      │   <span class="cmt">la foto que subió + esquema de referencia</span>
+│ analizada  │  │  N marcas  │
+└────────────┘  └────────────┘
+──────────────────────────────────────────
+Puntos propuestos / observados   ① … ② … (2 columnas)
+──────────────────────────────────────────
+SISTEMAS IMPLICADOS   <span class="cmt">(0–6, del patrón de signos)</span>
+ • &lt;sistema&gt; — &lt;región corporal&gt;   agudo/crónico · confianza
+   base: &lt;qué signo y en qué zona&gt;
+──────────────────────────────────────────
+Razonamiento     │     Conclusión
+Nota: debe ser corroborado por un profesional experto.</code></pre>
+
+      <h3>Página 2+ — informe clínico</h3>
+      <ul class="clean">
+        <li>Observación visual: coloración general + tabla de signos (signo · color · localización · extensión · interpretación · confianza)</li>
+        <li>Hipótesis: sistemas implicados (base observacional, región corporal, estado, hallazgos probables)</li>
+        <li>Evaluación del protocolo (tabla de puntos + checklist contra los criterios de Oleson 6.8)</li>
+        <li>Pronóstico</li>
+        <li>Pie en todas las páginas: descargo + fecha + «generado con IA»</li>
+      </ul>
+
+      <h3>El contrato IA ↔ PDF <span class="h3-tag">contrato/ · schema v1.1</span></h3>
+      <p>Ambas partes se renderizan de <strong>un único JSON</strong> (<code>contrato/informe.schema.json</code>, validado con Ajv). El rediseño v1.1 (feedback de la doctora) cambia el marco de <strong>«4 ejes funcionales» a razonamiento somatotópico</strong>: <code>observacion_visual.signos[]</code> (con <code>color</code> y <code>extension</code>) &rarr; <code>hipotesis_diagnostica.sistemas[]</code> (musculoesquelético, digestivo, neuroendocrino, neuro-psicológico… con <code>base_observacional</code>, <code>region_corporal</code>, <code>estado</code> agudo/crónico según el color) &rarr; <code>evaluacion_protocolo.puntos[]</code> (cada uno con su <code>sistema</code>). En modo <em>oreja limpia</em> SIEMPRE hay lectura — nunca «no concluyente»; <code>analisis_viable: false</code> solo si la imagen es inservible. 3 ejemplos validados: <code>ejemplo-oreja-limpia.json</code> (somatotópico), <code>ejemplo-ansiedad.json</code>, <code>ejemplo-no-viable.json</code>. El backend fuerza <code>caso_id</code>, <code>fecha</code> y el <code>disclaimer</code>.</p>
+    </section>
+
+    <section id="riesgos">
+      <div class="sec-head"><span class="sec-num">08</span><h2>Riesgos</h2></div>
+
+      <h3>Exactitud clínica</h3>
+      <p>Localizar puntos y «leer» el color de la piel depende de la luz y es subjetivo. <code>reporte.md</code> infiere un diagnóstico psicológico completo y un pronóstico desde una sola foto — es una afirmación fuerte para una IA. El modo <strong>oreja limpia</strong> es el más frágil.</p>
+
+      <h3>Regulatorio y legal</h3>
+      <p>El texto se lee como diagnóstico. El encuadre importa: herramienta de apoyo profesional (no autoconsulta) baja el riesgo, pero según jurisdicción podría calificar como producto sanitario. Para producción conviene revisión específica. En prueba es aceptable.</p>
+
+      <h3>Copyright</h3>
+      <p>Oleson 3.ª ed. está protegido. Uso interno para RAG es defendible; el informe debe <strong>sintetizar</strong>, no reproducir pasajes largos literales, y el texto del libro no se redistribuye.</p>
+
+      <h3>Consistencia y determinismo</h3>
+      <p>Los dos formatos (infográfico y narrativa) deben concordar → se resuelven desde <strong>un único JSON</strong>. Foto parecida debe dar informe parecido → temperatura baja y esquema estricto.</p>
+    </section>
+
+    <section id="ruta">
+      <div class="sec-head"><span class="sec-num">09</span><h2>Hoja de ruta</h2></div>
+      <ul class="roadmap">
+        <li class="done"><span class="phase-tag">Análisis</span><span class="box"></span><span>Decisiones, arquitectura y este dossier</span></li>
+        <li class="done"><span class="phase-tag">Cerebro</span><span class="box"></span><span>Estructura + skill Obsidian + cap. 3, 4, 5, 6, 7 completos (67 notas)</span></li>
+        <li class="done"><span class="phase-tag">RAG</span><span class="box"></span><span>Prototipo: compilador del vault + recuperación v1 medida sobre 3 casos (<code>rag/</code>)</span></li>
+        <li class="done"><span class="phase-tag">Contrato</span><span class="box"></span><span>Esquema JSON de salida + 2 ejemplos + validador Ajv (<code>contrato/</code>)</span></li>
+        <li class="done"><span class="phase-tag">Prompts</span><span class="box"></span><span>Prompts de visión y de generación del informe (<code>app/api/_lib/prompts.mjs</code>)</span></li>
+        <li class="done"><span class="phase-tag">Backend</span><span class="box"></span><span>Función <code>/api/analizar</code>: visión → RAG → informe → validación + sellado (<code>app/api/</code>)</span></li>
+        <li class="done"><span class="phase-tag">Diseño</span><span class="box"></span><span>Plantilla del informe: infográfico SVG azul + narrativa desde el JSON (<code>app/src/report.mjs</code>)</span></li>
+        <li class="done"><span class="phase-tag">PWA</span><span class="box"></span><span>App Vite: subir foto, selector de modo, vista previa, descargar PDF, modo demo</span></li>
+        <li class="done"><span class="phase-tag">Deploy</span><span class="box"></span><span>Vercel <strong>app-two-pearl-50.vercel.app</strong>; modelo del informe = <code>qwen-flash</code> texto (~20 s, ~$0.002/consulta)</span></li>
+        <li class="done"><span class="phase-tag">Feedback</span><span class="box"></span><span>Rediseño v1.1 somatotópico + foto real en el PDF + oreja limpia siempre concluye (audios de la doctora)</span></li>
+        <li class="now"><span class="phase-tag">Prueba</span><span class="box"></span><span>Probar el rediseño con fotos de oreja reales — recoger <code>debug</code> y el reporte para calibrar</span></li>
+        <li><span class="phase-tag">Ajustes</span><span class="box"></span><span>Pantalla de carga con pasos / SSE; arte de la oreja + coordenadas; deduplicar <code>retrieve.mjs</code>; revisión del vault por la doctora</span></li>
+        <li><span class="phase-tag">Cerebro</span><span class="box"></span><span>Opcional: completar cap. 9, cap. 8, cap. 2</span></li>
+        <li><span class="phase-tag">Frontend</span><span class="box"></span><span>PWA: cámara, subida, selector de modo, descarga del PDF</span></li>
+        <li><span class="phase-tag">Prueba</span><span class="box"></span><span>Casos reales de la doctora → ajustar <em>prompts</em> y cerebro</span></li>
+      </ul>
+    </section>
+
+    <section id="preguntas">
+      <div class="sec-head"><span class="sec-num">10</span><h2>Preguntas abiertas</h2></div>
+      <div class="q"><span class="qn">1</span><p>¿Detección <strong>automática</strong> de agujas en la foto, o siempre selector manual de modo?<span class="who">Decide: equipo — recomendación: manual en prueba</span></p></div>
+      <div class="q"><span class="qn">2</span><p>Con ejes variables (1–4), el panel del infográfico debe <strong>adaptar su tamaño</strong>. ¿Se acepta que el diseño flexione, o se prefiere un máximo fijo de ejes mostrados?<span class="who">Decide: fase de diseño</span></p></div>
+      <div class="q"><span class="qn">3</span><p>Idioma: solo español. ¿Se confirma?<span class="who">Decide: equipo</span></p></div>
+      <div class="q"><span class="qn">4</span><p>Revisión legal del encuadre (apoyo profesional vs producto sanitario) antes de pasar de prueba a producción.<span class="who">Decide: equipo</span></p></div>
+    </section>
+
+  </main>
+</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Auriculoterapia PWA · dossier de análisis</span>
+    <span>Basado en Terry Oleson, <em>Auriculoterapia: sistemas chino y occidental</em>, 3.ª ed.</span>
+  </div>
+</footer>

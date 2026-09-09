@@ -1,0 +1,12 @@
+node_modules
+dist
+dev-dist
+.env
+.env.*
+scripts/muestra*
+scripts/e2e-informe.*
+scripts/smoke.mjs
+scripts/e2e.mjs
+scripts/probar-modelos.mjs
+scripts/servidor-local.mjs
+README.md

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dev-dist/
+.vercel/
+.env
+scripts/muestra*.html
+scripts/muestra*.png
+scripts/e2e-informe.*
+
+.vercel
+.env*
