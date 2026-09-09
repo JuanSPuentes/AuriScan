@@ -59,6 +59,33 @@ body {
 .dropzone:hover { border-color: var(--azul2); }
 #preview { max-width: 100%; max-height: 320px; border-radius: 8px; }
 
+.tips {
+  margin: 10px 0 0;
+  padding-left: 1.1em;
+  font-size: .82rem;
+  color: var(--tinta2);
+}
+.tips li { margin: 2px 0; }
+
+.consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio);
+  background: #fff;
+  font-size: .86rem;
+  line-height: 1.45;
+  cursor: pointer;
+}
+.consent input { margin-top: 2px; flex: none; width: 18px; height: 18px; accent-color: var(--azul); }
+.consent:has(input:checked) { border-color: var(--azul); background: var(--azulc); }
+.privacidad { margin-top: 8px; font-size: .8rem; color: var(--tinta2); }
+.privacidad summary { cursor: pointer; color: var(--azul2); }
+.privacidad ul { margin: 8px 0 0; padding-left: 1.1em; }
+.privacidad li { margin: 4px 0; }
+
 .segmento { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .segmento.tres { grid-template-columns: 1fr 1fr 1fr; }
 .op.op-chica { padding: 11px 8px; text-align: center; font-size: .92rem; }

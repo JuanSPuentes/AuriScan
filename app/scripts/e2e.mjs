@@ -27,7 +27,7 @@ const res = {
 };
 console.log(`imagen: ${imgPath}  modo: ${modo}\nllamando…\n`);
 const t0 = Date.now();
-await handler({ method: "POST", body: { imagen: dataUrl, modo } }, res);
+await handler({ method: "POST", body: { imagen: dataUrl, modo, consentimiento: true } }, res);
 console.log(`HTTP ${res._s}  (${((Date.now() - t0) / 1000).toFixed(1)} s)\n`);
 
 if (res._s !== 200) { console.log(JSON.stringify(res._body, null, 2)); process.exit(1); }

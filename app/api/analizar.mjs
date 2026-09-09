@@ -21,12 +21,13 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Usa POST." });
 
   try {
-    const { imagen, modo, oreja } = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const { imagen, modo, oreja, consentimiento } = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     if (!imagen?.startsWith("data:image/")) return res.status(400).json({ error: "Falta 'imagen' (data URL)." });
     if (!["con_agujas", "oreja_limpia"].includes(modo)) return res.status(400).json({ error: "'modo' inválido." });
+    if (consentimiento !== true) return res.status(400).json({ error: "Falta el consentimiento para procesar la imagen." });
     const orejaUsuaria = ["izquierda", "derecha"].includes(oreja) ? oreja : null;
 
-    const debug = { costos: [], tiempos: {} };
+    const debug = { costos: [], tiempos: {}, consentimiento_en: new Date().toISOString() };
 
     // --- PASO 1 · visión --------------------------------------------------
     const v = await chat({
@@ -43,6 +44,14 @@ export default async function handler(req, res) {
     debug.observacion = obs;
     debug.costos.push({ paso: "vision", modelo: MODELO_VISION, ...costo(MODELO_VISION, v.usage) });
     debug.tiempos.vision_ms = v.ms;
+
+    // --- corte temprano: imagen no apta (ahorra el paso del informe) ----
+    if (obs.es_oreja === false)
+      return res.status(200).json({ rechazo: "no_es_oreja", debug,
+        mensaje: "La imagen no parece una oreja. Sube una foto lateral del pabellón auricular." });
+    if (obs.calidad === "insuficiente")
+      return res.status(200).json({ rechazo: "calidad", debug,
+        mensaje: "La foto no tiene calidad suficiente (borrosa, oscura o mal encuadrada). Repite con buena luz y la oreja nítida y centrada." });
 
     // --- PASO 2 · recuperación (local, sin coste) -----------------------
     const rag = recuperar({
