@@ -70,8 +70,11 @@ function earSVG(puntos) {
 const chip = (v) => v ? `<span class="chip c-${esc(v)}">${esc(v)}</span>` : "";
 const estadoTxt = (e) => ({ agudo: "agudo", subagudo: "subagudo", cronico: "crónico", no_determinado: "estado no determinado" }[e] || e || "");
 
+const logoImg = (logo) => logo ? `<img class="logo" src="${logo}" alt="Dra. Jakeline Caro">` : "";
+const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
+
 // --- infográfico (página 1) -------------------------------------------
-function infograficoHTML(inf, fotoDataUrl) {
+function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
   const puntos = inf.evaluacion_protocolo?.puntos || [];
   const sistemas = inf.hipotesis_diagnostica?.sistemas || [];
 
@@ -97,10 +100,13 @@ function infograficoHTML(inf, fotoDataUrl) {
 
   return `<section class="pagina infografico">
     <header>
-      <p class="marca">Análisis de imagen · auriculoterapia</p>
-      <h1>${esc(inf.infografico?.titulo || "Informe auricular")}</h1>
-      <p class="sub">${inf.meta?.oreja && inf.meta.oreja !== "no_determinada" ? "Oreja " + esc(inf.meta.oreja) + " · " : ""}vista ${esc(inf.meta?.vista || "lateral")} ·
-        ${inf.meta?.modo === "con_agujas" ? "puntos observados" : "puntos propuestos"} · ${esc(inf.meta?.fecha || "")}</p>
+      ${logoImg(logoDataUrl)}
+      <div class="tit">
+        <p class="marca">Análisis de imagen · auriculoterapia</p>
+        <h1>${esc(inf.infografico?.titulo || "Informe auricular")}</h1>
+        <p class="sub">${inf.meta?.oreja && inf.meta.oreja !== "no_determinada" ? "Oreja " + esc(inf.meta.oreja) + " · " : ""}vista ${esc(inf.meta?.vista || "lateral")} ·
+          ${inf.meta?.modo === "con_agujas" ? "puntos observados" : "puntos propuestos"} · ${esc(inf.meta?.fecha || "")}</p>
+      </div>
     </header>
 
     <div class="cuerpo">
@@ -124,7 +130,7 @@ function infograficoHTML(inf, fotoDataUrl) {
       <div><h3>Razonamiento</h3><p>${esc(inf.infografico?.razonamiento || "")}</p></div>
       <div><h3>Conclusión</h3><p>${esc(inf.infografico?.conclusion || "")}</p></div>
     </div>
-    <footer>${esc(inf.disclaimer || "")}</footer>
+    <footer><span class="pie-marca">${PIE_MARCA}</span><br>${esc(inf.disclaimer || "")}</footer>
   </section>`;
 }
 
@@ -134,7 +140,7 @@ function tabla(headers, filas) {
     <tbody>${filas.map((f) => `<tr>${f.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
 }
 
-function narrativaHTML(inf) {
+function narrativaHTML(inf, logoDataUrl) {
   const ov = inf.observacion_visual || {};
   const hd = inf.hipotesis_diagnostica || {};
   const ep = inf.evaluacion_protocolo || {};
@@ -166,8 +172,10 @@ function narrativaHTML(inf) {
   const sesiones = pr.sesiones_estimadas ? `${pr.sesiones_estimadas.min}–${pr.sesiones_estimadas.max}` : "—";
 
   return `<section class="pagina narrativa">
-    <h2>Informe clínico de apoyo</h2>
-    <p class="ref">Basado en el Manual de Auriculoterapia de Terry Oleson (3.ª ed.). ${esc(inf.meta?.caso_id || "")}</p>
+    <header class="nar-head">${logoImg(logoDataUrl)}
+      <div><h2>Informe clínico de apoyo</h2>
+      <p class="ref">Basado en el Manual de Auriculoterapia de Terry Oleson (3.ª ed.). ${esc(inf.meta?.caso_id || "")}</p></div>
+    </header>
 
     <h3>1 · Observación visual</h3>
     <p><b>Coloración predominante:</b> ${esc((ov.caracteristicas_generales?.color_general || "—").replace(/_/g, " "))}.
@@ -198,7 +206,7 @@ function narrativaHTML(inf) {
     <ul>${(inf.limitaciones || []).map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
     <p class="conf">Nivel de confianza global: ${chip(inf.nivel_de_confianza_global)}</p>
 
-    <footer>${esc(inf.disclaimer || "")} · Generado con IA (${esc(inf.meta?.modelo_ia || "")}) · ${esc(inf.meta?.fecha || "")}</footer>
+    <footer><span class="pie-marca">${PIE_MARCA}</span> · ${esc(inf.disclaimer || "")} · Generado con IA (${esc(inf.meta?.modelo_ia || "")}) · ${esc(inf.meta?.fecha || "")}</footer>
   </section>`;
 }
 
@@ -217,8 +225,14 @@ const CSS = `
   .marca,.sub,.ref{ font-family:"IBM Plex Sans",system-ui,sans-serif; color:var(--tinta2); }
   .marca{ font-size:8pt; letter-spacing:.18em; text-transform:uppercase; margin:0; }
   .sub,.ref{ font-size:9pt; margin:.2em 0 0; }
-  /* infográfico */
-  .infografico header{ border-bottom:1px solid var(--linea); padding-bottom:10px; }
+  /* logo */
+  .logo{ height:56px; width:auto; flex:none; }
+  .infografico header{ display:flex; gap:16px; align-items:center; border-bottom:1px solid var(--linea); padding-bottom:10px; }
+  .infografico header .tit{ flex:1; }
+  .nar-head{ display:flex; gap:14px; align-items:center; margin-bottom:6px; }
+  .nar-head .logo{ height:44px; }
+  .nar-head h2{ margin:0; }
+  .pie-marca{ font-weight:600; color:var(--azul); }
   .infografico .cuerpo{ display:flex; gap:16px; margin-top:14px; align-items:flex-start; }
   .foto{ width:46%; flex:none; margin:0; }
   .foto img{ width:100%; max-height:300px; object-fit:contain; border:1px solid var(--linea); border-radius:6px; background:#f4f7fb; }
@@ -259,10 +273,10 @@ const CSS = `
   @media print{ body{ background:#fff; } .pagina{ box-shadow:none; margin:0; } .pagina + .pagina{ page-break-before:always; } }
 `;
 
-export function construirDocumentoHTML(informe, fotoDataUrl = null) {
+export function construirDocumentoHTML(informe, fotoDataUrl = null, logoDataUrl = null) {
   const cuerpo = informe.analisis_viable === false
-    ? infograficoHTML(informe, fotoDataUrl)
-    : infograficoHTML(informe, fotoDataUrl) + narrativaHTML(informe);
+    ? infograficoHTML(informe, fotoDataUrl, logoDataUrl)
+    : infograficoHTML(informe, fotoDataUrl, logoDataUrl) + narrativaHTML(informe, logoDataUrl);
   return `<!doctype html><html lang="es"><head><meta charset="utf-8">
     <title>${esc(informe.infografico?.titulo || "Informe auricular")}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap">

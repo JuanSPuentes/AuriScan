@@ -1,5 +1,4 @@
 import { construirDocumentoHTML } from "./report.mjs";
-import { jsPDF } from "jspdf";
 
 const $ = (s) => document.querySelector(s);
 const estado = $("#estado");
@@ -8,6 +7,14 @@ let imagenDataUrl = null;
 let modo = null;
 let oreja = "no_determinada";
 let informe = null;
+let logoDataUrl = null;
+
+// Logo -> data URI (para que el informe sea autocontenido en la ventana de impresión)
+fetch("/logo.png")
+  .then((r) => (r.ok ? r.blob() : Promise.reject()))
+  .then((b) => new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(b); }))
+  .then((d) => { logoDataUrl = d; })
+  .catch(() => {});
 
 // --- 1 · imagen: elegir + redimensionar en el cliente -----------------
 $("#file").addEventListener("change", async (e) => {
@@ -120,7 +127,7 @@ function ajustarVista() {
 }
 
 function mostrar(inf, debug) {
-  const html = construirDocumentoHTML(inf, imagenDataUrl);
+  const html = construirDocumentoHTML(inf, imagenDataUrl, logoDataUrl);
   const vista = $("#vista");
   vista.onload = () => {
     ajustarVista();
@@ -141,41 +148,25 @@ function mostrar(inf, debug) {
   $("#resultado").scrollIntoView({ behavior: "smooth" });
 }
 
-$("#descargar").addEventListener("click", async () => {
+$("#descargar").addEventListener("click", () => {
   if (!informe) return;
-  const nombre = `${informe.meta?.caso_id || "informe"}.pdf`;
-  const html = construirDocumentoHTML(informe, imagenDataUrl);
-  setEstado("Generando PDF…");
-  try {
-    const cont = document.createElement("div");
-    cont.style.cssText = "position:fixed;left:-9999px;top:0;width:794px;background:#fff";
-    cont.innerHTML = html.replace(/^[\s\S]*?<body>|<\/body>[\s\S]*$/g, "");
-    const st = html.match(/<style>([\s\S]*?)<\/style>/);
-    if (st) { const s = document.createElement("style"); s.textContent = st[1]; cont.prepend(s); }
-    document.body.appendChild(cont);
-    if (document.fonts?.ready) await document.fonts.ready;
-    const doc = new jsPDF({ unit: "pt", format: "a4" });
-    await doc.html(cont, { autoPaging: "text", margin: 0, width: 595, windowWidth: 794,
-      html2canvas: { scale: 1.5, useCORS: true, logging: false } });
-    doc.save(nombre);
-    cont.remove();
-    setEstado("");
-  } catch (e) {
-    console.warn("jsPDF falló, uso impresión del navegador:", e);
-    setEstado("Abriendo la versión imprimible (elige «Guardar como PDF»)…");
-    imprimirEnVentana(html);
-  }
-});
-
-$("#imprimir").addEventListener("click", () => informe && imprimirEnVentana(construirDocumentoHTML(informe, imagenDataUrl)));
-
-function imprimirEnVentana(html) {
+  const html = construirDocumentoHTML(informe, imagenDataUrl, logoDataUrl);
   const w = window.open("", "_blank");
-  if (!w) { setEstado("El navegador bloqueó la ventana. Permite las ventanas emergentes.", true); return; }
+  if (!w) {
+    setEstado("El navegador bloqueó la ventana emergente. Permítelas para este sitio y vuelve a intentar.", true);
+    return;
+  }
   w.document.write(html);
   w.document.close();
-  w.addEventListener("load", () => setTimeout(() => w.print(), 400));
-}
+  const lanzar = () => {
+    const seguir = () => setTimeout(() => { try { w.focus(); w.print(); } catch {} }, 300);
+    if (w.document.fonts?.ready) w.document.fonts.ready.then(seguir).catch(seguir);
+    else seguir();
+  };
+  if (w.document.readyState === "complete") lanzar();
+  else w.addEventListener("load", lanzar);
+  setEstado("Se abrió el informe en otra pestaña. Elige «Guardar como PDF» en el diálogo de impresión.");
+});
 
 function setEstado(t, esError = false) {
   estado.textContent = t;

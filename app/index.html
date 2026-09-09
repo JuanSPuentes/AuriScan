@@ -13,6 +13,8 @@
 <body>
   <main class="app">
     <header class="top">
+      <img class="marca-logo" src="/logo.png" alt="Dra. Jakeline Caro — Medicina Integrativa y Salud Digital"
+           onerror="this.remove()" />
       <h1>Análisis auricular</h1>
       <p>Sube la foto de un oído y obtén un informe de auriculoterapia en PDF.
         Material de apoyo — debe ser corroborado por un profesional experto.</p>
@@ -57,10 +59,7 @@
     <section class="resultado" id="resultado" hidden>
       <div class="acciones">
         <h2>Informe</h2>
-        <div class="botones">
-          <button class="primario" id="descargar">Descargar PDF</button>
-          <button class="secundario chico" id="imprimir">Abrir para imprimir / guardar</button>
-        </div>
+        <button class="primario" id="descargar">Descargar PDF</button>
       </div>
       <details class="debug" id="debug" hidden><summary>Detalles técnicos</summary><pre id="debug-pre"></pre></details>
       <div id="vista-wrap"><iframe id="vista" title="Vista previa del informe" scrolling="no"></iframe></div>

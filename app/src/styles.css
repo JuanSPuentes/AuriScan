@@ -19,6 +19,12 @@ body {
 }
 .app { max-width: 640px; margin: 0 auto; padding: 24px 18px 64px; }
 
+.marca-logo {
+  display: block;
+  height: 64px;
+  width: auto;
+  margin: 0 0 12px;
+}
 .top h1 {
   font-family: "Spectral", Georgia, serif;
   font-size: 1.9rem;
