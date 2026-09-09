@@ -4,7 +4,7 @@
 //  - valida el ejemplo del contrato
 //  - renderiza el informe a PDF-HTML (comprobación de la plantilla)
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { recuperar } from "../api/_lib/retrieve.mjs";
@@ -24,6 +24,8 @@ console.log(`  ${rag.notasUsadas.length} notas · ~${rag.tokensEst} tokens de co
 
 console.log("\n== Validación del contrato ==");
 const { construirDocumentoHTML } = await import("../src/report.mjs");
+const logoPath = join(root, "public", "logo.png");
+const logo = existsSync(logoPath) ? `data:image/png;base64,${readFileSync(logoPath).toString("base64")}` : null;
 for (const nombre of ["ejemplo-ansiedad.json", "ejemplo-oreja-limpia.json", "ejemplo-no-viable.json"]) {
   const ej = JSON.parse(readFileSync(join(repo, "contrato", nombre), "utf8"));
   const r = validar(ej);
@@ -31,7 +33,7 @@ for (const nombre of ["ejemplo-ansiedad.json", "ejemplo-oreja-limpia.json", "eje
   const av = avisosVault(ej);
   if (av.length) console.log(`     avisos vault: ${av.join(" | ")}`);
   sellar(ej, { modo: ej.meta.modo, modelo: "qwen-flash" });
-  const html = construirDocumentoHTML(ej, null);
+  const html = construirDocumentoHTML(ej, null, logo);
   const out = join(root, "scripts", `muestra-${nombre.replace(".json", ".html")}`);
   writeFileSync(out, html, "utf8");
   console.log(`     -> titulo "${ej.infografico.titulo}" · ${html.length} bytes -> ${out.replace(root, ".")}`);

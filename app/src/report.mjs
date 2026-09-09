@@ -101,12 +101,10 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
   return `<section class="pagina infografico">
     <header>
       ${logoImg(logoDataUrl)}
-      <div class="tit">
-        <p class="marca">Análisis de imagen · auriculoterapia</p>
-        <h1>${esc(inf.infografico?.titulo || "Informe auricular")}</h1>
-        <p class="sub">${inf.meta?.oreja && inf.meta.oreja !== "no_determinada" ? "Oreja " + esc(inf.meta.oreja) + " · " : ""}vista ${esc(inf.meta?.vista || "lateral")} ·
-          ${inf.meta?.modo === "con_agujas" ? "puntos observados" : "puntos propuestos"} · ${esc(inf.meta?.fecha || "")}</p>
-      </div>
+      <p class="marca">Análisis de imagen · auriculoterapia</p>
+      <h1>${esc(inf.infografico?.titulo || "Informe auricular")}</h1>
+      <p class="sub">${inf.meta?.oreja && inf.meta.oreja !== "no_determinada" ? "Oreja " + esc(inf.meta.oreja) + " · " : ""}vista ${esc(inf.meta?.vista || "lateral")} ·
+        ${inf.meta?.modo === "con_agujas" ? "puntos observados" : "puntos propuestos"} · ${esc(inf.meta?.fecha || "")}</p>
     </header>
 
     <div class="cuerpo">
@@ -173,8 +171,8 @@ function narrativaHTML(inf, logoDataUrl) {
 
   return `<section class="pagina narrativa">
     <header class="nar-head">${logoImg(logoDataUrl)}
-      <div><h2>Informe clínico de apoyo</h2>
-      <p class="ref">Basado en el Manual de Auriculoterapia de Terry Oleson (3.ª ed.). ${esc(inf.meta?.caso_id || "")}</p></div>
+      <h2>Informe clínico de apoyo</h2>
+      <p class="ref">Basado en el Manual de Auriculoterapia de Terry Oleson (3.ª ed.). ${esc(inf.meta?.caso_id || "")}</p>
     </header>
 
     <h3>1 · Observación visual</h3>
@@ -225,13 +223,12 @@ const CSS = `
   .marca,.sub,.ref{ font-family:"IBM Plex Sans",system-ui,sans-serif; color:var(--tinta2); }
   .marca{ font-size:8pt; letter-spacing:.18em; text-transform:uppercase; margin:0; }
   .sub,.ref{ font-size:9pt; margin:.2em 0 0; }
-  /* logo */
-  .logo{ height:56px; width:auto; flex:none; }
-  .infografico header{ display:flex; gap:16px; align-items:center; border-bottom:1px solid var(--linea); padding-bottom:10px; }
-  .infografico header .tit{ flex:1; }
-  .nar-head{ display:flex; gap:14px; align-items:center; margin-bottom:6px; }
-  .nar-head .logo{ height:44px; }
-  .nar-head h2{ margin:0; }
+  /* logo — margen superior izquierdo, grande */
+  .logo{ display:block; height:24mm; width:auto; max-width:75%; margin:0 0 8px; }
+  .infografico header{ border-bottom:1px solid var(--linea); padding-bottom:10px; }
+  .nar-head{ margin-bottom:6px; }
+  .nar-head .logo{ height:20mm; }
+  .nar-head h2{ margin:.1em 0; }
   .pie-marca{ font-weight:600; color:var(--azul); }
   .infografico .cuerpo{ display:flex; gap:16px; margin-top:14px; align-items:flex-start; }
   .foto{ width:46%; flex:none; margin:0; }

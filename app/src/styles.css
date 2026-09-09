@@ -21,9 +21,10 @@ body {
 
 .marca-logo {
   display: block;
-  height: 64px;
+  height: 88px;
   width: auto;
-  margin: 0 0 12px;
+  max-width: 80%;
+  margin: 0 0 14px;
 }
 .top h1 {
   font-family: "Spectral", Georgia, serif;
