@@ -33,6 +33,7 @@ app/api/_lib/coordenadas-oreja.json
 app/public/ejemplo-*.json
 app/scripts/muestra*
 app/scripts/e2e-informe.*
+app/scripts/arq-*
 
 # --- Claude / editor local ---
 .claude/settings.local.json
