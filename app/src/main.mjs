@@ -1,4 +1,5 @@
 import { construirDocumentoHTML } from "./report.mjs";
+import * as historial from "./historial.mjs";
 
 const $ = (s) => document.querySelector(s);
 const estado = $("#estado");
@@ -8,6 +9,7 @@ let modo = null;
 let oreja = "no_determinada";
 let consentimiento = false;
 let informe = null;
+let fotoActual = null;   // la foto que acompaña al informe mostrado (subida o recuperada del historial)
 let logoDataUrl = null;
 
 const LADO_MIN = 600; // px del lado mayor de la foto original
@@ -114,8 +116,10 @@ $("#analizar").addEventListener("click", async () => {
       return;
     }
     informe = data.informe;
-    mostrar(informe, data.debug);
+    fotoActual = imagenDataUrl;
+    mostrar(informe, data.debug, fotoActual);
     setEstado("");
+    if (await historial.guardar({ informe, fotoDataUrl: fotoActual })) renderHistorial();
   } catch (err) {
     setEstado("Error: " + err.message, true);
   } finally {
@@ -130,7 +134,8 @@ $("#demo").addEventListener("click", async () => {
   try {
     const r = await fetch("/ejemplo-oreja-limpia.json");
     informe = await r.json();
-    mostrar(informe, null);
+    fotoActual = null;
+    mostrar(informe, null, null);
     setEstado("Ejemplo cargado (no consumió IA).");
   } catch {
     setEstado("No se pudo cargar el ejemplo.", true);
@@ -152,8 +157,8 @@ function ajustarVista() {
   wrap.style.height = Math.ceil(altoReal * escala) + 20 + "px";
 }
 
-function mostrar(inf, debug) {
-  const html = construirDocumentoHTML(inf, imagenDataUrl, logoDataUrl);
+function mostrar(inf, debug, foto = fotoActual) {
+  const html = construirDocumentoHTML(inf, foto, logoDataUrl);
   const vista = $("#vista");
   vista.onload = () => {
     ajustarVista();
@@ -176,7 +181,7 @@ function mostrar(inf, debug) {
 
 $("#descargar").addEventListener("click", () => {
   if (!informe) return;
-  const html = construirDocumentoHTML(informe, imagenDataUrl, logoDataUrl);
+  const html = construirDocumentoHTML(informe, fotoActual, logoDataUrl);
   const w = window.open("", "_blank");
   if (!w) {
     setEstado("El navegador bloqueó la ventana emergente. Permítelas para este sitio y vuelve a intentar.", true);
@@ -200,8 +205,56 @@ function setEstado(t, esError = false) {
   estado.classList.toggle("error", esError);
 }
 
+// --- historial (solo en este dispositivo) --------------------------
+const fmtFecha = (iso) => {
+  const d = new Date(iso);
+  return isNaN(d) ? (iso || "") : d.toLocaleDateString("es", { day: "2-digit", month: "short", year: "numeric" });
+};
+
+async function renderHistorial() {
+  if (!historial.disponible()) return;
+  const items = await historial.listar();
+  const sec = $("#historial"), ul = $("#hist-lista");
+  sec.hidden = items.length === 0;
+  ul.innerHTML = items.map((it) => `
+    <li data-id="${it.caso_id}">
+      <button class="hist-abrir" type="button">
+        <span class="hist-tit">${it.titulo}</span>
+        <span class="hist-meta">${fmtFecha(it.fecha)} · ${it.modo === "con_agujas" ? "con agujas" : "oreja limpia"}</span>
+      </button>
+      <button class="hist-del" type="button" title="Borrar" aria-label="Borrar">✕</button>
+    </li>`).join("");
+}
+
+$("#hist-lista").addEventListener("click", async (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  const id = li.dataset.id;
+  if (e.target.closest(".hist-del")) {
+    await historial.borrar(id);
+    renderHistorial();
+    return;
+  }
+  if (e.target.closest(".hist-abrir")) {
+    const rec = await historial.obtener(id);
+    if (!rec) { setEstado("No se pudo abrir ese informe.", true); return; }
+    informe = rec.informe;
+    fotoActual = rec.foto || null;
+    mostrar(informe, null, fotoActual);
+    setEstado("Informe recuperado del historial de este dispositivo.");
+  }
+});
+
+$("#hist-borrar-todo").addEventListener("click", async () => {
+  if (!confirm("¿Borrar todos los informes guardados en este dispositivo?")) return;
+  await historial.borrarTodo();
+  renderHistorial();
+});
+
 let _rt;
 window.addEventListener("resize", () => { clearTimeout(_rt); _rt = setTimeout(ajustarVista, 150); });
+
+renderHistorial();
 
 const qs = new URLSearchParams(location.search);
 if (qs.has("demo")) {
