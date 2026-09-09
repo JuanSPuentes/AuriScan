@@ -9,8 +9,8 @@ let oreja = "no_determinada";
 let informe = null;
 let logoDataUrl = null;
 
-// Logo -> data URI (para que el informe sea autocontenido en la ventana de impresión)
-fetch("/logo.png")
+// Emblema del logo -> data URI (para que el informe sea autocontenido en la ventana de impresión)
+fetch("/logo-emblema.png")
   .then((r) => (r.ok ? r.blob() : Promise.reject()))
   .then((b) => new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(b); }))
   .then((d) => { logoDataUrl = d; })

@@ -19,6 +19,8 @@ audio*.ogg
 oreja*.jpeg
 oreja*.jpg
 configuracion de accesos.png
+capturas/
+Stikers Dra Jaki Caro.pdf
 
 # --- build y archivos generados ---
 app/dist/

@@ -70,8 +70,13 @@ function earSVG(puntos) {
 const chip = (v) => v ? `<span class="chip c-${esc(v)}">${esc(v)}</span>` : "";
 const estadoTxt = (e) => ({ agudo: "agudo", subagudo: "subagudo", cronico: "crónico", no_determinado: "estado no determinado" }[e] || e || "");
 
-const logoImg = (logo) => logo ? `<img class="logo" src="${logo}" alt="Dra. Jakeline Caro">` : "";
 const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
+// Cabecera de marca: emblema + nombre tipografiado (el lockup vertical no se lee a tamaño de cabecera).
+const marcaHead = (logo) => `<div class="marca-head">
+  ${logo ? `<img class="emblema" src="${logo}" alt="">` : ""}
+  <div class="marca-txt"><span class="marca-nombre">Dra. Jakeline Caro</span>
+  <span class="marca-sub">Medicina Integrativa y Salud Digital</span></div>
+</div>`;
 
 // --- infográfico (página 1) -------------------------------------------
 function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
@@ -100,7 +105,7 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
 
   return `<section class="pagina infografico">
     <header>
-      ${logoImg(logoDataUrl)}
+      ${marcaHead(logoDataUrl)}
       <p class="marca">Análisis de imagen · auriculoterapia</p>
       <h1>${esc(inf.infografico?.titulo || "Informe auricular")}</h1>
       <p class="sub">${inf.meta?.oreja && inf.meta.oreja !== "no_determinada" ? "Oreja " + esc(inf.meta.oreja) + " · " : ""}vista ${esc(inf.meta?.vista || "lateral")} ·
@@ -170,7 +175,7 @@ function narrativaHTML(inf, logoDataUrl) {
   const sesiones = pr.sesiones_estimadas ? `${pr.sesiones_estimadas.min}–${pr.sesiones_estimadas.max}` : "—";
 
   return `<section class="pagina narrativa">
-    <header class="nar-head">${logoImg(logoDataUrl)}
+    <header class="nar-head">${marcaHead(logoDataUrl)}
       <h2>Informe clínico de apoyo</h2>
       <p class="ref">Basado en el Manual de Auriculoterapia de Terry Oleson (3.ª ed.). ${esc(inf.meta?.caso_id || "")}</p>
     </header>
@@ -223,11 +228,16 @@ const CSS = `
   .marca,.sub,.ref{ font-family:"IBM Plex Sans",system-ui,sans-serif; color:var(--tinta2); }
   .marca{ font-size:8pt; letter-spacing:.18em; text-transform:uppercase; margin:0; }
   .sub,.ref{ font-size:9pt; margin:.2em 0 0; }
-  /* logo — margen superior izquierdo, grande */
-  .logo{ display:block; height:24mm; width:auto; max-width:75%; margin:0 0 8px; }
+  /* marca — emblema + nombre, margen superior izquierdo */
+  .marca-head{ display:flex; align-items:center; gap:9px; margin:0 0 8px; }
+  .marca-head .emblema{ height:16mm; width:auto; flex:none; }
+  .marca-txt{ display:flex; flex-direction:column; line-height:1.15; }
+  .marca-nombre{ font-family:"Spectral","Georgia",serif; font-weight:700; font-size:13pt; color:var(--azul); letter-spacing:.01em; }
+  .marca-sub{ font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:7.5pt; letter-spacing:.14em; text-transform:uppercase; color:var(--tinta2); }
   .infografico header{ border-bottom:1px solid var(--linea); padding-bottom:10px; }
   .nar-head{ margin-bottom:6px; }
-  .nar-head .logo{ height:20mm; }
+  .nar-head .emblema{ height:12mm; }
+  .nar-head .marca-nombre{ font-size:11pt; }
   .nar-head h2{ margin:.1em 0; }
   .pie-marca{ font-weight:600; color:var(--azul); }
   .infografico .cuerpo{ display:flex; gap:16px; margin-top:14px; align-items:flex-start; }
