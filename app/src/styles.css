@@ -184,6 +184,34 @@ button.enlace {
 }
 .hist-del:hover { background: #f1e3d9; color: var(--ocre); }
 
+/* pie de página con los datos de la doctora */
+.app-footer {
+  margin-top: 48px;
+  padding-top: 18px;
+  border-top: 1px solid var(--linea);
+  text-align: center;
+  color: var(--tinta2);
+}
+.af-nombre {
+  font-family: "Spectral", Georgia, serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--azul);
+  margin: 0;
+}
+.af-sub {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin: 2px 0 10px;
+}
+.af-contacto { font-size: .82rem; margin: 0 0 12px; line-height: 1.9; }
+.af-contacto a { color: var(--azul2); text-decoration: none; }
+.af-contacto a:hover { text-decoration: underline; }
+.af-contacto span { color: var(--linea); margin: 0 4px; }
+.af-disclaimer { font-size: .72rem; line-height: 1.5; max-width: 46ch; margin: 0 auto; color: var(--ocre); }
+
 @media (max-width: 480px) {
   .segmento { grid-template-columns: 1fr; }
   .acciones { flex-direction: column; align-items: stretch; }

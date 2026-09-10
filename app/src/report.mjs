@@ -67,12 +67,9 @@ function earSVG(puntos) {
   </svg>`;
 }
 
-const chip = (v) => v ? `<span class="chip c-${esc(v)}">${esc(v)}</span>` : "";
-const chipConf = (v) => v ? `<span class="chip c-${esc(v)}">confianza ${esc(v)}</span>` : "";
-// Cabecera de cada sistema: solo la confianza (el estado agudo/crónico no se muestra).
-const sistemaMeta = (s) => chipConf(s.confianza);
 
 const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
+const PIE_CONTACTO = "Medicinaintegrstivadrajakeline@gmail.com · +57 310 817 8456 · TikTok @dra.jakeline.acu";
 // Cabecera de marca: emblema + nombre tipografiado (el lockup vertical no se lee a tamaño de cabecera).
 const marcaHead = (logo) => `<div class="marca-head">
   ${logo ? `<img class="emblema" src="${logo}" alt="">` : ""}
@@ -97,8 +94,7 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
 
   const panelSistemas = sistemas.length ? sistemas.map((s) => `
     <div class="sist">
-      <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}
-        <span class="s-meta">${sistemaMeta(s)}</span></h4>
+      <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}</h4>
       ${s.base_observacional ? `<p class="base">${esc(s.base_observacional)}</p>` : ""}
       ${s.region_corporal ? `<p class="reg"><b>Región:</b> ${esc(s.region_corporal)}</p>` : ""}
       ${s.hallazgos_probables?.length ? `<ul>${s.hallazgos_probables.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>` : ""}
@@ -135,7 +131,11 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
       <div><h3>Razonamiento</h3><p>${esc(inf.infografico?.razonamiento || "")}</p></div>
       <div><h3>Conclusión</h3><p>${esc(inf.infografico?.conclusion || "")}</p></div>
     </div>
-    <footer><span class="pie-marca">${PIE_MARCA}</span><br>${esc(inf.disclaimer || "")}</footer>
+    <footer>
+      <span class="pie-marca">${PIE_MARCA}</span><br>
+      <span class="pie-contacto">${PIE_CONTACTO}</span><br>
+      ${esc(inf.disclaimer || "")}
+    </footer>
   </section>`;
 }
 
@@ -152,14 +152,13 @@ function narrativaHTML(inf, logoDataUrl) {
   const pr = inf.pronostico || {};
 
   const signos = tabla(
-    ["Signo", "Color", "Localización", "Ext.", "Interpretación", "Conf."],
+    ["Signo", "Color", "Localización", "Ext.", "Interpretación"],
     (ov.signos || []).map((s) => [esc(s.signo), esc((s.color || "").replace(/_/g, " ")),
-      esc(s.localizacion), esc(s.extension || ""), esc(s.interpretacion), chip(s.confianza)]));
+      esc(s.localizacion), esc(s.extension || ""), esc(s.interpretacion)]));
 
   const sistemas = (hd.sistemas || []).map((s) => `
     <div class="bloque-sist">
-      <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}
-        <span class="s-meta">${sistemaMeta(s)}</span></h4>
+      <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}</h4>
       ${s.base_observacional ? `<p class="pa"><b>Base:</b> ${esc(s.base_observacional)}</p>` : ""}
       ${s.region_corporal ? `<p class="pa"><b>Región corporal:</b> ${esc(s.region_corporal)}</p>` : ""}
       ${s.puntos_asociados?.length ? `<p class="pa"><b>Puntos:</b> ${s.puntos_asociados.map(esc).join(", ")}</p>` : ""}
@@ -211,9 +210,12 @@ function narrativaHTML(inf, logoDataUrl) {
 
     <h3>Limitaciones</h3>
     <ul>${(inf.limitaciones || []).map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
-    <p class="conf">Nivel de confianza global: ${chip(inf.nivel_de_confianza_global)}</p>
 
-    <footer><span class="pie-marca">${PIE_MARCA}</span> · ${esc(inf.disclaimer || "")} · Generado con IA (${esc(inf.meta?.modelo_ia || "")}) · ${esc(inf.meta?.fecha || "")}</footer>
+    <footer>
+      <span class="pie-marca">${PIE_MARCA}</span><br>
+      <span class="pie-contacto">${PIE_CONTACTO}</span><br>
+      ${esc(inf.disclaimer || "")} · Generado con IA (${esc(inf.meta?.modelo_ia || "")}) · ${esc(inf.meta?.fecha || "")}
+    </footer>
   </section>`;
 }
 
@@ -244,6 +246,7 @@ const CSS = `
   .nar-head .marca-nombre{ font-size:11pt; }
   .nar-head h2{ margin:.1em 0; }
   .pie-marca{ font-weight:600; color:var(--azul); }
+  .pie-contacto{ color:var(--tinta2); }
   .infografico .cuerpo{ display:flex; gap:16px; margin-top:14px; align-items:flex-start; }
   .foto{ width:46%; flex:none; margin:0; }
   .foto img{ width:100%; max-height:300px; object-fit:contain; border:1px solid var(--linea); border-radius:6px; background:#f4f7fb; }
@@ -260,7 +263,7 @@ const CSS = `
   .tag{ font-family:"IBM Plex Sans",sans-serif; font-size:7pt; background:var(--azulc); color:var(--azul); padding:0 5px; border-radius:999px; text-transform:uppercase; }
   .loc{ font-size:8.5pt; color:var(--tinta2); }
   .grid-sist{ display:grid; grid-template-columns:1fr 1fr; gap:8px 18px; }
-  .sist h4{ margin:.2em 0; } .sist .s-meta{ font-family:"IBM Plex Sans",sans-serif; font-size:7.5pt; font-weight:400; color:var(--tinta2); }
+  .sist h4{ margin:.2em 0; }
   .sist .base{ font-size:9pt; color:var(--tinta2); font-style:italic; margin:.15em 0; }
   .sist .reg{ font-size:9pt; margin:.15em 0; }
   .sist ul{ margin:.2em 0; padding-left:1.1em; } .sist li{ font-size:9pt; }
@@ -273,13 +276,10 @@ const CSS = `
   th{ background:var(--azulc); font-family:"IBM Plex Sans",sans-serif; font-size:8pt; text-transform:uppercase; letter-spacing:.03em; }
   .dx{ background:var(--azulc); padding:8px 10px; border-left:3px solid var(--azul); }
   .bloque-sist{ margin:.6em 0; } .bloque-sist ul{ margin:.2em 0; padding-left:1.1em; }
-  .bloque-sist .s-meta{ font-family:"IBM Plex Sans",sans-serif; font-size:8pt; font-weight:400; color:var(--tinta2); }
   .pa{ font-size:9pt; color:var(--tinta2); margin:.12em 0; }
   ul.crit{ list-style:none; padding:0; } ul.crit li{ padding:3px 0; }
   .si{ color:var(--ok); font-weight:700; } .no{ color:var(--ocre); font-weight:700; }
   .st{ font-family:"IBM Plex Sans",sans-serif; font-size:9pt; font-weight:600; color:var(--azul2); margin:.8em 0 .2em; }
-  .chip{ font-family:"IBM Plex Sans",sans-serif; font-size:7.5pt; padding:1px 7px; border-radius:999px; text-transform:uppercase; }
-  .c-alta{ background:#dcefe3; color:var(--ok); } .c-media{ background:var(--azulc); color:var(--azul); } .c-baja{ background:#f1e5d9; color:var(--ocre); }
   ul.prono{ list-style:none; padding:0; } ul.prono li{ padding:2px 0; }
   @media print{ body{ background:#fff; } .pagina{ box-shadow:none; margin:0; } .pagina + .pagina{ page-break-before:always; } }
 `;

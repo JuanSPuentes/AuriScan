@@ -41,8 +41,16 @@ const RESUMEN_SOMATOTOPIA = new Set([
 ]);
 const ADMITE_ZONA = new Set(["anatomia", "semiologia", "protocolo", "criterio", "diagnostico", "eje"]);
 
+// color_general -> notas del cerebro que interpretan ese patrón difuso
+const COLOR_A_NOTAS = {
+  rojo_difuso: ["Manchas de coloracion oscura", "Eje de homeostasis general"],
+  rojo_focal: ["Manchas de coloracion oscura"],
+  palido: ["Piel blanca y descamacion", "Eje de homeostasis general"],
+  mixto: ["Manchas de coloracion oscura", "Piel blanca y descamacion"],
+};
+
 /**
- * @param {{zonas?:string[], signos?:({signo:string}|string)[], puntos_visibles?:string[]}} obs
+ * @param {{zonas?:string[], signos?:({signo:string}|string)[], colorGeneral?:string, puntos_visibles?:string[]}} obs
  * @returns {{context:string, notasUsadas:string[], noResueltos:string[], tokensEst:number}}
  */
 export function recuperar(obs = {}) {
@@ -78,6 +86,7 @@ export function recuperar(obs = {}) {
     if ((n.zona_auricular || []).some((z) => zset.has(norm(z))))
       add(n.id, n.tipo === "protocolo" ? "protocolo-zona" : "zona");
   }
+  for (const id of COLOR_A_NOTAS[obs.colorGeneral] || []) add(id, "color-general");
   const noResueltos = [];
   for (const p of puntos) {
     const id = resolve(p);
@@ -88,7 +97,8 @@ export function recuperar(obs = {}) {
 
   const prio = (motivos) => Math.min(...motivos.map((m) =>
     m === "nucleo" ? 0 : m.startsWith("enlace-nucleo") ? 1 : m.startsWith("punto") ? 2
-      : m.startsWith("signo") ? 3 : m === "protocolo-zona" ? 3 : m.startsWith("enlace") ? 5 : 6)); // zona genérica = lo último
+      : m.startsWith("signo") ? 3 : m === "protocolo-zona" ? 3 : m === "color-general" ? 3
+      : m.startsWith("enlace") ? 5 : 6)); // zona genérica = lo último
   const MAX_NOTAS = Number(process.env.RAG_MAX_NOTAS || 26);
   const picked = [...sel.entries()]
     .map(([id, motivos]) => ({ n: byId[id], r: prio(motivos) }))
