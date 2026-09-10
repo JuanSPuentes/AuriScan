@@ -73,6 +73,7 @@ const chipConf = (v) => v ? `<span class="chip c-${esc(v)}">confianza ${esc(v)}<
 const sistemaMeta = (s) => chipConf(s.confianza);
 
 const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
+const PIE_CONTACTO = "Medicinaintegrstivadrajakeline@gmail.com · +57 310 817 8456 · TikTok @dra.jakeline.acu";
 // Cabecera de marca: emblema + nombre tipografiado (el lockup vertical no se lee a tamaño de cabecera).
 const marcaHead = (logo) => `<div class="marca-head">
   ${logo ? `<img class="emblema" src="${logo}" alt="">` : ""}
@@ -135,7 +136,11 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
       <div><h3>Razonamiento</h3><p>${esc(inf.infografico?.razonamiento || "")}</p></div>
       <div><h3>Conclusión</h3><p>${esc(inf.infografico?.conclusion || "")}</p></div>
     </div>
-    <footer><span class="pie-marca">${PIE_MARCA}</span><br>${esc(inf.disclaimer || "")}</footer>
+    <footer>
+      <span class="pie-marca">${PIE_MARCA}</span><br>
+      <span class="pie-contacto">${PIE_CONTACTO}</span><br>
+      ${esc(inf.disclaimer || "")}
+    </footer>
   </section>`;
 }
 
@@ -212,7 +217,11 @@ function narrativaHTML(inf, logoDataUrl) {
     <h3>Limitaciones</h3>
     <ul>${(inf.limitaciones || []).map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
 
-    <footer><span class="pie-marca">${PIE_MARCA}</span> · ${esc(inf.disclaimer || "")} · Generado con IA (${esc(inf.meta?.modelo_ia || "")}) · ${esc(inf.meta?.fecha || "")}</footer>
+    <footer>
+      <span class="pie-marca">${PIE_MARCA}</span><br>
+      <span class="pie-contacto">${PIE_CONTACTO}</span><br>
+      ${esc(inf.disclaimer || "")} · Generado con IA (${esc(inf.meta?.modelo_ia || "")}) · ${esc(inf.meta?.fecha || "")}
+    </footer>
   </section>`;
 }
 
@@ -243,6 +252,7 @@ const CSS = `
   .nar-head .marca-nombre{ font-size:11pt; }
   .nar-head h2{ margin:.1em 0; }
   .pie-marca{ font-weight:600; color:var(--azul); }
+  .pie-contacto{ color:var(--tinta2); }
   .infografico .cuerpo{ display:flex; gap:16px; margin-top:14px; align-items:flex-start; }
   .foto{ width:46%; flex:none; margin:0; }
   .foto img{ width:100%; max-height:300px; object-fit:contain; border:1px solid var(--linea); border-radius:6px; background:#f4f7fb; }
