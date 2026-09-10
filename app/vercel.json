@@ -6,6 +6,10 @@
   "functions": {
     "api/analizar.mjs": {
       "maxDuration": 300
+    },
+    "api/pdf.mjs": {
+      "maxDuration": 60,
+      "memory": 1536
     }
   }
 }

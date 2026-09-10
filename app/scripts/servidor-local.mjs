@@ -32,6 +32,7 @@ if (!existsSync(DIST)) {
 }
 
 const { default: analizar } = await import("../api/analizar.mjs");
+const { default: pdf } = await import("../api/pdf.mjs");
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
   ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png",
@@ -39,17 +40,20 @@ const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/jav
 
 const server = createServer(async (req, res) => {
   // --- API ---
-  if (req.url === "/api/analizar") {
+  const ruta = { "/api/analizar": analizar, "/api/pdf": pdf }[req.url];
+  if (ruta) {
     if (req.method !== "POST") { res.writeHead(405).end("POST"); return; }
     let body = "";
     for await (const chunk of req) body += chunk;
     const shimReq = { method: "POST", body: body ? JSON.parse(body) : {} };
     const shimRes = {
-      _s: 200,
+      _s: 200, _h: {},
       status(c) { this._s = c; return this; },
+      setHeader(k, v) { this._h[k] = v; },
       json(o) { res.writeHead(this._s, { "Content-Type": "application/json" }); res.end(JSON.stringify(o)); },
+      send(b) { res.writeHead(this._s, this._h); res.end(b); },
     };
-    try { await analizar(shimReq, shimRes); }
+    try { await ruta(shimReq, shimRes); }
     catch (e) { res.writeHead(500, { "Content-Type": "application/json" }); res.end(JSON.stringify({ error: String(e.message || e) })); }
     return;
   }

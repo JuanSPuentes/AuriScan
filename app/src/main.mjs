@@ -168,14 +168,41 @@ function mostrar(inf, debug, foto = fotoActual) {
   $("#resultado").scrollIntoView({ behavior: "smooth" });
 }
 
-$("#descargar").addEventListener("click", () => {
+$("#descargar").addEventListener("click", async () => {
   if (!informe) return;
+  const btn = $("#descargar");
+  btn.disabled = true;
+  setEstado("Generando el PDF…");
+  try {
+    const r = await fetch("/api/pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ informe, foto: fotoActual, logo: logoDataUrl }),
+    });
+    if (!r.ok) throw new Error(`(${r.status})`);
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${(informe.meta?.caso_id || "informe-auricular").replace(/[^\w.-]/g, "")}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    setEstado("");
+  } catch (err) {
+    // reserva: abrir el informe en otra pestaña para imprimir/guardar
+    abrirParaImprimir();
+    setEstado("No se pudo generar el PDF automáticamente " + err.message + ". Se abrió en otra pestaña: elige «Guardar como PDF».", true);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function abrirParaImprimir() {
   const html = construirDocumentoHTML(informe, fotoActual, logoDataUrl);
   const w = window.open("", "_blank");
-  if (!w) {
-    setEstado("El navegador bloqueó la ventana emergente. Permítelas para este sitio y vuelve a intentar.", true);
-    return;
-  }
+  if (!w) return;
   w.document.write(html);
   w.document.close();
   const lanzar = () => {
@@ -185,8 +212,7 @@ $("#descargar").addEventListener("click", () => {
   };
   if (w.document.readyState === "complete") lanzar();
   else w.addEventListener("load", lanzar);
-  setEstado("Se abrió el informe en otra pestaña. Elige «Guardar como PDF» en el diálogo de impresión.");
-});
+}
 
 function setEstado(t, esError = false) {
   estado.textContent = t;
