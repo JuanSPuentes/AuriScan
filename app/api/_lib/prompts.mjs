@@ -67,10 +67,10 @@ export function promptInforme({ modo, schemaText }) {
     ? `MODO CON AGUJAS (foto post-intervención):
 - Usa "agujas_detectadas" y "agujas" de la visión. NO añadas agujas que la visión no reportó.
 - Para cada aguja, deduce en qué punto está por su posición y el material de referencia.
-- Infiere qué sistema(s) trata ese protocolo y su estado (agudo/crónico) por el color de la piel observado.
+- Infiere qué sistema(s) trata ese protocolo por la localización de las agujas y el color observado.
 - Evalúa el protocolo contra los criterios de Oleson. Cada punto va con "estado": "observado".`
     : `MODO OREJA LIMPIA (sin agujas): SIEMPRE produce una lectura, nunca "no concluyente". "agujas_detectadas" = 0.
-- Para cada signo localizado: zona -> sistema (mapa + contexto) -> estado por el color (rojo brillante = agudo; rojo oscuro / descamación = crónico).
+- Para cada signo localizado: zona -> sistema (mapa + contexto).
 - PROPÓN los puntos del/los sistema/s + los maestros de base. Cada punto va con "estado": "propuesto".
 - Si la oreja es de coloración homogénea y sin signos focales: NO la dejes vacía. Pon UN sistema
   "homeostasis-general" (titulo "Homeostasis general", zonas ["general"], confianza "baja",
@@ -83,11 +83,12 @@ export function promptInforme({ modo, schemaText }) {
 Sigue SIEMPRE esta cadena de razonamiento:
 1. OBSERVACIÓN: parte de lo que reportó la visión (color y ubicación, venas, descamación, relieve, agujas, hallazgos_normales). NO añadas hallazgos que la visión no mencionó.
 2. ZONA -> SISTEMA: para cada signo, qué región es y qué sistema corporal representa según el mapa de abajo y el CONTEXTO.
-3. ESTADO: agudo o crónico, deducido del color observado.
-4. PUNTOS: los puntos del/los sistema/s + los maestros de base. Cuando hay signos, una sesión real usa
+3. PUNTOS: los puntos del/los sistema/s + los maestros de base. Cuando hay signos, una sesión real usa
    entre 5 y 9 puntos (1-3 anatómicos del sistema + Punto Cero + Shen Men + 2-3 maestros/funcionales);
    no te quedes en 3. Si la oreja es homogénea (sin signos), basta con los 3-4 maestros de base.
-5. VALIDACIÓN: material de apoyo, a corroborar por un profesional.
+4. VALIDACIÓN: material de apoyo, a corroborar por un profesional.
+
+NO clasifiques el cuadro como agudo / subagudo / crónico ni lo menciones en ningún texto: no es fiable desde una sola foto.
 
 Trabajas con: las observaciones del paso de visión y el CONTEXTO de referencia (destilado del manual de Oleson). Usa SOLO ese contexto. Si algo no está respaldado, baja la "confianza"; no lo omitas.
 
@@ -104,12 +105,12 @@ Indicaciones:
 - "analisis_viable": false SOLO si la imagen no sirve (borrosa, cortada, no es una oreja). Una oreja limpia con signos sutiles SÍ es viable.
 - "observacion_visual.descripcion": el recorrido por regiones que hizo la visión. "hallazgos_normales": cópialos de la visión. "signos": copia y precisa lo que vio la visión (color, zona, ubicación con altura, focal/difuso); no lo dejes vacío si la visión reportó signos.
 - PROHIBIDO inventar: no afirmes agujas, adherencia al tratamiento, antecedentes, lateralidad (unilateral/bilateral) ni síntomas del paciente — no hay datos clínicos, solo la foto.
-- "hipotesis_diagnostica.diagnostico_principal": SIEMPRE un texto (nunca null) salvo imagen inviable. Titula con el/los sistema/s y su estado.
-- "hipotesis_diagnostica.sistemas": uno por cada sistema que el patrón de signos sugiera (o "homeostasis-general" si la oreja es homogénea — ver arriba). Claves permitidas SOLO: sistema, titulo, zonas, confianza, base_observacional, region_corporal, estado, hallazgos_probables, puntos_asociados. "base_observacional" CITA el signo y la zona exactos de la observación ("eritema rojo brillante focal en el trago").
+- "hipotesis_diagnostica.diagnostico_principal": SIEMPRE un texto (nunca null) salvo imagen inviable. Titula con el/los sistema/s implicado/s (sin "agudo"/"crónico").
+- "hipotesis_diagnostica.sistemas": uno por cada sistema que el patrón de signos sugiera (o "homeostasis-general" si la oreja es homogénea — ver arriba). Claves permitidas SOLO: sistema, titulo, zonas, confianza, base_observacional, region_corporal, hallazgos_probables, puntos_asociados. Deja "estado" fuera. "base_observacional" CITA el signo y la zona exactos de la observación ("eritema rojo brillante focal en el trago").
 - "evaluacion_protocolo.puntos": 5-9 entradas si hay signos; 3-4 si la oreja es homogénea. Cada "justificacion" (1 frase) enlaza el punto con un hallazgo de la observación o su función documentada en el contexto. "id" = nombre EXACTO de la nota del contexto cuando exista ("Shen Men", "Punto Cero"). "codigo_za" sin espacios: "PC2/CI4", no "PC2 / CI4".
 - "meta.motivo": etiqueta corta del sistema o cuadro principal ("Sistema musculoesquelético", "Ansiedad/estrés"). "No especificado" solo si de verdad no hay ninguna orientación.
 - "meta.oreja": pon "no_determinada". NO adivines izquierda/derecha desde la foto; si hace falta, lo indica la usuaria. No menciones el lado en los textos.
-- "pronostico": si el contexto no fija sesiones, usa 6-10 y ajusta por cronicidad. NO incluyas "factores" (adherencia, cooperación, estado general del paciente…): no hay datos clínicos. Deja "factores" fuera o vacío.
+- "pronostico": si el contexto no fija sesiones, usa 6-10. NO incluyas "factores" (adherencia, cooperación, estado general del paciente…): no hay datos clínicos. Deja "factores" fuera o vacío.
 - "disclaimer": incluye el campo con cualquier texto; se reemplaza.
 - Español de registro clínico, conciso.`;
 }

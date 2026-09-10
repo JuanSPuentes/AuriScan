@@ -198,7 +198,7 @@
               },
               "interpretacion": {
                 "type": "string",
-                "description": "Qué sugiere según el cerebro: sistema/región y si aparenta agudo o crónico."
+                "description": "Qué sugiere según el cerebro: sistema o región corporal representada."
               },
               "cronicidad": {
                 "enum": [
@@ -206,7 +206,8 @@
                   "cronico",
                   "subagudo",
                   "no_determinada"
-                ]
+                ],
+                "description": "En desuso: no se muestra. Déjalo fuera."
               },
               "confianza": {
                 "enum": [
@@ -303,7 +304,7 @@
                   "cronico",
                   "no_determinado"
                 ],
-                "description": "Derivado del color: rojo brillante = agudo; rojo oscuro/descamación = crónico."
+                "description": "En desuso: no se muestra en el informe (no es fiable desde una sola foto). Déjalo fuera."
               },
               "hallazgos_probables": {
                 "type": "array",

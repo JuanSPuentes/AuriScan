@@ -69,12 +69,8 @@ function earSVG(puntos) {
 
 const chip = (v) => v ? `<span class="chip c-${esc(v)}">${esc(v)}</span>` : "";
 const chipConf = (v) => v ? `<span class="chip c-${esc(v)}">confianza ${esc(v)}</span>` : "";
-const estadoTxt = (e) => ({ agudo: "agudo", subagudo: "subagudo", cronico: "crónico" }[e] || "");
-// "estado · confianza" para la cabecera de cada sistema; omite el estado si no se pudo determinar
-const sistemaMeta = (s) => {
-  const est = estadoTxt(s.estado);
-  return (est ? esc(est) + " · " : "") + chipConf(s.confianza);
-};
+// Cabecera de cada sistema: solo la confianza (el estado agudo/crónico no se muestra).
+const sistemaMeta = (s) => chipConf(s.confianza);
 
 const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
 // Cabecera de marca: emblema + nombre tipografiado (el lockup vertical no se lee a tamaño de cabecera).
