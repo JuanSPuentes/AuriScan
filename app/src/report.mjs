@@ -113,7 +113,7 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
     <div class="cuerpo">
       ${fotoBox}
       <div class="mapa">${earSVG(puntos)}
-        <p class="leyenda">Mapa de referencia · ● superficie &nbsp; ○ vista oculta</p>
+        <p class="leyenda">Mapa de referencia · <span class="pt-lleno"></span> superficie &nbsp; <span class="pt-vacio"></span> vista oculta</p>
       </div>
     </div>
 
@@ -255,6 +255,8 @@ const CSS = `
   .infografico .mapa{ width:46%; flex:none; }
   .infografico .mapa svg{ width:100%; height:auto; max-height:300px; }
   .leyenda{ font-family:"IBM Plex Sans",sans-serif; font-size:7.5pt; color:var(--tinta2); text-align:center; margin:.3em 0 0; }
+  .pt-lleno,.pt-vacio{ display:inline-block; width:7px; height:7px; border-radius:50%; border:1.5px solid var(--azul); vertical-align:middle; }
+  .pt-lleno{ background:var(--azul); }
   .bloque{ margin-top:14px; border-top:1px solid var(--linea); padding-top:8px; }
   ol.puntos{ list-style:none; margin:0; padding:0; columns:2; column-gap:20px; }
   ol.puntos li{ display:flex; gap:9px; padding:5px 0; border-bottom:1px solid var(--linea); break-inside:avoid; }
