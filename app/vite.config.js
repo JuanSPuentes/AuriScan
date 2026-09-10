@@ -16,8 +16,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "apple-touch-icon.png", "logo.svg", "logo-emblema.png"],
       manifest: {
-        name: "Análisis auricular",
-        short_name: "Auricular",
+        name: "AuriScan · análisis de pabellón auricular",
+        short_name: "AuriScan",
         description: "Sube la foto de un oído y descarga un informe de auriculoterapia.",
         lang: "es",
         theme_color: "#1f4e79",

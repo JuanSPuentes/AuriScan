@@ -6,6 +6,9 @@
   "functions": {
     "api/analizar.mjs": {
       "maxDuration": 300
+    },
+    "api/pdf.mjs": {
+      "maxDuration": 60
     }
   }
 }

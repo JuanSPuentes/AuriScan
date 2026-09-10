@@ -29,7 +29,16 @@ body {
   font-family: "Spectral", Georgia, serif;
   font-size: 1.9rem;
   color: var(--azul);
-  margin: 0 0 6px;
+  margin: 0 0 2px;
+  letter-spacing: -.01em;
+}
+.top .lema {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: .78rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--azul2);
+  margin: 0 0 10px;
 }
 .top p { color: var(--tinta2); font-size: .92rem; margin: 0 0 8px; }
 
