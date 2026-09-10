@@ -117,11 +117,12 @@ CÓMO CONSTRUIR EL DIAGNÓSTICO (SIEMPRE hay diagnóstico; nunca "sana" ni "sin 
    - eritema difuso de toda la oreja -> "homeostasis-general" o "circulatorio" (activación general).
    - eritema/palidez difusa de la concha -> "homeostasis-general" (tono neurovegetativo).
    - lóbulo congestivo -> "neuro-psicologico".
-2. Crea 1-3 "sistemas" (los más marcados). "confianza": "media" si el signo es claro, "baja" si es leve
-   o si la única base es el color relativo. "base_observacional" cita el signo y la zona.
+2. Crea 1-3 "sistemas" (los más marcados). Pon el campo "confianza" ("media" si el signo es claro,
+   "baja" si es leve o si la única base es el color relativo) pero NO menciones niveles de confianza
+   en NINGÚN texto visible. "base_observacional" cita el signo y la zona.
 3. Si TODAS las regiones venían rosadas y lisas y la visión solo marcó 1 signo "leve": haz igualmente
-   UN sistema con ese signo, confianza "baja", y dilo en "resumen": la lectura es orientativa por el
-   color relativo y debe confirmarse con exploración.
+   UN sistema con ese signo y dilo en "resumen": la lectura es orientativa por el color relativo y
+   debe confirmarse con exploración.
 4. "diagnostico_principal": "El patrón visual orienta a [sistema/s]". "resumen": explica el razonamiento
    zona->sistema y SIEMPRE termina "Orientación a partir de la imagen; debe confirmarse por palpación
    y detección eléctrica de puntos." "meta.motivo" = etiqueta del sistema principal.
