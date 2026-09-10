@@ -417,7 +417,7 @@
         },
         "criterios_oleson": {
           "type": "array",
-          "description": "Checklist contra los criterios de selección de Oleson (§6.8).",
+          "description": "Checklist contra los criterios de selección de puntos (clave heredada 'criterios_oleson'; en el informe se muestra como 'Criterios de selección de puntos').",
           "items": {
             "type": "object",
             "additionalProperties": false,

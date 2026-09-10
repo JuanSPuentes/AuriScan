@@ -179,7 +179,7 @@ function narrativaHTML(inf, logoDataUrl) {
   return `<section class="pagina narrativa">
     <header class="nar-head">${marcaHead(logoDataUrl)}
       <h2>Informe clínico de apoyo</h2>
-      <p class="ref">Basado en el Manual de Auriculoterapia de Terry Oleson (3.ª ed.). ${esc(inf.meta?.caso_id || "")}</p>
+      <p class="ref">Basado en la cartografía auricular de Paul Nogier. ${esc(inf.meta?.caso_id || "")}</p>
     </header>
 
     <h3>1 · Observación visual</h3>
@@ -197,7 +197,7 @@ function narrativaHTML(inf, logoDataUrl) {
 
     <h3>3 · Evaluación del protocolo</h3>
     ${ep.puntos?.length ? puntos : "<p>—</p>"}
-    ${criterios ? `<p class="st">Criterios de selección (Oleson §6.8)</p><ul class="crit">${criterios}</ul>` : ""}
+    ${criterios ? `<p class="st">Criterios de selección de puntos</p><ul class="crit">${criterios}</ul>` : ""}
     <p>${esc(ep.valoracion_global || "")}</p>
     ${ep.sugerencias?.length ? `<p class="st">Sugerencias</p><ul>${ep.sugerencias.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>` : ""}
 
@@ -284,14 +284,21 @@ const CSS = `
   @media print{ body{ background:#fff; } .pagina{ box-shadow:none; margin:0; } .pagina + .pagina{ page-break-before:always; } }
 `;
 
+// El informe se apoya en la cartografía de Nogier; si el modelo nombra a Oleson (autor del libro
+// del que se destiló el material) o cita números de sección de ese libro, se normaliza en la salida.
+const normalizarFuente = (s) => s
+  .replace(/\bTerry\s+Oleson\b/gi, "Paul Nogier")
+  .replace(/\bOleson\b/gi, "Nogier")
+  .replace(/\s*\(?§\s*\d+(?:\.\d+)?\)?/g, "");
+
 export function construirDocumentoHTML(informe, fotoDataUrl = null, logoDataUrl = null) {
   const cuerpo = informe.analisis_viable === false
     ? infograficoHTML(informe, fotoDataUrl, logoDataUrl)
     : infograficoHTML(informe, fotoDataUrl, logoDataUrl) + narrativaHTML(informe, logoDataUrl);
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8">
+  return normalizarFuente(`<!doctype html><html lang="es"><head><meta charset="utf-8">
     <title>${esc(informe.infografico?.titulo || "Informe auricular")}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap">
-    <style>${CSS}</style></head><body>${cuerpo}</body></html>`;
+    <style>${CSS}</style></head><body>${cuerpo}</body></html>`);
 }
 
 export { infograficoHTML, narrativaHTML };

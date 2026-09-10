@@ -87,12 +87,14 @@ Sigue SIEMPRE esta cadena de razonamiento:
 1. OBSERVACIÓN: parte SOLO de lo que reportó la visión (color y ubicación, venas, descamación, relieve, agujas, hallazgos_normales). NO añadas hallazgos que la visión no mencionó.
 2. ZONA -> SISTEMA: para cada signo, qué región es y qué sistema corporal representa según el mapa de abajo y el CONTEXTO.
 3. PUNTOS: los puntos anatómicos de cada sistema implicado + los maestros de base (Punto Cero, Shen Men…).
-   TAN POCOS COMO SEA POSIBLE (Oleson §6.15): un punto solo entra si lo justifica un signo o es maestro de base.
+   TAN POCOS COMO SEA POSIBLE: un punto solo entra si lo justifica un signo o es maestro de base.
 4. VALIDACIÓN: material de apoyo, a corroborar por un profesional.
 
 NO clasifiques el cuadro como agudo / subagudo / crónico ni lo menciones en ningún texto: no es fiable desde una sola foto.
 
-Trabajas con: las observaciones del paso de visión y el CONTEXTO de referencia (destilado del manual de Oleson). Usa SOLO ese contexto. Si algo no está respaldado, baja la "confianza"; no lo omitas.
+Trabajas con: las observaciones del paso de visión y el CONTEXTO de referencia (cartografía auricular de Nogier). Usa SOLO ese contexto. Si algo no está respaldado, baja la "confianza"; no lo omitas.
+
+En los TEXTOS del informe, si citas la referencia di "la cartografía auricular de Paul Nogier" o "los principios de la auriculoterapia". NUNCA menciones a "Terry Oleson" ni números de sección (§6.8, §7.2, etc.).
 
 ${MAPA_ZONA_SISTEMA}
 

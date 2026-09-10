@@ -42,7 +42,7 @@
         "extension": "focal",
         "interpretacion": "Reactividad de la zona que representa los miembros inferiores; sugiere afectación musculoesquelética de cadera/rodilla/tobillo",
         "confianza": "media",
-        "fuente": "Oleson §7.2, §5.1"
+        "fuente": "cartografía auricular de Nogier"
       },
       {
         "signo": "telangiectasias/venas",
@@ -71,7 +71,7 @@
   },
   "hipotesis_diagnostica": {
     "diagnostico_principal": "Signos de desequilibrio en el sistema musculoesquelético con proyección en miembros inferiores.",
-    "resumen": "El enrojecimiento focal y brillante en la parte alta de la oreja (raíz superior del antihélix y fosa triangular) corresponde, según la cartografía de Oleson, a los miembros inferiores (cadera, rodilla, tobillo).",
+    "resumen": "El enrojecimiento focal y brillante en la parte alta de la oreja (raíz superior del antihélix y fosa triangular) corresponde, según la cartografía auricular de Nogier, a los miembros inferiores (cadera, rodilla, tobillo).",
     "sistemas": [
       {
         "sistema": "musculoesqueletico",
@@ -190,7 +190,7 @@
       {
         "criterio": "Combinación clásica / experiencia clínica",
         "cumple": true,
-        "nota": "Área afectada + Shen Men + Punto Cero es la base para dolor de miembros (Oleson §6.15)."
+        "nota": "Área afectada + Shen Men + Punto Cero es la base para dolor de miembros."
       },
       {
         "criterio": "Diagnóstico médico general del paciente",
@@ -216,7 +216,7 @@
   },
   "infografico": {
     "titulo": "Caso 1602 · Sistema musculoesquelético",
-    "razonamiento": "El enrojecimiento focal y brillante se localiza en la parte alta de la oreja, sobre la raíz superior del antihélix y la fosa triangular. Según la cartografía de Oleson, esa zona representa los miembros inferiores. Se propone tratar los puntos de cadera, rodilla y tobillo de esa zona, junto con Shen Men y Punto Cero como base.",
+    "razonamiento": "El enrojecimiento focal y brillante se localiza en la parte alta de la oreja, sobre la raíz superior del antihélix y la fosa triangular. Según la cartografía auricular de Nogier, esa zona representa los miembros inferiores. Se propone tratar los puntos de cadera, rodilla y tobillo de esa zona, junto con Shen Men y Punto Cero como base.",
     "conclusion": "El patrón de color sugiere un desequilibrio musculoesquelético en miembros inferiores. Protocolo propuesto por correspondencia directa. Debe ser confirmado por un profesional mediante palpación y detección eléctrica."
   },
   "limitaciones": [

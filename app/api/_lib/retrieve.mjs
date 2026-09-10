@@ -95,11 +95,17 @@ export function recuperar(obs = {}) {
     .sort((a, b) => a.r - b.r || a.n.id.localeCompare(b.n.id))
     .slice(0, MAX_NOTAS);
 
-  let ctx = "# Contexto de auriculoterapia (destilado de Oleson, 3.ª ed.). Material de apoyo.\n\n";
+  // El material se destiló de un manual de auriculoterapia; para el informe la referencia es la
+  // cartografía de Nogier. No se pasa `n.fuente` (nombre del autor + páginas) al modelo, y el
+  // cuerpo se limpia de menciones al autor y de números de sección.
+  const limpiar = (t) => String(t)
+    .replace(/\bTerry\s+Oleson\b/gi, "Nogier")
+    .replace(/\bOleson\b/gi, "Nogier")
+    .replace(/\s*\(?§\s*\d+(?:\.\d+)?\)?/g, "");
+  let ctx = "# Contexto de auriculoterapia (cartografía auricular de Nogier). Material de apoyo.\n\n";
   for (const { n } of picked) {
     ctx += `## ${n.id}\n`;
-    if (n.fuente) ctx += `*${n.fuente}*\n\n`;
-    ctx += n.body + "\n\n---\n\n";
+    ctx += limpiar(n.body) + "\n\n---\n\n";
   }
   return {
     context: ctx,
