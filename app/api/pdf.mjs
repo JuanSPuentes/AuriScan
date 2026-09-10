@@ -6,6 +6,11 @@ import { construirDocumentoHTML } from "../src/report.mjs";
 async function lanzar() {
   const puppeteer = (await import("puppeteer-core")).default;
   if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    // @sparticuz/chromium detecta el entorno por AWS_EXECUTION_ENV / AWS_LAMBDA_JS_RUNTIME.
+    // Vercel Fluid Compute (Node 24) no coincide con lo que espera -> forzamos AL2023 antes de
+    // importar el paquete, para que extraiga sus .so y ponga LD_LIBRARY_PATH.
+    process.env.AWS_EXECUTION_ENV = "AWS_Lambda_nodejs20.x";
+    process.env.AWS_LAMBDA_JS_RUNTIME = "nodejs20.x";
     const chromium = (await import("@sparticuz/chromium")).default;
     return puppeteer.launch({
       args: chromium.args,
