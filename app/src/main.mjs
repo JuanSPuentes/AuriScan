@@ -13,6 +13,7 @@ let fotoActual = null;   // la foto que acompaña al informe mostrado (subida o 
 let logoDataUrl = null;
 
 const LADO_MIN = 600; // px del lado mayor de la foto original
+const HISTORIAL_VISIBLE = false; // los informes se siguen guardando en el dispositivo, pero la sección "Mis informes" está oculta
 
 // Emblema del logo -> data URI (para que el informe sea autocontenido en la ventana de impresión)
 fetch("/logo-emblema.png")
@@ -200,7 +201,7 @@ const fmtFecha = (iso) => {
 };
 
 async function renderHistorial() {
-  if (!historial.disponible()) return;
+  if (!HISTORIAL_VISIBLE || !historial.disponible()) return;
   const items = await historial.listar();
   const sec = $("#historial"), ul = $("#hist-lista");
   sec.hidden = items.length === 0;
