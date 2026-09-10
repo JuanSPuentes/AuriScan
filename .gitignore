@@ -20,6 +20,7 @@ oreja*.jpeg
 oreja*.jpg
 configuracion de accesos.png
 capturas/
+images/
 Stikers Dra Jaki Caro.pdf
 
 # --- build y archivos generados ---
@@ -34,6 +35,7 @@ app/public/ejemplo-*.json
 app/scripts/muestra*
 app/scripts/e2e-informe.*
 app/scripts/arq-*
+app/scripts/lote-out/
 
 # --- Claude / editor local ---
 .claude/settings.local.json

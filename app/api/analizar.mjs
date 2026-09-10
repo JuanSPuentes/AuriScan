@@ -11,8 +11,8 @@ import { validar, avisosVault, sellar, schema } from "./_lib/validate.mjs";
 
 const SCHEMA_TEXT = JSON.stringify(schema, null, 2);
 
-// Visión: qwen3-vl-flash. Con el prompt de recorrido por regiones (prompts.mjs) describe tan bien
-// como qwen3-vl-plus a 1/3 de latencia y 1/6 de coste (medido en scripts/probar-vision.mjs).
+// Visión: qwen3-vl-flash. Medido (scripts/comparar-vision*.mjs): plus y el modelo grande no detectan
+// mejor los signos reales; el factor decisivo es el prompt, no el modelo.
 const MODELO_VISION = process.env.MODELO_VISION || "qwen3-vl-flash";
 const MODELO_INFORME = process.env.MODELO_INFORME || "qwen-flash";
 // El paso 3 es solo texto por defecto (rápido/barato: se apoya en la descripción del paso 1).
