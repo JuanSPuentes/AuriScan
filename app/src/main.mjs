@@ -130,20 +130,6 @@ $("#analizar").addEventListener("click", async () => {
   }
 });
 
-// --- demo (sin gastar IA) ------------------------------------------
-$("#demo").addEventListener("click", async () => {
-  setEstado("Cargando ejemplo…");
-  try {
-    const r = await fetch("/ejemplo-oreja-limpia.json");
-    informe = await r.json();
-    fotoActual = null;
-    mostrar(informe, null, null);
-    setEstado("Ejemplo cargado (no consumió IA).");
-  } catch {
-    setEstado("No se pudo cargar el ejemplo.", true);
-  }
-});
-
 // --- render + descarga -------------------------------------------
 const PAGINA_PX = 794; // ancho A4 @96dpi
 
@@ -257,9 +243,3 @@ let _rt;
 window.addEventListener("resize", () => { clearTimeout(_rt); _rt = setTimeout(ajustarVista, 150); });
 
 renderHistorial();
-
-const qs = new URLSearchParams(location.search);
-if (qs.has("demo")) {
-  $("#demo").click();
-  if (qs.has("pdf")) setTimeout(() => $("#descargar").click(), 2500);
-}
