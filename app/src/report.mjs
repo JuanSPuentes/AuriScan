@@ -211,7 +211,6 @@ function narrativaHTML(inf, logoDataUrl) {
 
     <h3>Limitaciones</h3>
     <ul>${(inf.limitaciones || []).map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
-    <p class="conf">Nivel de confianza global: ${chip(inf.nivel_de_confianza_global)}</p>
 
     <footer><span class="pie-marca">${PIE_MARCA}</span> · ${esc(inf.disclaimer || "")} · Generado con IA (${esc(inf.meta?.modelo_ia || "")}) · ${esc(inf.meta?.fecha || "")}</footer>
   </section>`;
