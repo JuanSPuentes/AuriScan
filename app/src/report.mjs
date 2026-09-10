@@ -68,10 +68,17 @@ function earSVG(puntos) {
 }
 
 const chip = (v) => v ? `<span class="chip c-${esc(v)}">${esc(v)}</span>` : "";
-const estadoTxt = (e) => ({ agudo: "agudo", subagudo: "subagudo", cronico: "crónico", no_determinado: "estado no determinado" }[e] || e || "");
+const chipConf = (v) => v ? `<span class="chip c-${esc(v)}">confianza ${esc(v)}</span>` : "";
+// Cabecera de cada sistema: solo la confianza (el estado agudo/crónico no se muestra).
+const sistemaMeta = (s) => chipConf(s.confianza);
 
-const logoImg = (logo) => logo ? `<img class="logo" src="${logo}" alt="Dra. Jakeline Caro">` : "";
 const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
+// Cabecera de marca: emblema + nombre tipografiado (el lockup vertical no se lee a tamaño de cabecera).
+const marcaHead = (logo) => `<div class="marca-head">
+  ${logo ? `<img class="emblema" src="${logo}" alt="">` : ""}
+  <div class="marca-txt"><span class="marca-nombre">Dra. Jakeline Caro</span>
+  <span class="marca-sub">Medicina Integrativa y Salud Digital</span></div>
+</div>`;
 
 // --- infográfico (página 1) -------------------------------------------
 function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
@@ -91,7 +98,7 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
   const panelSistemas = sistemas.length ? sistemas.map((s) => `
     <div class="sist">
       <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}
-        <span class="s-meta">${esc(estadoTxt(s.estado))} · ${chip(s.confianza)}</span></h4>
+        <span class="s-meta">${sistemaMeta(s)}</span></h4>
       ${s.base_observacional ? `<p class="base">${esc(s.base_observacional)}</p>` : ""}
       ${s.region_corporal ? `<p class="reg"><b>Región:</b> ${esc(s.region_corporal)}</p>` : ""}
       ${s.hallazgos_probables?.length ? `<ul>${s.hallazgos_probables.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>` : ""}
@@ -100,7 +107,7 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
 
   return `<section class="pagina infografico">
     <header>
-      ${logoImg(logoDataUrl)}
+      ${marcaHead(logoDataUrl)}
       <p class="marca">Análisis de imagen · auriculoterapia</p>
       <h1>${esc(inf.infografico?.titulo || "Informe auricular")}</h1>
       <p class="sub">${inf.meta?.oreja && inf.meta.oreja !== "no_determinada" ? "Oreja " + esc(inf.meta.oreja) + " · " : ""}vista ${esc(inf.meta?.vista || "lateral")} ·
@@ -152,7 +159,7 @@ function narrativaHTML(inf, logoDataUrl) {
   const sistemas = (hd.sistemas || []).map((s) => `
     <div class="bloque-sist">
       <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}
-        <span class="s-meta">${esc(estadoTxt(s.estado))} · ${chip(s.confianza)}</span></h4>
+        <span class="s-meta">${sistemaMeta(s)}</span></h4>
       ${s.base_observacional ? `<p class="pa"><b>Base:</b> ${esc(s.base_observacional)}</p>` : ""}
       ${s.region_corporal ? `<p class="pa"><b>Región corporal:</b> ${esc(s.region_corporal)}</p>` : ""}
       ${s.puntos_asociados?.length ? `<p class="pa"><b>Puntos:</b> ${s.puntos_asociados.map(esc).join(", ")}</p>` : ""}
@@ -170,7 +177,7 @@ function narrativaHTML(inf, logoDataUrl) {
   const sesiones = pr.sesiones_estimadas ? `${pr.sesiones_estimadas.min}–${pr.sesiones_estimadas.max}` : "—";
 
   return `<section class="pagina narrativa">
-    <header class="nar-head">${logoImg(logoDataUrl)}
+    <header class="nar-head">${marcaHead(logoDataUrl)}
       <h2>Informe clínico de apoyo</h2>
       <p class="ref">Basado en el Manual de Auriculoterapia de Terry Oleson (3.ª ed.). ${esc(inf.meta?.caso_id || "")}</p>
     </header>
@@ -179,6 +186,9 @@ function narrativaHTML(inf, logoDataUrl) {
     <p><b>Coloración predominante:</b> ${esc((ov.caracteristicas_generales?.color_general || "—").replace(/_/g, " "))}.
        ${esc(ov.caracteristicas_generales?.descripcion || "")}</p>
     ${ov.signos?.length ? signos : "<p>Coloración homogénea, sin signos focales relevantes.</p>"}
+    ${ov.caracteristicas_generales?.hallazgos_normales?.length
+      ? `<p class="pa"><b>Regiones sin alteración:</b> ${ov.caracteristicas_generales.hallazgos_normales.map(esc).join(", ")}.</p>`
+      : ""}
 
     <h3>2 · Hipótesis: sistemas implicados</h3>
     <p class="dx"><b>${esc(hd.diagnostico_principal || "—")}</b></p>
@@ -198,7 +208,6 @@ function narrativaHTML(inf, logoDataUrl) {
       <li><b>Frecuencia:</b> ${esc(pr.frecuencia || "—")}</li>
       ${pr.tiempo_de_respuesta ? `<li><b>Tiempo de respuesta:</b> ${esc(pr.tiempo_de_respuesta)}</li>` : ""}
     </ul>
-    ${pr.factores?.length ? `<ul>${pr.factores.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
 
     <h3>Limitaciones</h3>
     <ul>${(inf.limitaciones || []).map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
@@ -223,11 +232,16 @@ const CSS = `
   .marca,.sub,.ref{ font-family:"IBM Plex Sans",system-ui,sans-serif; color:var(--tinta2); }
   .marca{ font-size:8pt; letter-spacing:.18em; text-transform:uppercase; margin:0; }
   .sub,.ref{ font-size:9pt; margin:.2em 0 0; }
-  /* logo — margen superior izquierdo, grande */
-  .logo{ display:block; height:24mm; width:auto; max-width:75%; margin:0 0 8px; }
+  /* marca — emblema + nombre, margen superior izquierdo */
+  .marca-head{ display:flex; align-items:center; gap:9px; margin:0 0 8px; }
+  .marca-head .emblema{ height:16mm; width:auto; flex:none; }
+  .marca-txt{ display:flex; flex-direction:column; line-height:1.15; }
+  .marca-nombre{ font-family:"Spectral","Georgia",serif; font-weight:700; font-size:13pt; color:var(--azul); letter-spacing:.01em; }
+  .marca-sub{ font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:7.5pt; letter-spacing:.14em; text-transform:uppercase; color:var(--tinta2); }
   .infografico header{ border-bottom:1px solid var(--linea); padding-bottom:10px; }
   .nar-head{ margin-bottom:6px; }
-  .nar-head .logo{ height:20mm; }
+  .nar-head .emblema{ height:12mm; }
+  .nar-head .marca-nombre{ font-size:11pt; }
   .nar-head h2{ margin:.1em 0; }
   .pie-marca{ font-weight:600; color:var(--azul); }
   .infografico .cuerpo{ display:flex; gap:16px; margin-top:14px; align-items:flex-start; }

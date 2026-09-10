@@ -138,8 +138,14 @@
             },
             "descripcion": {
               "type": "string",
-              "maxLength": 900,
-              "description": "2-4 frases: qué se ve (color y su ubicación, relieve, textura, venas, descamación, agujas si las hay)."
+              "maxLength": 1300,
+              "description": "Recorrido de la oreja: color general y por regiones, relieve, textura, venas, descamación, agujas. 3-6 frases."
+            },
+            "hallazgos_normales": {
+              "type": "array",
+              "items": { "type": "string" },
+              "maxItems": 22,
+              "description": "Zonas revisadas SIN alteración (hallazgos negativos). Refuerza que el recorrido fue completo."
             }
           }
         },
@@ -192,7 +198,7 @@
               },
               "interpretacion": {
                 "type": "string",
-                "description": "Qué sugiere según el cerebro: sistema/región y si aparenta agudo o crónico."
+                "description": "Qué sugiere según el cerebro: sistema o región corporal representada."
               },
               "cronicidad": {
                 "enum": [
@@ -200,7 +206,8 @@
                   "cronico",
                   "subagudo",
                   "no_determinada"
-                ]
+                ],
+                "description": "En desuso: no se muestra. Déjalo fuera."
               },
               "confianza": {
                 "enum": [
@@ -297,7 +304,7 @@
                   "cronico",
                   "no_determinado"
                 ],
-                "description": "Derivado del color: rojo brillante = agudo; rojo oscuro/descamación = crónico."
+                "description": "En desuso: no se muestra en el informe (no es fiable desde una sola foto). Déjalo fuera."
               },
               "hallazgos_probables": {
                 "type": "array",
@@ -490,7 +497,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "En desuso: no se muestra en el informe. Déjalo fuera o vacío (el pronóstico no depende de datos del paciente que no tenemos)."
         }
       }
     },

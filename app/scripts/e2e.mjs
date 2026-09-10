@@ -27,7 +27,7 @@ const res = {
 };
 console.log(`imagen: ${imgPath}  modo: ${modo}\nllamando…\n`);
 const t0 = Date.now();
-await handler({ method: "POST", body: { imagen: dataUrl, modo } }, res);
+await handler({ method: "POST", body: { imagen: dataUrl, modo, consentimiento: true } }, res);
 console.log(`HTTP ${res._s}  (${((Date.now() - t0) / 1000).toFixed(1)} s)\n`);
 
 if (res._s !== 200) { console.log(JSON.stringify(res._body, null, 2)); process.exit(1); }
@@ -45,8 +45,9 @@ console.log("\n— INFORME —");
 console.log("analisis_viable:", informe.analisis_viable);
 console.log("motivo:", informe.meta?.motivo, "| oreja:", informe.meta?.oreja);
 console.log("diagnóstico:", informe.hipotesis_diagnostica?.diagnostico_principal);
-console.log("ejes:", (informe.hipotesis_diagnostica?.ejes || []).map((e) => e.eje).join(", "));
-console.log("puntos:", (informe.evaluacion_protocolo?.puntos || []).map((p) => p.nombre).join(", "));
+console.log("sistemas:", (informe.hipotesis_diagnostica?.sistemas || []).map((s) => `${s.sistema}(${s.confianza})`).join(", "));
+console.log("hallazgos_normales:", (informe.observacion_visual?.caracteristicas_generales?.hallazgos_normales || []).join(", "));
+console.log(`puntos (${(informe.evaluacion_protocolo?.puntos || []).length}):`, (informe.evaluacion_protocolo?.puntos || []).map((p) => p.nombre).join(", "));
 
 writeFileSync(join(root, "scripts", "e2e-informe.json"), JSON.stringify(informe, null, 2));
 const { construirDocumentoHTML } = await import("../src/report.mjs");

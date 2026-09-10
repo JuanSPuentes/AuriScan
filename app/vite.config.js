@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg"],
+      includeAssets: ["favicon.svg", "apple-touch-icon.png", "logo.svg", "logo-emblema.png"],
       manifest: {
         name: "Análisis auricular",
         short_name: "Auricular",

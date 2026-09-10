@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#1f4e79" />
   <title>Análisis auricular</title>
   <link rel="icon" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" />
   <link rel="stylesheet" href="/src/styles.css" />
@@ -13,8 +14,8 @@
 <body>
   <main class="app">
     <header class="top">
-      <img class="marca-logo" src="/logo.png" alt="Dra. Jakeline Caro — Medicina Integrativa y Salud Digital"
-           onerror="this.remove()" />
+      <img class="marca-logo" src="/logo.svg" alt="Dra. Jakeline Caro — Medicina Integrativa y Salud Digital"
+           onerror="this.onerror=null; this.src='/logo.png'" />
       <h1>Análisis auricular</h1>
       <p>Sube la foto de un oído y obtén un informe de auriculoterapia en PDF.
         Material de apoyo — debe ser corroborado por un profesional experto.</p>
@@ -27,6 +28,11 @@
         <span id="dz-texto">Toca para tomar o elegir una foto del oído</span>
         <img id="preview" alt="" hidden />
       </label>
+      <ul class="tips">
+        <li>Buena luz natural, sin flash ni reflejos.</li>
+        <li>La oreja debe llenar el encuadre y verse nítida (limpia la lente).</li>
+        <li>Vista lateral del pabellón; retira el pelo que la tape.</li>
+      </ul>
     </section>
 
     <section class="paso" id="paso-modo">
@@ -50,6 +56,26 @@
       </div>
     </section>
 
+    <section class="paso" id="paso-consent">
+      <label class="consent">
+        <input type="checkbox" id="consent" />
+        <span>Autorizo procesar esta imagen para generar un informe de apoyo. La foto se envía a un
+          proveedor de IA (Alibaba Model Studio) solo para este análisis y <b>no se guarda en ningún
+          servidor</b>. El informe es material educativo, <b>no un diagnóstico</b>, y debe validarlo un
+          profesional.</span>
+      </label>
+      <details class="privacidad">
+        <summary>Cómo se tratan los datos</summary>
+        <ul>
+          <li>La imagen se envía cifrada a Alibaba Model Studio (servidores en EE. UU.) únicamente para
+            generar este informe. No se conserva copia en ningún servidor propio ni base de datos.</li>
+          <li>No se solicitan ni se guardan datos personales del paciente (nombre, fecha de nacimiento…).</li>
+          <li>El historial de informes, cuando esté disponible, se guarda <b>solo en este dispositivo</b>.</li>
+          <li>El resultado es orientativo y de carácter educativo; no sustituye la exploración ni el juicio clínico.</li>
+        </ul>
+      </details>
+    </section>
+
     <section class="paso">
       <button class="primario" id="analizar" disabled>Analizar</button>
       <button class="secundario" id="demo">Ver un informe de ejemplo</button>
@@ -63,6 +89,14 @@
       </div>
       <details class="debug" id="debug" hidden><summary>Detalles técnicos</summary><pre id="debug-pre"></pre></details>
       <div id="vista-wrap"><iframe id="vista" title="Vista previa del informe" scrolling="no"></iframe></div>
+    </section>
+
+    <section class="historial" id="historial" hidden>
+      <div class="hist-cab">
+        <h2>Mis informes <span class="opcional">(guardados solo en este dispositivo)</span></h2>
+        <button class="enlace" id="hist-borrar-todo" type="button">Borrar todo</button>
+      </div>
+      <ul id="hist-lista"></ul>
     </section>
   </main>
 

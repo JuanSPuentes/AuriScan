@@ -18,17 +18,29 @@
       "estado": "sin_intervencion",
       "agujas_detectadas": 0,
       "color_general": "rojo_focal",
-      "descripcion": "Oreja derecha sin agujas. Enrojecimiento focal rojo brillante en la parte alta de la oreja, sobre la raíz superior del antihélix y la fosa triangular. Alguna telangiectasia fina en esa zona y leve descamación en el borde. El resto del pabellón, de coloración rosada normal."
+      "descripcion": "Sin agujas. Recorrido: hélix de color rosado normal; raíz superior del antihélix y fosa triangular con enrojecimiento focal rojo brillante, alguna telangiectasia fina y leve descamación en el borde adyacente. Antihélix (cuerpo y cola), concha superior e inferior, cresta y pared de la concha, trago, cisura intertrágica, antitrago y lóbulo de coloración rosada uniforme, sin relieve ni descamación.",
+      "hallazgos_normales": [
+        "hélix",
+        "antihélix (cuerpo y cola)",
+        "concha superior",
+        "concha inferior",
+        "trago",
+        "cisura intertrágica",
+        "antitrago",
+        "lóbulo"
+      ]
     },
     "signos": [
       {
         "signo": "eritema",
         "color": "rojo_brillante",
         "localizacion": "Raíz superior del antihélix y fosa triangular, parte alta de la oreja",
-        "zonas": ["raiz-superior", "fosa-triangular"],
+        "zonas": [
+          "raiz-superior",
+          "fosa-triangular"
+        ],
         "extension": "focal",
-        "interpretacion": "Reactividad aguda de la zona que representa los miembros inferiores; sugiere afectación musculoesquelética de cadera/rodilla/tobillo",
-        "cronicidad": "agudo",
+        "interpretacion": "Reactividad de la zona que representa los miembros inferiores; sugiere afectación musculoesquelética de cadera/rodilla/tobillo",
         "confianza": "media",
         "fuente": "Oleson §7.2, §5.1"
       },
@@ -36,60 +48,155 @@
         "signo": "telangiectasias/venas",
         "color": "rojo_oscuro",
         "localizacion": "Raíz superior del antihélix",
-        "zonas": ["raiz-superior"],
+        "zonas": [
+          "raiz-superior"
+        ],
         "extension": "focal",
         "interpretacion": "Congestión vascular local; refuerza la reactividad de la zona",
-        "cronicidad": "no_determinada",
         "confianza": "baja"
       },
       {
         "signo": "descamación",
         "color": "blanco",
         "localizacion": "Borde del hélix a la altura de la fosa triangular",
-        "zonas": ["helix", "fosa-triangular"],
+        "zonas": [
+          "helix",
+          "fosa-triangular"
+        ],
         "extension": "focal",
-        "interpretacion": "Posible componente crónico añadido al cuadro agudo",
-        "cronicidad": "cronico",
+        "interpretacion": "Descamación puntual en el borde adyacente a la zona reactiva",
         "confianza": "baja"
       }
     ]
   },
   "hipotesis_diagnostica": {
-    "diagnostico_principal": "Signos de desequilibrio en el sistema musculoesquelético con proyección en miembros inferiores, de aspecto agudo sobre posible fondo crónico.",
-    "resumen": "El enrojecimiento focal y brillante en la parte alta de la oreja (raíz superior del antihélix y fosa triangular) corresponde, según la cartografía de Oleson, a los miembros inferiores. El color brillante orienta a un proceso agudo; la descamación asociada, a cronicidad de base.",
+    "diagnostico_principal": "Signos de desequilibrio en el sistema musculoesquelético con proyección en miembros inferiores.",
+    "resumen": "El enrojecimiento focal y brillante en la parte alta de la oreja (raíz superior del antihélix y fosa triangular) corresponde, según la cartografía de Oleson, a los miembros inferiores (cadera, rodilla, tobillo).",
     "sistemas": [
       {
         "sistema": "musculoesqueletico",
         "titulo": "Sistema musculoesquelético — miembros inferiores",
         "base_observacional": "Eritema focal rojo brillante + telangiectasias en la raíz superior del antihélix y la fosa triangular",
-        "zonas": ["raiz-superior", "fosa-triangular"],
+        "zonas": [
+          "raiz-superior",
+          "fosa-triangular"
+        ],
         "region_corporal": "Cadera, rodilla, tobillo y pie",
-        "estado": "agudo",
         "hallazgos_probables": [
           "Dolor, rigidez o inflamación en una o ambas piernas",
           "Molestia de cadera o rodilla al cargar peso",
           "Posible sobrecarga articular reciente"
         ],
-        "puntos_asociados": ["AH13", "AH15", "AH17", "FT1", "FT3", "FT4"],
+        "puntos_asociados": [
+          "AH13",
+          "AH15",
+          "AH17",
+          "FT1",
+          "FT3",
+          "FT4"
+        ],
         "confianza": "media"
       }
     ]
   },
   "evaluacion_protocolo": {
     "puntos": [
-      { "orden": 1, "id": "Punto Cero", "codigo_za": "HX1/CC1", "nombre": "Punto Cero", "localizacion": "Raíz del hélix, PR 0", "categoria": "maestro", "estado": "propuesto", "sistema": "homeostasis-general", "reactividad_visible": false, "justificacion": "Restablece la homeostasis y potencia el resto de puntos; base de casi todo protocolo." },
-      { "orden": 2, "id": "Shen Men", "codigo_za": "FT2", "nombre": "Shen Men", "localizacion": "Fosa triangular, superior al vértice", "categoria": "maestro", "estado": "propuesto", "sistema": "neuro-psicologico", "reactividad_visible": true, "justificacion": "Analgesia y sedación; indicado en dolor y procesos inflamatorios. Está en la misma zona reactiva." },
-      { "orden": 3, "nombre": "Cadera", "codigo_za": "AH13", "localizacion": "Parte baja de la raíz superior del antihélix", "categoria": "anatomico", "estado": "propuesto", "sistema": "musculoesqueletico", "reactividad_visible": true, "justificacion": "Punto de la cadera sobre la zona con eritema focal; correspondencia directa con el área corporal." },
-      { "orden": 4, "nombre": "Rodilla", "codigo_za": "AH15", "localizacion": "Punto medio de la raíz superior del antihélix", "categoria": "anatomico", "estado": "propuesto", "sistema": "musculoesqueletico", "reactividad_visible": true, "justificacion": "Punto de la rodilla; dolor y esguinces de rodilla." },
-      { "orden": 5, "nombre": "Tobillo/pie", "codigo_za": "AH17", "localizacion": "Parte alta de la raíz superior del antihélix", "categoria": "anatomico", "estado": "propuesto", "sistema": "musculoesqueletico", "reactividad_visible": false, "justificacion": "Completa la representación del miembro inferior; dolor y edema de tobillo." },
-      { "orden": 6, "id": "Punto Autonomo Simpatico", "codigo_za": "HI4/AH7", "nombre": "Punto Autónomo Simpático", "localizacion": "Unión hélix interno / raíz inferior del antihélix", "categoria": "maestro", "estado": "propuesto", "sistema": "homeostasis-general", "reactividad_visible": false, "justificacion": "Mejora la circulación local por vasodilatación; útil en dolor musculoesquelético con componente inflamatorio." }
+      {
+        "orden": 1,
+        "id": "Punto Cero",
+        "codigo_za": "HX1/CC1",
+        "nombre": "Punto Cero",
+        "localizacion": "Raíz del hélix, PR 0",
+        "categoria": "maestro",
+        "estado": "propuesto",
+        "sistema": "homeostasis-general",
+        "reactividad_visible": false,
+        "justificacion": "Restablece la homeostasis y potencia el resto de puntos; base de casi todo protocolo."
+      },
+      {
+        "orden": 2,
+        "id": "Shen Men",
+        "codigo_za": "FT2",
+        "nombre": "Shen Men",
+        "localizacion": "Fosa triangular, superior al vértice",
+        "categoria": "maestro",
+        "estado": "propuesto",
+        "sistema": "neuro-psicologico",
+        "reactividad_visible": true,
+        "justificacion": "Analgesia y sedación; indicado en dolor y procesos inflamatorios. Está en la misma zona reactiva."
+      },
+      {
+        "orden": 3,
+        "nombre": "Cadera",
+        "codigo_za": "AH13",
+        "localizacion": "Parte baja de la raíz superior del antihélix",
+        "categoria": "anatomico",
+        "estado": "propuesto",
+        "sistema": "musculoesqueletico",
+        "reactividad_visible": true,
+        "justificacion": "Punto de la cadera sobre la zona con eritema focal; correspondencia directa con el área corporal."
+      },
+      {
+        "orden": 4,
+        "nombre": "Rodilla",
+        "codigo_za": "AH15",
+        "localizacion": "Punto medio de la raíz superior del antihélix",
+        "categoria": "anatomico",
+        "estado": "propuesto",
+        "sistema": "musculoesqueletico",
+        "reactividad_visible": true,
+        "justificacion": "Punto de la rodilla; dolor y esguinces de rodilla."
+      },
+      {
+        "orden": 5,
+        "nombre": "Tobillo/pie",
+        "codigo_za": "AH17",
+        "localizacion": "Parte alta de la raíz superior del antihélix",
+        "categoria": "anatomico",
+        "estado": "propuesto",
+        "sistema": "musculoesqueletico",
+        "reactividad_visible": false,
+        "justificacion": "Completa la representación del miembro inferior; dolor y edema de tobillo."
+      },
+      {
+        "orden": 6,
+        "id": "Punto Autonomo Simpatico",
+        "codigo_za": "HI4/AH7",
+        "nombre": "Punto Autónomo Simpático",
+        "localizacion": "Unión hélix interno / raíz inferior del antihélix",
+        "categoria": "maestro",
+        "estado": "propuesto",
+        "sistema": "homeostasis-general",
+        "reactividad_visible": false,
+        "justificacion": "Mejora la circulación local por vasodilatación; útil en dolor musculoesquelético con componente inflamatorio."
+      }
     ],
     "criterios_oleson": [
-      { "criterio": "Correspondencia con el área corporal afectada", "cumple": true, "nota": "Los puntos de cadera, rodilla y tobillo se sitúan justo sobre la zona con eritema." },
-      { "criterio": "Reactividad selectiva (color/forma)", "cumple": true, "nota": "Eritema focal y telangiectasias visibles; falta confirmar con detección eléctrica y palpación." },
-      { "criterio": "Función basada en estudios clínicos", "cumple": true, "nota": "Shen Men y Punto Cero con evidencia para dolor; puntos anatómicos por correspondencia somatotópica." },
-      { "criterio": "Combinación clásica / experiencia clínica", "cumple": true, "nota": "Área afectada + Shen Men + Punto Cero es la base para dolor de miembros (Oleson §6.15)." },
-      { "criterio": "Diagnóstico médico general del paciente", "cumple": false, "nota": "No disponible; imprescindible antes de tratar un dolor." }
+      {
+        "criterio": "Correspondencia con el área corporal afectada",
+        "cumple": true,
+        "nota": "Los puntos de cadera, rodilla y tobillo se sitúan justo sobre la zona con eritema."
+      },
+      {
+        "criterio": "Reactividad selectiva (color/forma)",
+        "cumple": true,
+        "nota": "Eritema focal y telangiectasias visibles; falta confirmar con detección eléctrica y palpación."
+      },
+      {
+        "criterio": "Función basada en estudios clínicos",
+        "cumple": true,
+        "nota": "Shen Men y Punto Cero con evidencia para dolor; puntos anatómicos por correspondencia somatotópica."
+      },
+      {
+        "criterio": "Combinación clásica / experiencia clínica",
+        "cumple": true,
+        "nota": "Área afectada + Shen Men + Punto Cero es la base para dolor de miembros (Oleson §6.15)."
+      },
+      {
+        "criterio": "Diagnóstico médico general del paciente",
+        "cumple": false,
+        "nota": "No disponible; imprescindible antes de tratar un dolor."
+      }
     ],
     "valoracion_global": "Protocolo propuesto por correspondencia somatotópica directa: el patrón de color sitúa la reactividad en los miembros inferiores, y los puntos elegidos cubren esa zona más los maestros de base. Confianza media a la espera de exploración directa.",
     "sugerencias": [
@@ -100,19 +207,17 @@
   },
   "pronostico": {
     "respuesta_esperada": "buena",
-    "sesiones_estimadas": { "min": 6, "max": 10 },
+    "sesiones_estimadas": {
+      "min": 6,
+      "max": 10
+    },
     "frecuencia": "2-3 veces por semana al inicio, luego espaciando",
-    "tiempo_de_respuesta": "Alivio parcial esperable desde la 1.ª-2.ª sesión en cuadros agudos",
-    "factores": [
-      "El aspecto agudo (rojo brillante) suele responder más rápido que el crónico",
-      "La descamación asociada puede alargar el número de sesiones",
-      "Respuesta condicionada al diagnóstico real y a impedimentos no evaluables en la foto"
-    ]
+    "tiempo_de_respuesta": "Alivio parcial esperable desde la 1.ª-2.ª sesión"
   },
   "infografico": {
     "titulo": "Caso 1602 · Sistema musculoesquelético",
-    "razonamiento": "El enrojecimiento focal y brillante se localiza en la parte alta de la oreja, sobre la raíz superior del antihélix y la fosa triangular. Según la cartografía de Oleson, esa zona representa los miembros inferiores, y el color brillante indica un proceso agudo. Se propone tratar los puntos de cadera, rodilla y tobillo de esa zona, junto con Shen Men y Punto Cero como base.",
-    "conclusion": "El patrón de color sugiere un desequilibrio musculoesquelético en miembros inferiores, de aspecto agudo. Protocolo propuesto por correspondencia directa. Debe ser confirmado por un profesional mediante palpación y detección eléctrica."
+    "razonamiento": "El enrojecimiento focal y brillante se localiza en la parte alta de la oreja, sobre la raíz superior del antihélix y la fosa triangular. Según la cartografía de Oleson, esa zona representa los miembros inferiores. Se propone tratar los puntos de cadera, rodilla y tobillo de esa zona, junto con Shen Men y Punto Cero como base.",
+    "conclusion": "El patrón de color sugiere un desequilibrio musculoesquelético en miembros inferiores. Protocolo propuesto por correspondencia directa. Debe ser confirmado por un profesional mediante palpación y detección eléctrica."
   },
   "limitaciones": [
     "Lectura basada solo en color y relieve visibles; sin palpación ni detección eléctrica, que son el estándar para confirmar puntos reactivos.",

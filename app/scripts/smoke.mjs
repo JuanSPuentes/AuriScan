@@ -24,7 +24,7 @@ console.log(`  ${rag.notasUsadas.length} notas · ~${rag.tokensEst} tokens de co
 
 console.log("\n== Validación del contrato ==");
 const { construirDocumentoHTML } = await import("../src/report.mjs");
-const logoPath = join(root, "public", "logo.png");
+const logoPath = join(root, "public", "logo-emblema.png");
 const logo = existsSync(logoPath) ? `data:image/png;base64,${readFileSync(logoPath).toString("base64")}` : null;
 for (const nombre of ["ejemplo-ansiedad.json", "ejemplo-oreja-limpia.json", "ejemplo-no-viable.json"]) {
   const ej = JSON.parse(readFileSync(join(repo, "contrato", nombre), "utf8"));

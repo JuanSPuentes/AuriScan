@@ -11,6 +11,8 @@ import { validar, avisosVault, sellar, schema } from "./_lib/validate.mjs";
 
 const SCHEMA_TEXT = JSON.stringify(schema, null, 2);
 
+// Visión: qwen3-vl-flash. Medido (scripts/comparar-vision*.mjs): plus y el modelo grande no detectan
+// mejor los signos reales; el factor decisivo es el prompt, no el modelo.
 const MODELO_VISION = process.env.MODELO_VISION || "qwen3-vl-flash";
 const MODELO_INFORME = process.env.MODELO_INFORME || "qwen-flash";
 // El paso 3 es solo texto por defecto (rápido/barato: se apoya en la descripción del paso 1).
@@ -21,19 +23,20 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Usa POST." });
 
   try {
-    const { imagen, modo, oreja } = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const { imagen, modo, oreja, consentimiento } = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     if (!imagen?.startsWith("data:image/")) return res.status(400).json({ error: "Falta 'imagen' (data URL)." });
     if (!["con_agujas", "oreja_limpia"].includes(modo)) return res.status(400).json({ error: "'modo' inválido." });
+    if (consentimiento !== true) return res.status(400).json({ error: "Falta el consentimiento para procesar la imagen." });
     const orejaUsuaria = ["izquierda", "derecha"].includes(oreja) ? oreja : null;
 
-    const debug = { costos: [], tiempos: {} };
+    const debug = { costos: [], tiempos: {}, consentimiento_en: new Date().toISOString() };
 
     // --- PASO 1 · visión --------------------------------------------------
     const v = await chat({
       model: MODELO_VISION,
       json: true,
       temperature: 0.1,
-      maxTokens: 1200,
+      maxTokens: 2000,
       messages: [
         { role: "system", content: PROMPT_VISION },
         { role: "user", content: [imageContent(imagen), { type: "text", text: "Describe esta oreja." }] },
@@ -43,6 +46,14 @@ export default async function handler(req, res) {
     debug.observacion = obs;
     debug.costos.push({ paso: "vision", modelo: MODELO_VISION, ...costo(MODELO_VISION, v.usage) });
     debug.tiempos.vision_ms = v.ms;
+
+    // --- corte temprano: imagen no apta (ahorra el paso del informe) ----
+    if (obs.es_oreja === false)
+      return res.status(200).json({ rechazo: "no_es_oreja", debug,
+        mensaje: "La imagen no parece una oreja. Sube una foto lateral del pabellón auricular." });
+    if (obs.calidad === "insuficiente")
+      return res.status(200).json({ rechazo: "calidad", debug,
+        mensaje: "La foto no tiene calidad suficiente (borrosa, oscura o mal encuadrada). Repite con buena luz y la oreja nítida y centrada." });
 
     // --- PASO 2 · recuperación (local, sin coste) -----------------------
     const rag = recuperar({
@@ -59,17 +70,20 @@ export default async function handler(req, res) {
       `CONTEXTO DE REFERENCIA:\n${rag.context}` };
     const userContent = INFORME_CON_IMAGEN ? [imageContent(imagen), textPart] : [textPart];
 
-    let informe, errores = [];
+    let informe, errores = [], corte = false;
     for (let intento = 1; intento <= 2; intento++) {
       const msgs = [{ role: "system", content: sys }, { role: "user", content: userContent }];
       if (intento === 2) msgs.push({
         role: "user",
-        content: `El JSON anterior no validó. Corrige exactamente estos errores y devuelve SOLO el JSON:\n- ${errores.join("\n- ")}`,
+        content: corte
+          ? `Tu respuesta anterior se cortó o no fue JSON válido. Devuelve el informe COMPLETO y más CONCISO: justificaciones y textos de 1 frase, "hallazgos_probables" máximo 2 por sistema.`
+          : `El JSON anterior no validó. Corrige exactamente estos errores y devuelve SOLO el JSON:\n- ${errores.join("\n- ")}`,
       });
-      const g = await chat({ model: MODELO_INFORME, json: true, temperature: 0.2, maxTokens: 3000, messages: msgs });
+      const g = await chat({ model: MODELO_INFORME, json: true, temperature: 0.2, maxTokens: 4000, messages: msgs });
       debug.costos.push({ paso: `informe#${intento}`, modelo: MODELO_INFORME, ...costo(MODELO_INFORME, g.usage) });
       debug.tiempos[`informe${intento}_ms`] = g.ms;
-      try { informe = parseJsonLoose(g.text); } catch (e) { errores = [String(e.message)]; continue; }
+      try { informe = parseJsonLoose(g.text); corte = false; }
+      catch (e) { errores = [String(e.message)]; corte = true; continue; }
       const r = validar(informe);
       if (r.ok) { errores = []; break; }
       errores = r.errors;

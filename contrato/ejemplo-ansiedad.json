@@ -25,10 +25,13 @@
         "signo": "eritema",
         "color": "rojo_brillante",
         "localizacion": "Hélix, antihélix y lóbulo, de forma generalizada",
-        "zonas": ["helix", "antihelix", "lobulo"],
+        "zonas": [
+          "helix",
+          "antihelix",
+          "lobulo"
+        ],
         "extension": "difuso",
         "interpretacion": "Reacción de alarma generalizada; activación global del pabellón",
-        "cronicidad": "agudo",
         "confianza": "media",
         "fuente": "Oleson §5.1"
       },
@@ -36,97 +39,196 @@
         "signo": "eritema",
         "color": "rojo_brillante",
         "localizacion": "Trago y cisura intertrágica",
-        "zonas": ["trago", "cisura-intertragica"],
+        "zonas": [
+          "trago",
+          "cisura-intertragica"
+        ],
         "extension": "focal",
         "interpretacion": "Reactividad de la zona endocrina y de las glándulas suprarrenales (eje del estrés)",
-        "cronicidad": "agudo",
         "confianza": "media"
       },
       {
         "signo": "eritema",
         "color": "rojo_oscuro",
         "localizacion": "Concha inferior y pared de la concha",
-        "zonas": ["concha-inferior", "pared-concha"],
+        "zonas": [
+          "concha-inferior",
+          "pared-concha"
+        ],
         "extension": "difuso",
         "interpretacion": "Activación parasimpática (nervio vago); tono neurovegetativo alterado",
-        "cronicidad": "no_determinada",
         "confianza": "baja"
       },
       {
         "signo": "descamación",
         "color": "blanco",
         "localizacion": "Borde del hélix y lóbulo",
-        "zonas": ["helix", "lobulo"],
+        "zonas": [
+          "helix",
+          "lobulo"
+        ],
         "extension": "focal",
-        "interpretacion": "Posible cronicidad del cuadro",
-        "cronicidad": "cronico",
+        "interpretacion": "Descamación en el borde del hélix y del lóbulo",
         "confianza": "baja"
       }
     ]
   },
   "hipotesis_diagnostica": {
-    "diagnostico_principal": "Patrón de desregulación neurovegetativa con predominio del eje neuro-psicológico (ansiedad/estrés), de aspecto agudo sobre un fondo posiblemente crónico.",
+    "diagnostico_principal": "Patrón de desregulación neurovegetativa con predominio del eje neuro-psicológico (ansiedad/estrés).",
     "resumen": "El eritema generalizado, la hiperemia del trago/cisura y el lóbulo congestivo, junto con el protocolo de puntos maestros observado, orientan a un cuadro de estrés con componente neuroendocrino y afectación del tono autonómico.",
     "sistemas": [
       {
         "sistema": "neuro-psicologico",
         "titulo": "Eje neuro-psicológico",
         "base_observacional": "Lóbulo congestivo y eritema del antihélix/hélix; agujas en fosa triangular (Shen Men) y pared de la concha (Tálamo)",
-        "zonas": ["lobulo", "fosa-triangular", "pared-concha"],
+        "zonas": [
+          "lobulo",
+          "fosa-triangular",
+          "pared-concha"
+        ],
         "region_corporal": "Corteza cerebral, sistema límbico, control del dolor",
-        "estado": "agudo",
         "hallazgos_probables": [
           "Ansiedad generalizada, preocupación excesiva, pensamiento rumiante",
           "Dificultad para concentrarse y fatiga mental",
           "Trastornos del sueño"
         ],
-        "puntos_asociados": ["FT2", "PC2/CI4", "LO1", "TG2"],
+        "puntos_asociados": [
+          "FT2",
+          "PC2/CI4",
+          "LO1",
+          "TG2"
+        ],
         "confianza": "media"
       },
       {
         "sistema": "neuroendocrino",
         "titulo": "Eje neuroendocrino (HPA)",
         "base_observacional": "Hiperemia focal rojo brillante en el trago y la cisura intertrágica",
-        "zonas": ["trago", "cisura-intertragica"],
+        "zonas": [
+          "trago",
+          "cisura-intertragica"
+        ],
         "region_corporal": "Hipófisis, glándulas suprarrenales, tiroides",
-        "estado": "agudo",
         "hallazgos_probables": [
           "Hiperactividad del eje HPA (cortisol elevado)",
           "Posible fatiga suprarrenal"
         ],
-        "puntos_asociados": ["IT2", "TG3"],
+        "puntos_asociados": [
+          "IT2",
+          "TG3"
+        ],
         "confianza": "baja"
       },
       {
         "sistema": "homeostasis-general",
         "titulo": "Homeostasis / tono neurovegetativo",
         "base_observacional": "Eritema difuso en concha inferior y pared de la concha",
-        "zonas": ["concha-inferior", "pared-concha"],
+        "zonas": [
+          "concha-inferior",
+          "pared-concha"
+        ],
         "region_corporal": "Sistema nervioso autónomo, equilibrio energético",
-        "estado": "no_determinado",
         "hallazgos_probables": [
           "Desregulación simpático/parasimpática",
           "Fatiga crónica, sensación de malestar sin causa orgánica clara"
         ],
-        "puntos_asociados": ["HX1/CC1", "HI4/AH7"],
+        "puntos_asociados": [
+          "HX1/CC1",
+          "HI4/AH7"
+        ],
         "confianza": "media"
       }
     ]
   },
   "evaluacion_protocolo": {
     "puntos": [
-      { "orden": 1, "id": "Punto Cero", "codigo_za": "HX1/CC1", "nombre": "Punto Cero", "localizacion": "Raíz del hélix, PR 0", "categoria": "maestro", "estado": "observado", "sistema": "homeostasis-general", "reactividad_visible": true, "justificacion": "Restablece la homeostasis y potencia el resto de puntos; elección estándar en estrés." },
-      { "orden": 2, "id": "Shen Men", "codigo_za": "FT2", "nombre": "Shen Men", "localizacion": "Fosa triangular, superior al vértice", "categoria": "maestro", "estado": "observado", "sistema": "neuro-psicologico", "reactividad_visible": true, "justificacion": "Tranquiliza la mente; ansiedad, insomnio, inquietud." },
-      { "orden": 3, "id": "Punto Talamo", "codigo_za": "PC2/CI4", "nombre": "Punto Tálamo (Subcórtex)", "localizacion": "Pared de la concha, detrás del antitrago", "categoria": "maestro", "estado": "observado", "sistema": "neuro-psicologico", "reactividad_visible": true, "justificacion": "Control del dolor y sedación neurológica; regula tálamo-hipotálamo." },
-      { "orden": 4, "id": "Punto Endocrino", "codigo_za": "IT2", "nombre": "Punto Endocrino", "localizacion": "Cisura intertrágica, bajo PR 9", "categoria": "endocrino", "estado": "observado", "sistema": "neuroendocrino", "reactividad_visible": true, "justificacion": "Regula el eje hipofisario; corrige alteraciones hormonales y del cortisol." },
-      { "orden": 5, "id": "Punto Maestro Sensorial", "codigo_za": "LO4", "nombre": "Punto Maestro Sensorial", "localizacion": "Mitad del lóbulo", "categoria": "maestro", "estado": "observado", "sistema": "sensorial", "reactividad_visible": false, "justificacion": "Disminuye la sobrecarga sensorial, la fatiga visual y el tinnitus." }
+      {
+        "orden": 1,
+        "id": "Punto Cero",
+        "codigo_za": "HX1/CC1",
+        "nombre": "Punto Cero",
+        "localizacion": "Raíz del hélix, PR 0",
+        "categoria": "maestro",
+        "estado": "observado",
+        "sistema": "homeostasis-general",
+        "reactividad_visible": true,
+        "justificacion": "Restablece la homeostasis y potencia el resto de puntos; elección estándar en estrés."
+      },
+      {
+        "orden": 2,
+        "id": "Shen Men",
+        "codigo_za": "FT2",
+        "nombre": "Shen Men",
+        "localizacion": "Fosa triangular, superior al vértice",
+        "categoria": "maestro",
+        "estado": "observado",
+        "sistema": "neuro-psicologico",
+        "reactividad_visible": true,
+        "justificacion": "Tranquiliza la mente; ansiedad, insomnio, inquietud."
+      },
+      {
+        "orden": 3,
+        "id": "Punto Talamo",
+        "codigo_za": "PC2/CI4",
+        "nombre": "Punto Tálamo (Subcórtex)",
+        "localizacion": "Pared de la concha, detrás del antitrago",
+        "categoria": "maestro",
+        "estado": "observado",
+        "sistema": "neuro-psicologico",
+        "reactividad_visible": true,
+        "justificacion": "Control del dolor y sedación neurológica; regula tálamo-hipotálamo."
+      },
+      {
+        "orden": 4,
+        "id": "Punto Endocrino",
+        "codigo_za": "IT2",
+        "nombre": "Punto Endocrino",
+        "localizacion": "Cisura intertrágica, bajo PR 9",
+        "categoria": "endocrino",
+        "estado": "observado",
+        "sistema": "neuroendocrino",
+        "reactividad_visible": true,
+        "justificacion": "Regula el eje hipofisario; corrige alteraciones hormonales y del cortisol."
+      },
+      {
+        "orden": 5,
+        "id": "Punto Maestro Sensorial",
+        "codigo_za": "LO4",
+        "nombre": "Punto Maestro Sensorial",
+        "localizacion": "Mitad del lóbulo",
+        "categoria": "maestro",
+        "estado": "observado",
+        "sistema": "sensorial",
+        "reactividad_visible": false,
+        "justificacion": "Disminuye la sobrecarga sensorial, la fatiga visual y el tinnitus."
+      }
     ],
     "criterios_oleson": [
-      { "criterio": "Correspondencia con el área/sistema afectado", "cumple": true, "nota": "Puntos que regulan SNC, eje endocrino y tono autónomo, acordes al patrón de signos." },
-      { "criterio": "Reactividad selectiva (color/forma)", "cumple": true, "nota": "Eritema e hiperemia visibles sobre las zonas tratadas; falta confirmar con detección eléctrica." },
-      { "criterio": "Función basada en estudios clínicos", "cumple": true, "nota": "Puntos maestros con evidencia para estrés y ansiedad." },
-      { "criterio": "Combinación clásica / experiencia clínica", "cumple": true, "nota": "Combinación reconocida para estrés-ansiedad." },
-      { "criterio": "Diagnóstico médico general del paciente", "cumple": false, "nota": "No disponible en la imagen." }
+      {
+        "criterio": "Correspondencia con el área/sistema afectado",
+        "cumple": true,
+        "nota": "Puntos que regulan SNC, eje endocrino y tono autónomo, acordes al patrón de signos."
+      },
+      {
+        "criterio": "Reactividad selectiva (color/forma)",
+        "cumple": true,
+        "nota": "Eritema e hiperemia visibles sobre las zonas tratadas; falta confirmar con detección eléctrica."
+      },
+      {
+        "criterio": "Función basada en estudios clínicos",
+        "cumple": true,
+        "nota": "Puntos maestros con evidencia para estrés y ansiedad."
+      },
+      {
+        "criterio": "Combinación clásica / experiencia clínica",
+        "cumple": true,
+        "nota": "Combinación reconocida para estrés-ansiedad."
+      },
+      {
+        "criterio": "Diagnóstico médico general del paciente",
+        "cumple": false,
+        "nota": "No disponible en la imagen."
+      }
     ],
     "valoracion_global": "El protocolo observado es coherente con el patrón de signos: cubre el eje neuro-psicológico, el neuroendocrino y el tono autonómico con puntos maestros de eficacia documentada.",
     "sugerencias": [
@@ -136,15 +238,17 @@
   },
   "pronostico": {
     "respuesta_esperada": "buena_a_excelente",
-    "sesiones_estimadas": { "min": 6, "max": 10 },
+    "sesiones_estimadas": {
+      "min": 6,
+      "max": 10
+    },
     "frecuencia": "2-3 veces por semana inicialmente, luego espaciando",
-    "tiempo_de_respuesta": "Mejora perceptible desde la 2.ª-3.ª sesión",
-    "factores": ["La descamación sugiere cierta cronicidad", "Buena reactividad visible sobre las zonas tratadas"]
+    "tiempo_de_respuesta": "Mejora perceptible desde la 2.ª-3.ª sesión"
   },
   "infografico": {
     "titulo": "Caso 1436 · Ansiedad/estrés",
     "razonamiento": "El eritema brillante generalizado y la hiperemia focal del trago y la cisura intertrágica sitúan la reactividad en el eje neuro-psicológico y neuroendocrino; el eritema difuso de la concha añade un componente de tono autonómico. El protocolo de puntos maestros observado ataca esos tres frentes.",
-    "conclusion": "Patrón compatible con estrés/ansiedad de aspecto agudo. Protocolo adecuado; pronóstico bueno a excelente en 6-10 sesiones. Requiere corroboración clínica."
+    "conclusion": "Patrón compatible con estrés/ansiedad. Protocolo adecuado; pronóstico bueno a excelente en 6-10 sesiones. Requiere corroboración clínica."
   },
   "limitaciones": [
     "Las regiones ocultas (pared de la concha, hélix interno) no son plenamente evaluables en una vista lateral.",
