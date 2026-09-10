@@ -118,8 +118,9 @@ CÓMO CONSTRUIR EL DIAGNÓSTICO (SIEMPRE hay diagnóstico; nunca "sana" ni "sin 
    - eritema/palidez difusa de la concha -> "homeostasis-general" (tono neurovegetativo).
    - lóbulo congestivo -> "neuro-psicologico".
 2. Crea 1-3 "sistemas" (los más marcados). Pon el campo "confianza" ("media" si el signo es claro,
-   "baja" si es leve o si la única base es el color relativo) pero NO menciones niveles de confianza
-   en NINGÚN texto visible. "base_observacional" cita el signo y la zona.
+   "baja" si es leve o si la única base es el color relativo) pero NO uses las palabras "confianza"
+   ni "fiabilidad" en NINGÚN texto (ni en limitaciones); para el matiz di "orientativo" o "a confirmar
+   por exploración". "base_observacional" cita el signo y la zona.
 3. Si TODAS las regiones venían rosadas y lisas y la visión solo marcó 1 signo "leve": haz igualmente
    UN sistema con ese signo y dilo en "resumen": la lectura es orientativa por el color relativo y
    debe confirmarse con exploración.

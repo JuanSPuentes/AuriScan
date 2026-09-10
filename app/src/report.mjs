@@ -284,12 +284,16 @@ const CSS = `
   @media print{ body{ background:#fff; } .pagina{ box-shadow:none; margin:0; } .pagina + .pagina{ page-break-before:always; } }
 `;
 
-// El informe se apoya en la cartografía de Nogier; si el modelo nombra a Oleson (autor del libro
-// del que se destiló el material) o cita números de sección de ese libro, se normaliza en la salida.
+// Normaliza la salida del modelo: referencia = Nogier (no Oleson), sin números de sección, y sin
+// menciones a "confianza"/"fiabilidad" (la doctora no quiere que se muestren niveles de confianza).
 const normalizarFuente = (s) => s
   .replace(/\bTerry\s+Oleson\b/gi, "Paul Nogier")
   .replace(/\bOleson\b/gi, "Nogier")
-  .replace(/\s*\(?§\s*\d+(?:\.\d+)?\)?/g, "");
+  .replace(/\s*\(?§\s*\d+(?:\.\d+)?\)?/g, "")
+  .replace(/,?\s*(?:lo que|que)\s+(?:reduce|limita|disminuye|baja|afecta a?)\s+la\s+(?:confianza|fiabilidad)[^.;]*/gi, "")
+  .replace(/\b(?:baja|media|alta|menor|escasa|limitada)\s+(?:confianza|fiabilidad)\b/gi, "carácter orientativo")
+  .replace(/\b(?:la\s+)?(?:confianza|fiabilidad)\s+(?:en|de)\s+(?:la\s+)?(?:interpretaci[oó]n|lectura|hip[oó]tesis)/gi, "la lectura")
+  .replace(/\bconfianza\b/gi, "orientación").replace(/\bfiabilidad\b/gi, "certeza");
 
 export function construirDocumentoHTML(informe, fotoDataUrl = null, logoDataUrl = null) {
   const cuerpo = informe.analisis_viable === false
