@@ -496,7 +496,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "description": "En desuso: no se muestra en el informe. Déjalo fuera o vacío (el pronóstico no depende de datos del paciente que no tenemos)."
         }
       }
     },

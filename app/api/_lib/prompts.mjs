@@ -109,7 +109,7 @@ Indicaciones:
 - "evaluacion_protocolo.puntos": 5-9 entradas si hay signos; 3-4 si la oreja es homogénea. Cada "justificacion" (1 frase) enlaza el punto con un hallazgo de la observación o su función documentada en el contexto. "id" = nombre EXACTO de la nota del contexto cuando exista ("Shen Men", "Punto Cero"). "codigo_za" sin espacios: "PC2/CI4", no "PC2 / CI4".
 - "meta.motivo": etiqueta corta del sistema o cuadro principal ("Sistema musculoesquelético", "Ansiedad/estrés"). "No especificado" solo si de verdad no hay ninguna orientación.
 - "meta.oreja": pon "no_determinada". NO adivines izquierda/derecha desde la foto; si hace falta, lo indica la usuaria. No menciones el lado en los textos.
-- "pronostico": si el contexto no fija sesiones, usa 6-10 y ajusta por cronicidad.
+- "pronostico": si el contexto no fija sesiones, usa 6-10 y ajusta por cronicidad. NO incluyas "factores" (adherencia, cooperación, estado general del paciente…): no hay datos clínicos. Deja "factores" fuera o vacío.
 - "disclaimer": incluye el campo con cualquier texto; se reemplaza.
 - Español de registro clínico, conciso.`;
 }

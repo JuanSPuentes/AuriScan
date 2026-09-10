@@ -68,7 +68,13 @@ function earSVG(puntos) {
 }
 
 const chip = (v) => v ? `<span class="chip c-${esc(v)}">${esc(v)}</span>` : "";
-const estadoTxt = (e) => ({ agudo: "agudo", subagudo: "subagudo", cronico: "crónico", no_determinado: "estado no determinado" }[e] || e || "");
+const chipConf = (v) => v ? `<span class="chip c-${esc(v)}">confianza ${esc(v)}</span>` : "";
+const estadoTxt = (e) => ({ agudo: "agudo", subagudo: "subagudo", cronico: "crónico" }[e] || "");
+// "estado · confianza" para la cabecera de cada sistema; omite el estado si no se pudo determinar
+const sistemaMeta = (s) => {
+  const est = estadoTxt(s.estado);
+  return (est ? esc(est) + " · " : "") + chipConf(s.confianza);
+};
 
 const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
 // Cabecera de marca: emblema + nombre tipografiado (el lockup vertical no se lee a tamaño de cabecera).
@@ -96,7 +102,7 @@ function infograficoHTML(inf, fotoDataUrl, logoDataUrl) {
   const panelSistemas = sistemas.length ? sistemas.map((s) => `
     <div class="sist">
       <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}
-        <span class="s-meta">${esc(estadoTxt(s.estado))} · ${chip(s.confianza)}</span></h4>
+        <span class="s-meta">${sistemaMeta(s)}</span></h4>
       ${s.base_observacional ? `<p class="base">${esc(s.base_observacional)}</p>` : ""}
       ${s.region_corporal ? `<p class="reg"><b>Región:</b> ${esc(s.region_corporal)}</p>` : ""}
       ${s.hallazgos_probables?.length ? `<ul>${s.hallazgos_probables.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>` : ""}
@@ -157,7 +163,7 @@ function narrativaHTML(inf, logoDataUrl) {
   const sistemas = (hd.sistemas || []).map((s) => `
     <div class="bloque-sist">
       <h4>${esc(s.titulo || SISTEMA_TITULO[s.sistema] || s.sistema)}
-        <span class="s-meta">${esc(estadoTxt(s.estado))} · ${chip(s.confianza)}</span></h4>
+        <span class="s-meta">${sistemaMeta(s)}</span></h4>
       ${s.base_observacional ? `<p class="pa"><b>Base:</b> ${esc(s.base_observacional)}</p>` : ""}
       ${s.region_corporal ? `<p class="pa"><b>Región corporal:</b> ${esc(s.region_corporal)}</p>` : ""}
       ${s.puntos_asociados?.length ? `<p class="pa"><b>Puntos:</b> ${s.puntos_asociados.map(esc).join(", ")}</p>` : ""}
@@ -206,7 +212,6 @@ function narrativaHTML(inf, logoDataUrl) {
       <li><b>Frecuencia:</b> ${esc(pr.frecuencia || "—")}</li>
       ${pr.tiempo_de_respuesta ? `<li><b>Tiempo de respuesta:</b> ${esc(pr.tiempo_de_respuesta)}</li>` : ""}
     </ul>
-    ${pr.factores?.length ? `<ul>${pr.factores.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
 
     <h3>Limitaciones</h3>
     <ul>${(inf.limitaciones || []).map((l) => `<li>${esc(l)}</li>`).join("")}</ul>
