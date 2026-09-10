@@ -6,14 +6,14 @@
 
 import { chat, imageContent, parseJsonLoose, costo } from "./_lib/alibaba.mjs";
 import { recuperar } from "./_lib/retrieve.mjs";
-import { PROMPT_VISION, promptInforme } from "./_lib/prompts.mjs";
+import { PROMPT_VISION, SEMIOLOGIA_REF, promptInforme } from "./_lib/prompts.mjs";
 import { validar, avisosVault, sellar, schema } from "./_lib/validate.mjs";
 
 const SCHEMA_TEXT = JSON.stringify(schema, null, 2);
 
-// Visión: qwen3-vl-flash. Medido (scripts/comparar-vision*.mjs): plus y el modelo grande no detectan
-// mejor los signos reales; el factor decisivo es el prompt, no el modelo.
-const MODELO_VISION = process.env.MODELO_VISION || "qwen3-vl-flash";
+// Visión = qwen3-vl-plus: el examen semiológico estructurado (recorrido por regiones + checklist)
+// necesita salida JSON fiable; flash la rompe con esa longitud. Override con MODELO_VISION.
+const MODELO_VISION = process.env.MODELO_VISION || "qwen3-vl-plus";
 const MODELO_INFORME = process.env.MODELO_INFORME || "qwen-flash";
 // El paso 3 es solo texto por defecto (rápido/barato: se apoya en la descripción del paso 1).
 // INFORME_CON_IMAGEN=1 -> vuelve a enviar la foto (requiere un modelo con visión en MODELO_INFORME).
@@ -38,8 +38,8 @@ export default async function handler(req, res) {
       temperature: 0.1,
       maxTokens: 2000,
       messages: [
-        { role: "system", content: PROMPT_VISION },
-        { role: "user", content: [imageContent(imagen), { type: "text", text: "Describe esta oreja." }] },
+        { role: "system", content: `${SEMIOLOGIA_REF}\n\n${PROMPT_VISION}` },
+        { role: "user", content: [imageContent(imagen), { type: "text", text: "Examina esta oreja." }] },
       ],
     });
     const obs = parseJsonLoose(v.text);
@@ -56,12 +56,27 @@ export default async function handler(req, res) {
         mensaje: "La foto no tiene calidad suficiente (borrosa, oscura o mal encuadrada). Repite con buena luz y la oreja nítida y centrada." });
 
     // --- PASO 2 · recuperación (local, sin coste) -----------------------
-    const rag = recuperar({
-      zonas: obs.zonas_con_signo,
-      signos: (obs.signos || []).map((s) => s.signo),
-      puntos_visibles: [], // en oreja limpia no hay; con agujas, el modelo del paso 3 los deduce
-    });
-    debug.rag = { notas: rag.notasUsadas.length, tokensEst: rag.tokensEst, noResueltos: rag.noResueltos };
+    // Enriquecer las zonas: las de "signos" + las del recorrido que no vienen normales + las de signos_especificos.
+    const esp = obs.signos_especificos || {};
+    const zonasRecorrido = (obs.recorrido || [])
+      .filter((r) => r && !/^(rosad|normal)/i.test((r.color || "").trim()) || !/^normal/i.test((r?.relieve || "normal").trim()))
+      .map((r) => r.region);
+    const zonas = [...new Set([
+      ...(obs.zonas_con_signo || []),
+      ...zonasRecorrido,
+      ...(esp.escamas || []), ...(esp.papulas_nodulos || []), ...(esp.vasos_visibles || []),
+      ...(esp.pliegue_diagonal_lobulo || esp.surcos_lobulo ? ["lobulo"] : []),
+    ])];
+    const signos = [...new Set([
+      ...(obs.signos || []).map((s) => s.signo),
+      ...(esp.escamas?.length ? ["descamacion"] : []),
+      ...(esp.papulas_nodulos?.length ? ["papula"] : []),
+      ...(esp.vasos_visibles?.length ? ["telangiectasias/venas"] : []),
+      ...(esp.pliegue_diagonal_lobulo ? ["pliegue"] : []),
+      ...(esp.surcos_lobulo ? ["surco"] : []),
+    ])];
+    const rag = recuperar({ zonas, signos, colorGeneral: obs.color_general, puntos_visibles: [] });
+    debug.rag = { notas: rag.notasUsadas.length, tokensEst: rag.tokensEst, noResueltos: rag.noResueltos, zonas, signos };
 
     // --- PASO 3 · informe ----------------------------------------------
     const sys = promptInforme({ modo, schemaText: SCHEMA_TEXT });
