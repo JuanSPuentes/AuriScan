@@ -166,14 +166,6 @@ function mostrar(inf, debug, foto = fotoActual) {
   };
   vista.srcdoc = html;
   $("#resultado").hidden = false;
-  if (debug) {
-    $("#debug").hidden = false;
-    $("#debug-pre").textContent =
-      `notas RAG: ${debug.rag?.notas} · contexto ~${debug.rag?.tokensEst} tok\n` +
-      `coste IA: US$ ${debug.costoTotalUsd}\n` +
-      (debug.avisosVault?.length ? `avisos: ${debug.avisosVault.join(" | ")}\n` : "") +
-      JSON.stringify(debug.costos, null, 2);
-  }
   $("#resultado").scrollIntoView({ behavior: "smooth" });
 }
 

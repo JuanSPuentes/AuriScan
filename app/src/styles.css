@@ -161,10 +161,6 @@ button.secundario.chico { width: auto; padding: 10px 14px; font-size: .85rem; }
 }
 .boton-wsp:hover { background: #20bd5a; border-color: #20bd5a; }
 
-.debug { margin: 12px 0; font-size: .8rem; }
-.debug summary { cursor: pointer; color: var(--tinta2); }
-.debug pre { overflow-x: auto; background: #eef3f9; padding: 10px; border-radius: 8px; }
-
 #vista-wrap {
   margin-top: 12px;
   border: 1px solid var(--linea);
