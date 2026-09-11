@@ -12,9 +12,9 @@ addFormats(ajv);
 const _validate = ajv.compile(schema);
 
 export const DISCLAIMER =
-  "Este material es de apoyo y de carácter educativo. Debe ser corroborado por un profesional " +
-  "experto mediante exploración directa (palpación y detección eléctrica de puntos). No constituye " +
-  "un diagnóstico ni sustituye el juicio clínico.";
+  "Este material es de apoyo, de carácter educativo, y no configura un diagnóstico clínico. Si " +
+  "deseas acceder a una consulta con una médica especialista, agenda tu cita con la Dra. Jakeline " +
+  "Caro al whatsapp +57 310 817 8456.";
 
 export function validar(informe) {
   const ok = _validate(informe);

@@ -146,8 +146,17 @@ function ajustarVista() {
   wrap.style.height = Math.ceil(altoReal * escala) + 20 + "px";
 }
 
+function enlaceWhatsapp(inf) {
+  const dx = inf?.hipotesis_diagnostica?.diagnostico_principal;
+  const caso = inf?.meta?.caso_id;
+  const msg = `Hola Dra. Jakeline, tengo mi informe de AuriScan${caso ? ` (${caso})` : ""}` +
+    `${dx ? `: ${dx}` : ""}. Quiero agendar una consulta.`;
+  return `https://wa.me/573108178456?text=${encodeURIComponent(msg)}`;
+}
+
 function mostrar(inf, debug, foto = fotoActual) {
   const html = construirDocumentoHTML(inf, foto, logoDataUrl);
+  $("#agendar").href = enlaceWhatsapp(inf);
   const vista = $("#vista");
   vista.onload = () => {
     ajustarVista();
