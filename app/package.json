@@ -12,6 +12,8 @@
     "local": "node scripts/servidor-local.mjs"
   },
   "dependencies": {
+    "@alicloud/bssopenapi20171214": "^4.1.1",
+    "@alicloud/openapi-client": "^0.4.15",
     "@sparticuz/chromium": "131.0.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
