@@ -31,8 +31,20 @@ if (!existsSync(DIST)) {
   process.exit(1);
 }
 
-const { default: analizar } = await import("../api/analizar.mjs");
-const { default: pdf } = await import("../api/pdf.mjs");
+const [analizar, pdf, checkout, pagoEstado, pagoWebhook, misInformes, adminMetricas] = await Promise.all([
+  import("../api/analizar.mjs").then((m) => m.default),
+  import("../api/pdf.mjs").then((m) => m.default),
+  import("../api/checkout.mjs").then((m) => m.default),
+  import("../api/pago-estado.mjs").then((m) => m.default),
+  import("../api/pago-webhook.mjs").then((m) => m.default),
+  import("../api/mis-informes.mjs").then((m) => m.default),
+  import("../api/admin-metricas.mjs").then((m) => m.default),
+]);
+const RUTAS = {
+  "/api/analizar": analizar, "/api/pdf": pdf, "/api/checkout": checkout,
+  "/api/pago-estado": pagoEstado, "/api/pago-webhook": pagoWebhook,
+  "/api/mis-informes": misInformes, "/api/admin-metricas": adminMetricas,
+};
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
   ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png",
@@ -40,12 +52,11 @@ const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/jav
 
 const server = createServer(async (req, res) => {
   // --- API ---
-  const ruta = { "/api/analizar": analizar, "/api/pdf": pdf }[req.url];
+  const ruta = RUTAS[req.url.split("?")[0]];
   if (ruta) {
-    if (req.method !== "POST") { res.writeHead(405).end("POST"); return; }
     let body = "";
     for await (const chunk of req) body += chunk;
-    const shimReq = { method: "POST", body: body ? JSON.parse(body) : {} };
+    const shimReq = { method: req.method, headers: req.headers, body: body ? JSON.parse(body) : {} };
     const shimRes = {
       _s: 200, _h: {},
       status(c) { this._s = c; return this; },

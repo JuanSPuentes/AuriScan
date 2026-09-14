@@ -1,5 +1,4 @@
-import { construirDocumentoHTML } from "./report.mjs";
-import * as historial from "./historial.mjs";
+import { Clerk } from "@clerk/clerk-js";
 
 const $ = (s) => document.querySelector(s);
 const estado = $("#estado");
@@ -8,19 +7,30 @@ let imagenDataUrl = null;
 let modo = null;
 let oreja = "no_determinada";
 let consentimiento = false;
-let informe = null;
-let fotoActual = null;   // la foto que acompaña al informe mostrado (subida o recuperada del historial)
-let logoDataUrl = null;
+let consentimientoInvestigacion = false;
+let informeIdActual = null;
+let resumenActual = null;
 
 const LADO_MIN = 600; // px del lado mayor de la foto original
-const HISTORIAL_VISIBLE = false; // los informes se siguen guardando en el dispositivo, pero la sección "Mis informes" está oculta
 
-// Emblema del logo -> data URI (para que el informe sea autocontenido en la ventana de impresión)
-fetch("/logo-emblema.png")
-  .then((r) => (r.ok ? r.blob() : Promise.reject()))
-  .then((b) => new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(b); }))
-  .then((d) => { logoDataUrl = d; })
-  .catch(() => {});
+// --- 0 · sesión (Clerk, solo Google) ----------------------------------
+const clerk = new Clerk(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
+await clerk.load();
+
+function authHeaders() {
+  return clerk.session ? clerk.session.getToken().then((t) => ({ Authorization: `Bearer ${t}` })) : Promise.resolve({});
+}
+
+function actualizarSesion() {
+  const conectado = !!clerk.user;
+  $("#login-gate").hidden = conectado;
+  $("#app-contenido").hidden = !conectado;
+  if (conectado) clerk.mountUserButton($("#user-button"));
+}
+clerk.addListener(actualizarSesion);
+actualizarSesion();
+
+$("#btn-login").addEventListener("click", () => clerk.openSignIn({}));
 
 // --- 1 · imagen: elegir + redimensionar en el cliente -----------------
 $("#file").addEventListener("change", async (e) => {
@@ -80,9 +90,10 @@ document.querySelectorAll(".op[data-oreja]").forEach((b) =>
   }));
 
 $("#consent").addEventListener("change", (e) => { consentimiento = e.target.checked; refrescar(); });
+$("#consent-investigacion").addEventListener("change", (e) => { consentimientoInvestigacion = e.target.checked; refrescar(); });
 
 function refrescar() {
-  $("#analizar").disabled = !(imagenDataUrl && modo && consentimiento);
+  $("#analizar").disabled = !(imagenDataUrl && modo && consentimiento && consentimientoInvestigacion);
 }
 
 // --- 3 · analizar ---------------------------------------------------
@@ -99,8 +110,8 @@ $("#analizar").addEventListener("click", async () => {
   try {
     const r = await fetch("/api/analizar", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imagen: imagenDataUrl, modo, oreja, consentimiento }),
+      headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+      body: JSON.stringify({ imagen: imagenDataUrl, modo, oreja, consentimiento, consentimientoInvestigacion }),
     });
     const txt = await r.text();
     let data;
@@ -118,11 +129,11 @@ $("#analizar").addEventListener("click", async () => {
       setEstado(data.mensaje || "La imagen no sirve para el análisis. Prueba con otra foto.", true);
       return;
     }
-    informe = data.informe;
-    fotoActual = imagenDataUrl;
-    mostrar(informe, data.debug, fotoActual);
+    informeIdActual = data.informe_id;
+    resumenActual = data.resumen;
+    mostrarResumen(resumenActual, false);
     setEstado("");
-    if (await historial.guardar({ informe, fotoDataUrl: fotoActual })) renderHistorial();
+    renderHistorial();
   } catch (err) {
     setEstado("Error: " + err.message, true);
   } finally {
@@ -131,88 +142,116 @@ $("#analizar").addEventListener("click", async () => {
   }
 });
 
-// --- render + descarga -------------------------------------------
-const PAGINA_PX = 794; // ancho A4 @96dpi
-
-function ajustarVista() {
-  const wrap = $("#vista-wrap"), vista = $("#vista");
-  const doc = vista.contentDocument;
-  if (!doc?.body) return;
-  const disponible = wrap.clientWidth - 20; // menos el padding
-  const escala = Math.min(1, disponible / PAGINA_PX);
-  const altoReal = doc.documentElement.scrollHeight;
-  vista.style.transform = `scale(${escala})`;
-  vista.style.height = altoReal + "px";
-  wrap.style.height = Math.ceil(altoReal * escala) + 20 + "px";
-}
-
-function enlaceWhatsapp(inf) {
-  const dx = inf?.hipotesis_diagnostica?.diagnostico_principal;
-  const caso = inf?.meta?.caso_id;
-  const msg = `Hola Dra. Jakeline, tengo mi informe de AuriScan${caso ? ` (${caso})` : ""}` +
-    `${dx ? `: ${dx}` : ""}. Quiero agendar una consulta.`;
+// --- resumen en pantalla (el informe completo solo existe en el servidor,
+// y solo se convierte en PDF si hay un pago aprobado) -------------------
+function enlaceWhatsapp(resumen) {
+  const msg = `Hola Dra. Jakeline, tengo mi informe de AuriScan${resumen.caso_id ? ` (${resumen.caso_id})` : ""}` +
+    `${resumen.diagnostico_principal ? `: ${resumen.diagnostico_principal}` : ""}. Quiero agendar una consulta.`;
   return `https://wa.me/573108178456?text=${encodeURIComponent(msg)}`;
 }
 
-function mostrar(inf, debug, foto = fotoActual) {
-  const html = construirDocumentoHTML(inf, foto, logoDataUrl);
-  $("#agendar").href = enlaceWhatsapp(inf);
-  const vista = $("#vista");
-  vista.onload = () => {
-    ajustarVista();
-    setTimeout(ajustarVista, 300); // reajuste tras cargar fuentes
-    const d = vista.contentDocument;
-    if (d?.fonts?.ready) d.fonts.ready.then(ajustarVista);
-  };
-  vista.srcdoc = html;
+function mostrarResumen(resumen, pagado) {
+  $("#resumen-titulo").textContent = resumen.diagnostico_principal || "Análisis completado";
+  $("#resumen-sistemas").innerHTML = (resumen.sistemas || []).map((s) => `<li>${s}</li>`).join("");
+  $("#resumen-disclaimer").textContent = resumen.disclaimer || "";
+  $("#agendar").href = enlaceWhatsapp(resumen);
+  actualizarBotonDescarga(pagado);
   $("#resultado").hidden = false;
   $("#resultado").scrollIntoView({ behavior: "smooth" });
 }
 
+function actualizarBotonDescarga(pagado) {
+  const btn = $("#descargar");
+  btn.textContent = pagado ? "Descargar PDF" : "Pagar y descargar PDF";
+  btn.dataset.pagado = pagado ? "1" : "";
+}
+
 $("#descargar").addEventListener("click", async () => {
-  if (!informe) return;
+  if (!informeIdActual) return;
+  if (!$("#descargar").dataset.pagado) return iniciarPago();
+  await descargarPdf();
+});
+
+async function iniciarPago() {
+  const btn = $("#descargar");
+  btn.disabled = true;
+  setEstado("Preparando el pago…");
+  try {
+    const r = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+      body: JSON.stringify({ informe_id: informeIdActual }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || `Error ${r.status}`);
+    if (data.ya_pagado) { actualizarBotonDescarga(true); await descargarPdf(); return; }
+    window.location.href = data.url; // redirige a Wompi
+  } catch (err) {
+    setEstado("No se pudo iniciar el pago: " + err.message, true);
+    btn.disabled = false;
+  }
+}
+
+async function descargarPdf() {
   const btn = $("#descargar");
   btn.disabled = true;
   setEstado("Generando el PDF…");
   try {
     const r = await fetch("/api/pdf", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ informe, foto: fotoActual, logo: logoDataUrl }),
+      headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+      body: JSON.stringify({ informe_id: informeIdActual }),
     });
-    if (!r.ok) throw new Error(`(${r.status})`);
+    if (!r.ok) {
+      const data = await r.json().catch(() => ({}));
+      throw new Error(data.error || `(${r.status})`);
+    }
     const blob = await r.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${(informe.meta?.caso_id || "informe-auricular").replace(/[^\w.-]/g, "")}.pdf`;
+    a.download = `${(resumenActual?.caso_id || "informe-auricular").replace(/[^\w.-]/g, "")}.pdf`;
     document.body.appendChild(a);
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
     setEstado("");
   } catch (err) {
-    // reserva: abrir el informe en otra pestaña para imprimir/guardar
-    abrirParaImprimir();
-    setEstado("No se pudo generar el PDF automáticamente " + err.message + ". Se abrió en otra pestaña: elige «Guardar como PDF».", true);
+    setEstado("No se pudo descargar el PDF: " + err.message + ". Vuelve a intentar.", true);
   } finally {
     btn.disabled = false;
   }
-});
+}
 
-function abrirParaImprimir() {
-  const html = construirDocumentoHTML(informe, fotoActual, logoDataUrl);
-  const w = window.open("", "_blank");
-  if (!w) return;
-  w.document.write(html);
-  w.document.close();
-  const lanzar = () => {
-    const seguir = () => setTimeout(() => { try { w.focus(); w.print(); } catch {} }, 300);
-    if (w.document.fonts?.ready) w.document.fonts.ready.then(seguir).catch(seguir);
-    else seguir();
-  };
-  if (w.document.readyState === "complete") lanzar();
-  else w.addEventListener("load", lanzar);
+// --- vuelta desde Wompi: /?informe_id=...&id=<transaccion>&env=... -----
+async function revisarRetornoDePago() {
+  const qs = new URLSearchParams(location.search);
+  const informeId = qs.get("informe_id");
+  const transaccionId = qs.get("id");
+  if (!informeId || !transaccionId) return;
+  history.replaceState({}, "", location.pathname); // limpia la URL
+
+  setEstado("Confirmando el pago…");
+  try {
+    const r = await fetch("/api/pago-estado", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+      body: JSON.stringify({ transaccion_id: transaccionId }),
+    });
+    const data = await r.json();
+    if (data.aprobado) {
+      informeIdActual = data.informe_id;
+      actualizarBotonDescarga(true);
+      $("#resultado").hidden = false;
+      setEstado("Pago aprobado. Descargando el PDF…");
+      await descargarPdf();
+      renderHistorial();
+    } else {
+      setEstado("El pago no se aprobó (" + (data.estado_wompi || "desconocido") + "). Intenta de nuevo.", true);
+    }
+  } catch (err) {
+    setEstado("No se pudo confirmar el pago: " + err.message, true);
+  }
 }
 
 function setEstado(t, esError = false) {
@@ -221,53 +260,41 @@ function setEstado(t, esError = false) {
   estado.classList.toggle("error", esError);
 }
 
-// --- historial (solo en este dispositivo) --------------------------
+// --- mis informes (guardados en el servidor, ligados a la cuenta) ------
 const fmtFecha = (iso) => {
   const d = new Date(iso);
   return isNaN(d) ? (iso || "") : d.toLocaleDateString("es", { day: "2-digit", month: "short", year: "numeric" });
 };
 
 async function renderHistorial() {
-  if (!HISTORIAL_VISIBLE || !historial.disponible()) return;
-  const items = await historial.listar();
+  if (!clerk.user) return;
   const sec = $("#historial"), ul = $("#hist-lista");
-  sec.hidden = items.length === 0;
-  ul.innerHTML = items.map((it) => `
-    <li data-id="${it.caso_id}">
-      <button class="hist-abrir" type="button">
-        <span class="hist-tit">${it.titulo}</span>
-        <span class="hist-meta">${fmtFecha(it.fecha)} · ${it.modo === "con_agujas" ? "con agujas" : "oreja limpia"}</span>
-      </button>
-      <button class="hist-del" type="button" title="Borrar" aria-label="Borrar">✕</button>
-    </li>`).join("");
+  try {
+    const r = await fetch("/api/mis-informes", { headers: await authHeaders() });
+    const data = await r.json();
+    const items = data.informes || [];
+    sec.hidden = items.length === 0;
+    ul.innerHTML = items.map((it) => `
+      <li data-id="${it.id}" data-pagado="${it.pagado ? "1" : ""}">
+        <button class="hist-abrir" type="button">
+          <span class="hist-tit">${it.titulo || "Informe auricular"}</span>
+          <span class="hist-meta">${fmtFecha(it.creado_en)} · ${it.modo === "con_agujas" ? "con agujas" : "oreja limpia"} · ${it.pagado ? "pagado" : "sin pagar"}</span>
+        </button>
+      </li>`).join("");
+  } catch { sec.hidden = true; }
 }
 
 $("#hist-lista").addEventListener("click", async (e) => {
   const li = e.target.closest("li");
-  if (!li) return;
-  const id = li.dataset.id;
-  if (e.target.closest(".hist-del")) {
-    await historial.borrar(id);
-    renderHistorial();
-    return;
-  }
-  if (e.target.closest(".hist-abrir")) {
-    const rec = await historial.obtener(id);
-    if (!rec) { setEstado("No se pudo abrir ese informe.", true); return; }
-    informe = rec.informe;
-    fotoActual = rec.foto || null;
-    mostrar(informe, null, fotoActual);
-    setEstado("Informe recuperado del historial de este dispositivo.");
-  }
+  if (!li || !e.target.closest(".hist-abrir")) return;
+  informeIdActual = li.dataset.id;
+  resumenActual = { caso_id: li.dataset.id };
+  actualizarBotonDescarga(!!li.dataset.pagado);
+  $("#resumen-titulo").textContent = li.querySelector(".hist-tit").textContent;
+  $("#resumen-sistemas").innerHTML = "";
+  $("#resumen-disclaimer").textContent = "Informe recuperado de tu historial.";
+  $("#resultado").hidden = false;
+  $("#resultado").scrollIntoView({ behavior: "smooth" });
 });
 
-$("#hist-borrar-todo").addEventListener("click", async () => {
-  if (!confirm("¿Borrar todos los informes guardados en este dispositivo?")) return;
-  await historial.borrarTodo();
-  renderHistorial();
-});
-
-let _rt;
-window.addEventListener("resize", () => { clearTimeout(_rt); _rt = setTimeout(ajustarVista, 150); });
-
-renderHistorial();
+revisarRetornoDePago();

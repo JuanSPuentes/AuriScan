@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-auriscan}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-auriscan}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-auriscan}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-auriscan}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-auriscan}
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY}
+      ALIBABA_BASE_URL: ${ALIBABA_BASE_URL}
+      MODELO_VISION: ${MODELO_VISION:-qwen3-vl-plus}
+      MODELO_INFORME: ${MODELO_INFORME:-qwen-flash}
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+      OSS_REGION: ${OSS_REGION}
+      OSS_BUCKET: ${OSS_BUCKET}
+      OSS_AK_ID: ${OSS_AK_ID}
+      OSS_AK_SECRET: ${OSS_AK_SECRET}
+      WOMPI_ENV: ${WOMPI_ENV:-test}
+      WOMPI_PUBLIC_KEY: ${WOMPI_PUBLIC_KEY}
+      WOMPI_PRIVATE_KEY: ${WOMPI_PRIVATE_KEY}
+      WOMPI_INTEGRITY_SECRET: ${WOMPI_INTEGRITY_SECRET}
+      WOMPI_EVENTS_SECRET: ${WOMPI_EVENTS_SECRET}
+      PRECIO_PDF_COP: ${PRECIO_PDF_COP:-15000}
+      APP_ORIGIN: ${APP_ORIGIN}
+      CONSENT_VERSION: ${CONSENT_VERSION:-v1}
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+  respaldo:
+    build:
+      context: .
+      dockerfile: Dockerfile.respaldo
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-auriscan}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-auriscan}
+      OSS_REGION: ${OSS_REGION}
+      OSS_BUCKET: ${OSS_BUCKET}
+      OSS_AK_ID: ${OSS_AK_ID}
+      OSS_AK_SECRET: ${OSS_AK_SECRET}
+      RESPALDO_HORA_UTC: ${RESPALDO_HORA_UTC:-7}
+
+volumes:
+  pgdata:

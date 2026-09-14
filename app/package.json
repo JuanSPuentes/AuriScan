@@ -9,14 +9,22 @@
     "preview": "vite preview",
     "prepare-data": "node scripts/prepare.mjs",
     "smoke": "node scripts/smoke.mjs",
-    "local": "node scripts/servidor-local.mjs"
+    "local": "node scripts/servidor-local.mjs",
+    "server": "node server/index.mjs",
+    "docker": "docker compose up -d --build",
+    "docker:logs": "docker compose logs -f",
+    "docker:down": "docker compose down"
   },
   "dependencies": {
     "@alicloud/bssopenapi20171214": "^4.1.1",
     "@alicloud/openapi-client": "^0.4.15",
+    "@clerk/backend": "^3.17.2",
+    "@clerk/clerk-js": "^6.31.1",
     "@sparticuz/chromium": "131.0.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
+    "ali-oss": "^6.23.0",
+    "pg": "^8.23.0",
     "puppeteer-core": "23.11.1"
   },
   "devDependencies": {

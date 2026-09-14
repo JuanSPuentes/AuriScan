@@ -8,6 +8,9 @@ import { chat, imageContent, parseJsonLoose, costo } from "./_lib/alibaba.mjs";
 import { recuperar } from "./_lib/retrieve.mjs";
 import { PROMPT_VISION, SEMIOLOGIA_REF, promptInforme } from "./_lib/prompts.mjs";
 import { validar, avisosVault, sellar, schema } from "./_lib/validate.mjs";
+import { exigirUsuario } from "./_lib/auth.mjs";
+import { guardarInforme, resumenPublico } from "./_lib/guardar-informe.mjs";
+import { query } from "./_lib/db.mjs";
 
 const SCHEMA_TEXT = JSON.stringify(schema, null, 2);
 
@@ -23,11 +26,30 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Usa POST." });
 
   try {
-    const { imagen, modo, oreja, consentimiento } = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const usuario = await exigirUsuario(req, res);
+    if (!usuario) return; // exigirUsuario ya respondió 401
+
+    const { imagen, modo, oreja, consentimiento, consentimientoInvestigacion } =
+      typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     if (!imagen?.startsWith("data:image/")) return res.status(400).json({ error: "Falta 'imagen' (data URL)." });
     if (!["con_agujas", "oreja_limpia"].includes(modo)) return res.status(400).json({ error: "'modo' inválido." });
     if (consentimiento !== true) return res.status(400).json({ error: "Falta el consentimiento para procesar la imagen." });
+    if (consentimientoInvestigacion !== true)
+      return res.status(400).json({ error: "Falta el consentimiento para uso de los datos en investigación." });
     const orejaUsuaria = ["izquierda", "derecha"].includes(oreja) ? oreja : null;
+
+    // Se guarda una sola vez (la primera vez que consiente) -- CONSENT_VERSION debe coincidir
+    // con el texto exacto que aprobó el comité de ética; súbela solo si el texto cambia de fondo.
+    const CONSENT_VERSION = process.env.CONSENT_VERSION || "v1";
+    await query(
+      `update usuarios set
+         consentimiento_app_en = coalesce(consentimiento_app_en, now()),
+         consentimiento_app_version = coalesce(consentimiento_app_version, $2),
+         consentimiento_investigacion_en = coalesce(consentimiento_investigacion_en, now()),
+         consentimiento_investigacion_version = coalesce(consentimiento_investigacion_version, $2)
+       where id = $1`,
+      [usuario.id, CONSENT_VERSION]
+    );
 
     const debug = { costos: [], tiempos: {}, consentimiento_en: new Date().toISOString() };
 
@@ -111,7 +133,12 @@ export default async function handler(req, res) {
     debug.avisosVault = avisosVault(informe);
     debug.costoTotalUsd = +debug.costos.reduce((s, c) => s + (c?.usd || 0), 0).toFixed(5);
 
-    return res.status(200).json({ informe, debug });
+    // El informe completo se guarda en la base (foto incluida) y queda ligado al usuario que
+    // inició sesión -- es la pieza que alimenta las métricas del artículo. Al navegador solo
+    // le llega un resumen: el PDF completo se genera después, y solo si hay un pago aprobado.
+    const informeId = await guardarInforme({ usuarioId: usuario.id, informe, fotoDataUrl: imagen });
+
+    return res.status(200).json({ informe_id: informeId, resumen: resumenPublico(informe) });
   } catch (e) {
     return res.status(500).json({ error: String(e.message || e) });
   }

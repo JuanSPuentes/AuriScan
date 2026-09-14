@@ -161,22 +161,32 @@ button.secundario.chico { width: auto; padding: 10px 14px; font-size: .85rem; }
 }
 .boton-wsp:hover { background: #20bd5a; border-color: #20bd5a; }
 
-#vista-wrap {
-  margin-top: 12px;
-  border: 1px solid var(--linea);
+/* resumen en pantalla -- el informe completo solo existe en el servidor hasta que se paga */
+.resumen {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1.5px solid var(--linea);
   border-radius: var(--radio);
-  background: #eef3f9;
-  overflow: hidden;         /* la página A4 escalada se recorta al ancho disponible */
-  padding: 10px;
-}
-#vista {
-  width: 794px;             /* ancho real de una página A4 a 96dpi */
-  border: 0;
-  display: block;
   background: #fff;
-  box-shadow: 0 1px 6px rgba(18, 36, 59, .15);
-  transform-origin: top left;
 }
+.resumen h3 { font-family: "Spectral", serif; color: var(--azul); margin: 0 0 8px; }
+.resumen ul { margin: 0 0 10px; padding-left: 1.2em; }
+.resumen ul li { margin: 3px 0; }
+.resumen-disclaimer { font-size: .82rem; color: var(--ocre); margin: 0; }
+
+/* sesión (Clerk, solo Google) */
+.login-gate {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1.5px dashed var(--linea);
+  border-radius: var(--radio);
+  text-align: center;
+  background: #fff;
+}
+.login-gate p { color: var(--tinta2); margin: 0 0 12px; }
+.login-gate .primario { width: auto; padding: 12px 24px; }
+.user-button { position: absolute; top: 24px; right: 18px; }
+.top { position: relative; }
 
 /* historial */
 .historial { margin-top: 40px; }
