@@ -10,7 +10,10 @@ export default defineConfig({
     port: 5173,
     proxy: { "/api": { target: API_PROXY, changeOrigin: true } },
   },
-  build: { target: "es2022" },
+  build: {
+    target: "es2022",
+    rollupOptions: { input: { main: "index.html", admin: "admin.html" } },
+  },
   plugins: [
     VitePWA({
       registerType: "autoUpdate",

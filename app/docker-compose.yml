@@ -46,6 +46,7 @@ services:
       PRECIO_PDF_COP: ${PRECIO_PDF_COP:-15000}
       APP_ORIGIN: ${APP_ORIGIN}
       CONSENT_VERSION: ${CONSENT_VERSION:-v1}
+      ADMIN_EMAILS: ${ADMIN_EMAILS}
     volumes:
       - archivos:/app/data
 

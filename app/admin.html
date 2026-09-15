@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1f4e79" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>AuriScan · métricas</title>
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" />
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <h1>AuriScan</h1>
+      <p class="lema">Panel de métricas</p>
+      <div id="user-button" class="user-button"></div>
+    </header>
+
+    <section class="login-gate" id="login-gate">
+      <p>Inicia sesión para continuar.</p>
+      <button class="primario" id="btn-login">Iniciar sesión con Google</button>
+    </section>
+
+    <section id="no-autorizado" hidden>
+      <p class="estado error">Tu cuenta no tiene acceso a este panel.</p>
+    </section>
+
+    <div id="panel" hidden>
+      <section class="paso">
+        <h2>Resumen</h2>
+        <p id="m-totales"></p>
+      </section>
+
+      <section class="paso">
+        <h2>Sistemas implicados (desequilibrio)</h2>
+        <table class="tabla-metricas" id="t-sistemas"></table>
+      </section>
+
+      <section class="paso">
+        <h2>Puntos más frecuentes</h2>
+        <table class="tabla-metricas" id="t-puntos"></table>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="/src/admin.mjs"></script>
+</body>
+</html>

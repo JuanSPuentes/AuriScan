@@ -52,11 +52,20 @@ export async function exigirUsuario(req, res) {
   return usuario;
 }
 
-// Para el panel de la doctora: exige sesión Y rol admin.
+// Lista de correos con acceso al panel de métricas -- la fuente de verdad es esta variable
+// de entorno (no la columna `rol`, que puede quedar mal puesta en la base por error). Un
+// usuario también entra si tiene rol=admin en la base, para cuando la doctora necesite el
+// suyo sin depender de redeploy.
+function correosAdminPermitidos() {
+  return (process.env.ADMIN_EMAILS || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+}
+
+// Para el panel de métricas: exige sesión Y (correo en ADMIN_EMAILS O rol=admin en la base).
 export async function exigirAdmin(req, res) {
   const usuario = await exigirUsuario(req, res);
   if (!usuario) return null;
-  if (usuario.rol !== "admin") {
+  const permitido = usuario.rol === "admin" || correosAdminPermitidos().includes((usuario.email || "").toLowerCase());
+  if (!permitido) {
     res.status(403).json({ error: "No autorizado." });
     return null;
   }

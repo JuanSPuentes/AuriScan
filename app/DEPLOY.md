@@ -54,10 +54,13 @@ docker compose logs -f   # confirma que los 4 contenedores arrancan sin error
 
 La base se crea sola la primera vez (aplica `db/schema.sql`). El sitio queda en el puerto 80.
 
-## 6 · El primer usuario admin
+## 6 · Quién ve el panel de métricas (`/admin`)
 
-No hay pantalla para esto todavía -- se marca a mano en la base la primera vez que la
-doctora inicia sesión (así ya existe su fila en `usuarios`):
+Se controla con `ADMIN_EMAILS` en el `.env` (correos separados por coma) -- ese es el que
+manda, no algo que se pueda cambiar desde el navegador. Para agregar a la doctora más
+adelante: súmala a esa variable y reinicia el backend (`docker compose up -d backend`).
+También entra cualquiera con `rol='admin'` en la tabla `usuarios`, por si alguna vez hace
+falta dar acceso sin redeploy:
 
 ```bash
 docker compose exec postgres psql -U auriscan -d auriscan \

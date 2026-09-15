@@ -193,6 +193,13 @@ button.secundario.chico { width: auto; padding: 10px 14px; font-size: .85rem; }
 .user-email { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .top { position: relative; }
 
+/* panel de métricas */
+.tabla-metricas { width: 100%; border-collapse: collapse; margin-top: 8px; background: #fff; }
+.tabla-metricas th, .tabla-metricas td {
+  border: 1px solid var(--linea); padding: 8px 10px; text-align: left; font-size: .88rem;
+}
+.tabla-metricas th { background: var(--azulc); color: var(--azul); font-weight: 600; }
+
 /* historial */
 .historial { margin-top: 40px; }
 .hist-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
