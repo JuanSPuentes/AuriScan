@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 import { construirDocumentoHTML } from "../src/report.mjs";
 import { exigirUsuario } from "./_lib/auth.mjs";
 import { one } from "./_lib/db.mjs";
-import { obtenerComoDataUrl, subirPdf } from "./_lib/oss.mjs";
+import { obtenerComoDataUrl, subirPdf } from "./_lib/storage.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 

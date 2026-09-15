@@ -35,10 +35,12 @@ nano .env   # llena TODAS las variables -- ver la lista abajo
    [wompi.co/en/docs](https://docs.wompi.co) para probar sin cuenta real) → copia la llave
    pública, la privada y el secreto de integridad. El secreto de eventos sale de
    Configuración → Eventos, al activar el webhook.
-3. **OSS** — consola de Alibaba Cloud → Object Storage Service → crear bucket (región
-   `us-east-1` para que quede cerca del resto) → RAM → crea un usuario con AccessKey y la
-   política `AliyunOSSFullAccess` acotada a ese bucket (o `AliyunOSSFullAccess` a secas si no
-   quieres complicarte con la política acotada todavía).
+3. **OSS** *(opcional mientras se está probando)* — con `STORAGE_DRIVER=local` (el valor por
+   defecto) las fotos y PDFs se guardan en un volumen de Docker, sin necesitar bucket. Cuando
+   se vaya a producción de verdad: consola de Alibaba Cloud → Object Storage Service → crear
+   bucket (región `us-east-1` para que quede cerca del resto) → RAM → crea un usuario con
+   AccessKey y la política `AliyunOSSFullAccess` acotada a ese bucket → pon `STORAGE_DRIVER=oss`
+   + las `OSS_*` en el `.env`.
 4. **APP_ORIGIN** — la URL final donde va a vivir la app (ej. `https://auriscan.tudominio.com`
    si le pones dominio y HTTPS con Certbot/Caddy delante, o `http://<ip-de-la-vm>` mientras
    tanto). Wompi redirige ahí después del pago -- tiene que ser accesible desde afuera.

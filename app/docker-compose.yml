@@ -30,6 +30,10 @@ services:
       MODELO_VISION: ${MODELO_VISION:-qwen3-vl-plus}
       MODELO_INFORME: ${MODELO_INFORME:-qwen-flash}
       CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+      # STORAGE_DRIVER=local (por defecto) guarda fotos/PDFs en el volumen "archivos" de
+      # abajo -- sin necesitar bucket real. Cambia a "oss" cuando haya cuenta de verdad.
+      STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+      LOCAL_STORAGE_DIR: /app/data
       OSS_REGION: ${OSS_REGION}
       OSS_BUCKET: ${OSS_BUCKET}
       OSS_AK_ID: ${OSS_AK_ID}
@@ -42,6 +46,8 @@ services:
       PRECIO_PDF_COP: ${PRECIO_PDF_COP:-15000}
       APP_ORIGIN: ${APP_ORIGIN}
       CONSENT_VERSION: ${CONSENT_VERSION:-v1}
+    volumes:
+      - archivos:/app/data
 
   frontend:
     build:
@@ -73,3 +79,4 @@ services:
 
 volumes:
   pgdata:
+  archivos:

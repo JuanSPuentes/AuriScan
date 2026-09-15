@@ -3,7 +3,7 @@
 // un GROUP BY directo, sin tener que parsear el jsonb cada vez) + la foto en OSS.
 
 import { tx } from "./db.mjs";
-import { subirFoto } from "./oss.mjs";
+import { subirFoto } from "./storage.mjs";
 
 export async function guardarInforme({ usuarioId, informe, fotoDataUrl }) {
   return tx(async (c) => {
