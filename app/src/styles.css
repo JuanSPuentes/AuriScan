@@ -185,7 +185,12 @@ button.secundario.chico { width: auto; padding: 10px 14px; font-size: .85rem; }
 }
 .login-gate p { color: var(--tinta2); margin: 0 0 12px; }
 .login-gate .primario { width: auto; padding: 12px 24px; }
-.user-button { position: absolute; top: 24px; right: 18px; }
+.user-button {
+  position: absolute; top: 24px; right: 18px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: .78rem; color: var(--tinta2);
+}
+.user-email { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .top { position: relative; }
 
 /* historial */

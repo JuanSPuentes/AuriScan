@@ -1,0 +1,11 @@
+node_modules
+dist
+dev-dist
+.git
+.vercel
+.env
+.env.local
+scripts/muestra*.html
+scripts/muestra*.png
+scripts/lote-out
+scripts/arq-*

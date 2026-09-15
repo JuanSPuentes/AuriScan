@@ -21,16 +21,25 @@ function authHeaders() {
   return clerk.session ? clerk.session.getToken().then((t) => ({ Authorization: `Bearer ${t}` })) : Promise.resolve({});
 }
 
+// Nada de openSignIn()/mountSignIn()/mountUserButton(): esos componentes visuales de Clerk
+// necesitan cargar aparte un paquete de UI remoto -- más frágil de lo que vale la pena para
+// esto. Se usa solo la parte "headless" (datos + redirectToSignIn/signOut) con una interfaz
+// propia, mínima.
 function actualizarSesion() {
   const conectado = !!clerk.user;
   $("#login-gate").hidden = conectado;
   $("#app-contenido").hidden = !conectado;
-  if (conectado) clerk.mountUserButton($("#user-button"));
+  const ub = $("#user-button");
+  ub.innerHTML = conectado
+    ? `<span class="user-email">${clerk.user.primaryEmailAddress?.emailAddress || ""}</span>
+       <button type="button" id="btn-logout" class="enlace">Cerrar sesión</button>`
+    : "";
+  if (conectado) $("#btn-logout").addEventListener("click", () => clerk.signOut());
 }
 clerk.addListener(actualizarSesion);
 actualizarSesion();
 
-$("#btn-login").addEventListener("click", () => clerk.openSignIn({}));
+$("#btn-login").addEventListener("click", () => clerk.redirectToSignIn({ redirectUrl: window.location.href }));
 
 // --- 1 · imagen: elegir + redimensionar en el cliente -----------------
 $("#file").addEventListener("change", async (e) => {
