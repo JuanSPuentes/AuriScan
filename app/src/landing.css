@@ -1,7 +1,11 @@
 /* Landing page -- usa las variables de :root que ya define styles.css (--azul, --tinta, etc.) */
 
 .landing { overflow-x: hidden; }
-.landing section, .landing header { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+/* ojo: solo el padding horizontal va acá -- el shorthand "padding" también pondría
+   top/bottom en 0, y como ".landing section" (clase+elemento) pesa más que una clase
+   sola como ".l-incluye", le ganaría al padding-top/bottom que cada sección define
+   abajo (exactamente el choque de especificidad que advierte la guía de diseño). */
+.landing section, .landing header { max-width: 1080px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
 
 /* ===== nav ===== */
 .l-nav {
@@ -55,7 +59,9 @@
 }
 
 /* ===== sobre la doctora ===== */
-.l-doctora {
+/* .landing antepuesto: sube la especificidad por encima de ".landing section" de arriba,
+   así el max-width:none (banda de borde a borde) sí gana. */
+.landing .l-doctora {
   display: flex; gap: 24px; align-items: center; padding: 44px 22px;
   background: #fff; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
   max-width: none;
@@ -97,7 +103,7 @@
 }
 
 /* ===== disclaimer band ===== */
-.l-disclaimer { max-width: none; background: var(--azulc); padding: 28px 22px; }
+.landing .l-disclaimer { max-width: none; background: var(--azulc); padding: 28px 22px; }
 .l-disclaimer p { max-width: 720px; margin: 0 auto; text-align: center; color: var(--tinta); font-size: .9rem; line-height: 1.6; }
 
 /* ===== cta final ===== */
