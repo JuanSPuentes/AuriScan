@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#1f4e79" />
-  <title>AuriScan · análisis de pabellón auricular</title>
+  <title>AuriScan: Análisis de pabellón auricular</title>
   <link rel="icon" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet"
@@ -32,7 +32,7 @@
     </section>
 
     <div id="app-contenido" hidden>
-      <section class="paso" id="paso-imagen">
+      <section class="paso paso-tarjeta" id="paso-imagen">
         <h2><span class="paso-num">1</span>La imagen</h2>
         <label class="dropzone" id="dropzone">
           <input type="file" accept="image/*" id="file" hidden />
@@ -46,7 +46,7 @@
         </ul>
       </section>
 
-      <section class="paso" id="paso-modo">
+      <section class="paso paso-tarjeta" id="paso-modo">
         <h2><span class="paso-num">2</span>El estado de la oreja</h2>
         <div class="segmento" role="radiogroup" aria-label="Modo">
           <button type="button" class="op" data-modo="con_agujas" aria-pressed="false">
@@ -58,7 +58,7 @@
         </div>
       </section>
 
-      <section class="paso" id="paso-oreja">
+      <section class="paso paso-tarjeta" id="paso-oreja">
         <h2><span class="paso-num">3</span>¿Qué oreja es? <span class="opcional">(opcional)</span></h2>
         <div class="segmento tres" role="radiogroup" aria-label="Oreja">
           <button type="button" class="op op-chica" data-oreja="izquierda" aria-pressed="false">Izquierda</button>
@@ -67,7 +67,7 @@
         </div>
       </section>
 
-      <section class="paso" id="paso-consent">
+      <section class="paso paso-tarjeta" id="paso-consent">
         <h2><span class="paso-num">4</span>Autorización</h2>
         <label class="consent">
           <input type="checkbox" id="consent" />

@@ -21,7 +21,7 @@ body {
 
 .marca-logo {
   display: block;
-  width: min(300px, 66vw);
+  width: min(150px, 40vw);
   height: auto;
   margin: 0 0 14px;
 }
@@ -43,6 +43,14 @@ body {
 .top p { color: var(--tinta2); font-size: .92rem; margin: 0 0 8px; }
 
 .paso { margin-top: 26px; }
+/* clase aparte (no ".paso" a secas): /admin también usa ".paso" para sus 3 bloques de
+   métricas, que no son una tarjeta de un paso -- así no le cambia el aspecto sin querer. */
+.paso-tarjeta {
+  background: #fff;
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio);
+  padding: 18px;
+}
 .paso h2 {
   display: flex;
   align-items: center;
