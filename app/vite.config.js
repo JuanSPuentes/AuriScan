@@ -12,7 +12,7 @@ export default defineConfig({
   },
   build: {
     target: "es2022",
-    rollupOptions: { input: { main: "index.html", admin: "admin.html" } },
+    rollupOptions: { input: { landing: "index.html", app: "app.html", admin: "admin.html" } },
   },
   plugins: [
     VitePWA({
@@ -26,7 +26,7 @@ export default defineConfig({
         theme_color: "#1f4e79",
         background_color: "#f4f7fb",
         display: "standalone",
-        start_url: "/",
+        start_url: "/app",
         icons: [
           { src: "icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "icon-512.png", sizes: "512x512", type: "image/png" },

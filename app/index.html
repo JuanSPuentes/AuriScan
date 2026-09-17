@@ -5,121 +5,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#1f4e79" />
   <title>AuriScan · análisis de pabellón auricular</title>
+  <meta name="description" content="Sube una foto de tu oído y recibe un análisis orientativo de auriculoterapia con IA, basado en la cartografía de Paul Nogier — el primer paso antes de tu consulta con la Dra. Jakeline Caro." />
   <link rel="icon" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" />
   <link rel="stylesheet" href="/src/styles.css" />
+  <link rel="stylesheet" href="/src/landing.css" />
 </head>
 <body>
-  <main class="app">
-    <header class="top">
-      <img class="marca-logo" src="/logo.svg" alt="Dra. Jakeline Caro — Medicina Integrativa y Salud Digital"
-           onerror="this.onerror=null; this.src='/logo.png'" />
-      <h1>AuriScan</h1>
-      <p class="lema">Análisis de pabellón auricular</p>
-      <p>Sube la foto de un oído y obtén un informe de auriculoterapia. El informe completo se
-        descarga en PDF luego de un pago. Material de apoyo — debe ser corroborado por un
-        profesional experto.</p>
-      <div id="user-button" class="user-button"></div>
+  <div class="landing">
+
+    <header class="l-nav">
+      <a class="l-nav-marca" href="/">
+        <img src="/logo-emblema.png" alt="" width="34" height="34" />
+        <span>AuriScan</span>
+      </a>
+      <a class="l-nav-cta" href="/app">Analizar mi oreja</a>
     </header>
 
-    <section class="login-gate" id="login-gate">
-      <p>Inicia sesión con tu cuenta de Google para analizar una foto y guardar tu historial.</p>
-      <button class="primario" id="btn-login">Iniciar sesión con Google</button>
+    <!-- ===== hero ===== -->
+    <section class="l-hero">
+      <div class="l-hero-texto">
+        <p class="l-eyebrow">Auriculoterapia · análisis con IA</p>
+        <h1>Tu oreja tiene información sobre tu bienestar.<br>Léela en minutos.</h1>
+        <p class="l-hero-sub">Sube una foto de tu pabellón auricular y recibe un análisis orientativo,
+          basado en la cartografía auricular de Paul Nogier — el primer paso antes de tu consulta
+          con la <b>Dra. Jakeline Caro</b>.</p>
+        <div class="l-hero-botones">
+          <a class="primario l-boton" href="/app">Analizar mi oreja</a>
+          <a class="l-enlace-secundario" href="#proceso">Ver cómo funciona ↓</a>
+        </div>
+        <p class="l-hero-nota">Material educativo y orientativo — no reemplaza una consulta médica.</p>
+      </div>
+      <div class="l-hero-ilustracion" aria-hidden="true">
+        <svg viewBox="0 0 360 460" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="l-piel" cx="42%" cy="38%" r="72%">
+              <stop offset="0%" stop-color="#eef4fb" /><stop offset="100%" stop-color="#dae7f4" />
+            </radialGradient>
+          </defs>
+          <path d="M138,26 C78,34 46,110 44,200 C42,286 52,372 84,446 C104,494 142,528 186,522 C232,516 250,470 242,420 C236,388 214,368 214,368 C266,372 288,300 262,252 C286,214 276,132 240,92 C210,58 182,20 138,26 Z"
+            transform="translate(0,-30) scale(0.86)" fill="url(#l-piel)" stroke="#1f4e79" stroke-width="3" />
+          <g class="l-punto" style="--r:0s"><circle cx="112" cy="150" r="10" fill="#1f4e79" /></g>
+          <g class="l-punto" style="--r:.6s"><circle cx="168" cy="90" r="8" fill="#2e6da8" /></g>
+          <g class="l-punto" style="--r:1.2s"><circle cx="150" cy="330" r="9" fill="#9c5628" /></g>
+          <g class="l-punto" style="--r:1.8s"><circle cx="205" cy="230" r="7" fill="#2c6a4b" /></g>
+        </svg>
+      </div>
     </section>
 
-    <div id="app-contenido" hidden>
-      <section class="paso" id="paso-imagen">
-        <h2>1 · La imagen</h2>
-        <label class="dropzone" id="dropzone">
-          <input type="file" accept="image/*" id="file" hidden />
-          <span id="dz-texto">Toca para tomar o elegir una foto del oído</span>
-          <img id="preview" alt="" hidden />
-        </label>
-        <ul class="tips">
-          <li>Buena luz natural, sin flash ni reflejos.</li>
-          <li>La oreja debe llenar el encuadre y verse nítida (limpia la lente).</li>
-          <li>Vista lateral del pabellón; retira el pelo que la tape.</li>
-        </ul>
-      </section>
+    <!-- ===== sobre la doctora ===== -->
+    <section class="l-doctora">
+      <img class="l-doctora-emblema" src="/logo-emblema.png" alt="" />
+      <div>
+        <h2>Dra. Jakeline Caro</h2>
+        <p class="l-doctora-sub">Medicina Integrativa y Salud Digital</p>
+        <p>Médica especializada en medicina integrativa, que combina la consulta clínica tradicional
+          con herramientas digitales de apoyo — como este análisis auricular — para que cada paciente
+          llegue a su cita con más información sobre su propio cuerpo.</p>
+      </div>
+    </section>
 
-      <section class="paso" id="paso-modo">
-        <h2>2 · El estado de la oreja</h2>
-        <div class="segmento" role="radiogroup" aria-label="Modo">
-          <button type="button" class="op" data-modo="con_agujas" aria-pressed="false">
-            Con agujas puestas<small>La IA interpreta el tratamiento aplicado</small>
-          </button>
-          <button type="button" class="op" data-modo="oreja_limpia" aria-pressed="false">
-            Oreja limpia<small>La IA propone un protocolo</small>
-          </button>
-        </div>
-      </section>
+    <!-- ===== proceso ===== -->
+    <section class="l-proceso" id="proceso">
+      <p class="l-eyebrow l-eyebrow-centro">Cómo funciona</p>
+      <h2 class="l-titulo-centro">Cuatro pasos, unos minutos</h2>
 
-      <section class="paso" id="paso-oreja">
-        <h2>3 · ¿Qué oreja es? <span class="opcional">(opcional)</span></h2>
-        <div class="segmento tres" role="radiogroup" aria-label="Oreja">
-          <button type="button" class="op op-chica" data-oreja="izquierda" aria-pressed="false">Izquierda</button>
-          <button type="button" class="op op-chica" data-oreja="derecha" aria-pressed="false">Derecha</button>
-          <button type="button" class="op op-chica" data-oreja="no_determinada" aria-pressed="true">No indicar</button>
-        </div>
-      </section>
-
-      <section class="paso" id="paso-consent">
-        <label class="consent">
-          <input type="checkbox" id="consent" />
-          <span>Autorizo procesar esta imagen para generar un informe de apoyo, guardado en mi
-            cuenta. La foto se envía a un proveedor de IA (Alibaba Model Studio) para este
-            análisis. El informe es material educativo, <b>no un diagnóstico</b>, y debe
-            validarlo un profesional.</span>
-        </label>
-        <label class="consent">
-          <input type="checkbox" id="consent-investigacion" />
-          <span>Autorizo que mis resultados, de forma anonimizada, se usen con fines de
-            investigación (estudio con aval del comité de ética correspondiente).</span>
-        </label>
-        <details class="privacidad">
-          <summary>Cómo se tratan los datos</summary>
-          <ul>
-            <li>La imagen se envía cifrada a Alibaba Model Studio (servidores en EE. UU.) para
-              generar el informe, y el informe completo queda guardado en el servidor, ligado a
-              tu cuenta de Google.</li>
-            <li>El PDF completo con el informe solo se descarga luego de un pago.</li>
-            <li>Tus resultados anonimizados pueden usarse en investigación si lo autorizaste.</li>
-            <li>El resultado es orientativo y de carácter educativo; no sustituye la exploración
-              ni el juicio clínico.</li>
-          </ul>
-        </details>
-      </section>
-
-      <section class="paso">
-        <button class="primario" id="analizar" disabled>Analizar</button>
-        <p class="estado" id="estado" hidden></p>
-      </section>
-
-      <section class="resultado" id="resultado" hidden>
-        <div class="acciones">
-          <h2>Informe</h2>
-          <div class="botones">
-            <button class="primario" id="descargar">Pagar y descargar PDF</button>
-            <a class="boton-wsp" id="agendar" target="_blank" rel="noopener"
-               href="https://wa.me/573108178456?text=Hola%20Dra.%20Jakeline%2C%20quiero%20agendar%20una%20consulta.">Agenda tu cita</a>
+      <div class="l-pasos">
+        <div class="l-paso">
+          <div class="l-paso-icono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-2h6l2 2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="14" r="3.5"/></svg>
           </div>
+          <h3>1 · Sube tu foto</h3>
+          <p>Una foto lateral de tu oído, con buena luz. Te decimos si hace falta más nitidez antes de analizar.</p>
         </div>
-        <div class="resumen">
-          <h3 id="resumen-titulo"></h3>
-          <ul id="resumen-sistemas"></ul>
-          <p class="resumen-disclaimer" id="resumen-disclaimer"></p>
+        <div class="l-paso">
+          <div class="l-paso-icono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="3.5"/></svg>
+          </div>
+          <h3>2 · La IA la examina</h3>
+          <p>Recorre color, relieve y textura de cada zona, cruzándolo con la cartografía auricular de Nogier.</p>
         </div>
-      </section>
+        <div class="l-paso">
+          <div class="l-paso-icono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5M9 13h6M9 16.5h6"/></svg>
+          </div>
+          <h3>3 · Recibes tu resumen</h3>
+          <p>Un diagnóstico orientativo y los sistemas del cuerpo implicados, al instante en pantalla.</p>
+        </div>
+        <div class="l-paso">
+          <div class="l-paso-icono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v13m0 0-4-4m4 4 4-4"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+          </div>
+          <h3>4 · Descarga y agenda</h3>
+          <p>El informe completo en PDF, con puntos y protocolo — y un enlace directo para agendar tu cita.</p>
+        </div>
+      </div>
+    </section>
 
-      <section class="historial" id="historial" hidden>
-        <div class="hist-cab">
-          <h2>Mis informes</h2>
-        </div>
-        <ul id="hist-lista"></ul>
-      </section>
-    </div>
+    <!-- ===== qué incluye ===== -->
+    <section class="l-incluye">
+      <div>
+        <p class="l-eyebrow">El informe</p>
+        <h2>Qué vas a encontrar en tu PDF</h2>
+        <ul class="l-lista-check">
+          <li>Diagnóstico orientativo y sistemas del cuerpo implicados</li>
+          <li>Puntos auriculares observados o propuestos, con su ubicación</li>
+          <li>Mapa de referencia de la oreja analizada</li>
+          <li>Pronóstico estimado y sugerencias de seguimiento</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== disclaimer ===== -->
+    <section class="l-disclaimer">
+      <p><b>Material de apoyo, de carácter educativo.</b> AuriScan no diagnostica ni reemplaza una
+        consulta médica — es una orientación previa que debe confirmarse mediante exploración
+        directa con un profesional. Ante cualquier duda de salud, consulta a la Dra. Jakeline Caro
+        o a tu médico de confianza.</p>
+    </section>
+
+    <!-- ===== cta final ===== -->
+    <section class="l-cta-final">
+      <h2>¿Lista o listo para ver qué dice tu oreja?</h2>
+      <a class="primario l-boton" href="/app">Analizar mi oreja ahora</a>
+    </section>
 
     <footer class="app-footer">
       <p class="af-nombre">Dra. Jakeline Caro</p>
@@ -135,8 +146,6 @@
         profesional experto mediante exploración directa; no constituye un diagnóstico ni sustituye el
         juicio clínico.</p>
     </footer>
-  </main>
-
-  <script type="module" src="/src/main.mjs"></script>
+  </div>
 </body>
 </html>

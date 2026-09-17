@@ -26,7 +26,8 @@ export default async function handler(req, res) {
     const referencia = `pdf-${informe_id}-${randomBytes(4).toString("hex")}`;
     const origen = process.env.APP_ORIGIN;
     if (!origen) throw new Error("Falta APP_ORIGIN.");
-    const redirectUrl = `${origen}/?informe_id=${informe_id}`;
+    // vuelve a /app (la herramienta), no a "/" -- ahí es donde vive el manejo del retorno de pago.
+    const redirectUrl = `${origen}/app?informe_id=${informe_id}`;
 
     const { url, montoCentavos, moneda } = urlCheckout({ referencia, redirectUrl });
 

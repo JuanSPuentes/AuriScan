@@ -1,0 +1,114 @@
+/* Landing page -- usa las variables de :root que ya define styles.css (--azul, --tinta, etc.) */
+
+.landing { overflow-x: hidden; }
+.landing section, .landing header { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+
+/* ===== nav ===== */
+.l-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 18px; padding-bottom: 18px;
+}
+.l-nav-marca {
+  display: flex; align-items: center; gap: 10px; text-decoration: none;
+  font-family: "Spectral", Georgia, serif; font-weight: 700; font-size: 1.2rem; color: var(--azul);
+}
+.l-nav-cta {
+  padding: 9px 18px; border-radius: var(--radio); border: 1.5px solid var(--azul);
+  background: var(--azul); color: #fff; text-decoration: none; font-weight: 600; font-size: .88rem;
+}
+
+/* ===== botón compartido (landing usa <a>, no <button>) ===== */
+.l-boton {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 28px; border-radius: var(--radio); background: var(--azul); color: #fff;
+  font-weight: 600; text-decoration: none; border: 1.5px solid var(--azul); width: auto;
+}
+.l-boton:hover { background: var(--azul2); border-color: var(--azul2); }
+
+/* ===== hero ===== */
+.l-hero {
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center;
+  padding-top: 32px; padding-bottom: 56px;
+}
+.l-eyebrow {
+  font-family: "IBM Plex Sans", sans-serif; font-size: .78rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--azul2); margin: 0 0 12px; font-weight: 600;
+}
+.l-hero-texto h1 {
+  font-family: "Spectral", Georgia, serif; font-size: 2.4rem; line-height: 1.15;
+  color: var(--tinta); margin: 0 0 16px; letter-spacing: -.01em;
+}
+.l-hero-sub { font-size: 1.02rem; color: var(--tinta2); line-height: 1.6; margin: 0 0 24px; max-width: 46ch; }
+.l-hero-botones { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+.l-enlace-secundario { color: var(--azul2); font-weight: 600; text-decoration: none; font-size: .92rem; }
+.l-enlace-secundario:hover { text-decoration: underline; }
+.l-hero-nota { font-size: .8rem; color: var(--tinta2); }
+
+.l-hero-ilustracion svg { width: 100%; height: auto; max-height: 420px; }
+.l-punto circle { transform-origin: center; animation: l-pulso 2.4s ease-in-out infinite; animation-delay: var(--r); }
+@keyframes l-pulso {
+  0%, 100% { opacity: .55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
+/* ===== sobre la doctora ===== */
+.l-doctora {
+  display: flex; gap: 24px; align-items: center; padding: 44px 22px;
+  background: #fff; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
+  max-width: none;
+}
+.l-doctora > * { max-width: 1080px; }
+.l-doctora-emblema { width: 84px; height: 84px; flex: none; }
+.l-doctora h2 { font-family: "Spectral", serif; color: var(--azul); margin: 0 0 2px; font-size: 1.5rem; }
+.l-doctora-sub {
+  font-family: "IBM Plex Sans", sans-serif; font-size: .74rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--azul2); margin: 0 0 10px;
+}
+.l-doctora p:last-child { color: var(--tinta2); line-height: 1.6; max-width: 62ch; margin: 0; }
+
+/* ===== proceso ===== */
+.l-proceso { padding: 56px 22px; text-align: center; }
+.l-eyebrow-centro { text-align: center; }
+.l-titulo-centro { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.9rem; margin: 0 0 36px; }
+.l-pasos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: left; }
+.l-paso {
+  background: #fff; border: 1.5px solid var(--linea); border-radius: var(--radio); padding: 22px 18px;
+}
+.l-paso-icono {
+  width: 40px; height: 40px; display: grid; place-items: center; border-radius: 999px;
+  background: var(--azulc); color: var(--azul); margin-bottom: 14px;
+}
+.l-paso-icono svg { width: 22px; height: 22px; }
+.l-paso h3 { font-family: "Spectral", serif; color: var(--azul); font-size: 1.05rem; margin: 0 0 6px; }
+.l-paso p { font-size: .88rem; color: var(--tinta2); line-height: 1.5; margin: 0; }
+
+/* ===== qué incluye ===== */
+.l-incluye { padding: 8px 22px 56px; }
+.l-incluye h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem; margin: 0 0 20px; max-width: 30ch; }
+.l-lista-check { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: 52ch; }
+.l-lista-check li { position: relative; padding-left: 30px; color: var(--tinta2); line-height: 1.5; }
+.l-lista-check li::before {
+  content: "✓"; position: absolute; left: 0; top: -1px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--ok, #2c6a4b); color: #fff; font-size: .72rem; font-weight: 700; display: grid; place-items: center;
+}
+
+/* ===== disclaimer band ===== */
+.l-disclaimer { max-width: none; background: var(--azulc); padding: 28px 22px; }
+.l-disclaimer p { max-width: 720px; margin: 0 auto; text-align: center; color: var(--tinta); font-size: .9rem; line-height: 1.6; }
+
+/* ===== cta final ===== */
+.l-cta-final { text-align: center; padding: 64px 22px; }
+.l-cta-final h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.9rem; margin: 0 0 22px; }
+
+@media (max-width: 860px) {
+  .l-hero { grid-template-columns: 1fr; padding-top: 20px; }
+  .l-hero-ilustracion { order: -1; max-width: 260px; margin: 0 auto; }
+  .l-hero-texto h1 { font-size: 1.9rem; }
+  .l-pasos { grid-template-columns: 1fr 1fr; }
+  .l-doctora { flex-direction: column; text-align: center; }
+  .l-doctora p:last-child { margin: 0 auto; }
+}
+@media (max-width: 520px) {
+  .l-pasos { grid-template-columns: 1fr; }
+  .l-nav-marca span { display: none; }
+}
