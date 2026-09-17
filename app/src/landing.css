@@ -62,11 +62,16 @@
 /* .landing antepuesto: sube la especificidad por encima de ".landing section" de arriba,
    así el max-width:none (banda de borde a borde) sí gana. */
 .landing .l-doctora {
-  display: flex; gap: 24px; align-items: center; padding: 44px 22px;
+  padding: 44px 22px;
   background: #fff; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
   max-width: none;
 }
-.l-doctora > * { max-width: 1080px; }
+/* el contenido se centra aparte, como grupo -- ".l-doctora > *" antes topaba cada hijo por
+   separado sin centrar el conjunto, dejando el bloque pegado a la izquierda en pantallas anchas. */
+.l-doctora-inner {
+  display: flex; gap: 24px; align-items: center; justify-content: center;
+  max-width: 1080px; margin: 0 auto;
+}
 .l-doctora-emblema { width: 84px; height: 84px; flex: none; }
 .l-doctora h2 { font-family: "Spectral", serif; color: var(--azul); margin: 0 0 2px; font-size: 1.5rem; }
 .l-doctora-sub {
@@ -135,7 +140,7 @@
   .l-hero-ilustracion { order: -1; max-width: 260px; margin: 0 auto; }
   .l-hero-texto h1 { font-size: 1.9rem; }
   .l-pasos { grid-template-columns: 1fr 1fr; }
-  .l-doctora { flex-direction: column; text-align: center; }
+  .l-doctora-inner { flex-direction: column; text-align: center; }
   .l-doctora p:last-child { margin: 0 auto; }
 }
 @media (max-width: 520px) {
