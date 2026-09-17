@@ -14,13 +14,15 @@
 <body>
   <main class="app">
     <header class="top">
-      <img class="marca-logo" src="/logo.svg" alt="Dra. Jakeline Caro — Medicina Integrativa y Salud Digital"
-           onerror="this.onerror=null; this.src='/logo.png'" />
+      <a class="marca-enlace" href="/" aria-label="Volver a la portada">
+        <img class="marca-logo" src="/logo.svg" alt="Dra. Jakeline Caro — Medicina Integrativa y Salud Digital"
+             onerror="this.onerror=null; this.src='/logo.png'" />
+      </a>
       <h1>AuriScan</h1>
       <p class="lema">Análisis de pabellón auricular</p>
       <p>Sube la foto de un oído y obtén un informe de auriculoterapia. El informe completo se
         descarga en PDF luego de un pago. Material de apoyo — debe ser corroborado por un
-        profesional experto.</p>
+        profesional experto. <a class="enlace-inline" href="/#tratamientos">¿Qué más trata la Dra. Jakeline?</a></p>
       <div id="user-button" class="user-button"></div>
     </header>
 
@@ -31,7 +33,7 @@
 
     <div id="app-contenido" hidden>
       <section class="paso" id="paso-imagen">
-        <h2>1 · La imagen</h2>
+        <h2><span class="paso-num">1</span>La imagen</h2>
         <label class="dropzone" id="dropzone">
           <input type="file" accept="image/*" id="file" hidden />
           <span id="dz-texto">Toca para tomar o elegir una foto del oído</span>
@@ -45,7 +47,7 @@
       </section>
 
       <section class="paso" id="paso-modo">
-        <h2>2 · El estado de la oreja</h2>
+        <h2><span class="paso-num">2</span>El estado de la oreja</h2>
         <div class="segmento" role="radiogroup" aria-label="Modo">
           <button type="button" class="op" data-modo="con_agujas" aria-pressed="false">
             Con agujas puestas<small>La IA interpreta el tratamiento aplicado</small>
@@ -57,7 +59,7 @@
       </section>
 
       <section class="paso" id="paso-oreja">
-        <h2>3 · ¿Qué oreja es? <span class="opcional">(opcional)</span></h2>
+        <h2><span class="paso-num">3</span>¿Qué oreja es? <span class="opcional">(opcional)</span></h2>
         <div class="segmento tres" role="radiogroup" aria-label="Oreja">
           <button type="button" class="op op-chica" data-oreja="izquierda" aria-pressed="false">Izquierda</button>
           <button type="button" class="op op-chica" data-oreja="derecha" aria-pressed="false">Derecha</button>
@@ -66,6 +68,7 @@
       </section>
 
       <section class="paso" id="paso-consent">
+        <h2><span class="paso-num">4</span>Autorización</h2>
         <label class="consent">
           <input type="checkbox" id="consent" />
           <span>Autorizo procesar esta imagen para generar un informe de apoyo, guardado en mi

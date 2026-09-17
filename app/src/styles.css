@@ -44,6 +44,9 @@ body {
 
 .paso { margin-top: 26px; }
 .paso h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: "IBM Plex Mono", monospace;
   font-size: .78rem;
   letter-spacing: .1em;
@@ -51,6 +54,25 @@ body {
   color: var(--azul2);
   margin: 0 0 10px;
 }
+.paso-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  font-size: .82rem;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.marca-enlace { display: inline-block; text-decoration: none; }
+.enlace-inline { color: var(--azul2); font-weight: 600; text-decoration: none; }
+.enlace-inline:hover { text-decoration: underline; }
 
 .dropzone {
   display: grid;
@@ -69,12 +91,15 @@ body {
 #preview { max-width: 100%; max-height: 320px; border-radius: 8px; }
 
 .tips {
-  margin: 10px 0 0;
-  padding-left: 1.1em;
+  margin: 12px 0 0;
+  padding: 12px 14px 12px 2em;
   font-size: .82rem;
   color: var(--tinta2);
+  background: #faf3ee;
+  border-left: 3px solid var(--ocre);
+  border-radius: 0 8px 8px 0;
 }
-.tips li { margin: 2px 0; }
+.tips li { margin: 3px 0; }
 
 .consent {
   display: flex;

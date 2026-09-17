@@ -75,6 +75,26 @@
 }
 .l-doctora p:last-child { color: var(--tinta2); line-height: 1.6; max-width: 62ch; margin: 0; }
 
+/* ===== tratamientos ===== */
+.landing .l-tratamientos {
+  text-align: center; padding: 56px 22px; max-width: none;
+}
+.l-tratamientos h2 {
+  font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem;
+  max-width: 640px; margin: 0 auto 14px;
+}
+.l-tratamientos-sub { color: var(--tinta2); max-width: 620px; margin: 0 auto 28px; line-height: 1.6; }
+.l-chips {
+  list-style: none; margin: 0 auto 22px; padding: 0; max-width: 820px;
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+}
+.l-chips li {
+  padding: 9px 18px; border-radius: 999px; border: 1.5px solid var(--azul);
+  color: var(--azul); background: var(--azulc); font-size: .88rem; font-weight: 600;
+}
+.l-chips li.l-chip-ocre { border-color: var(--ocre); color: var(--ocre); background: #f1e3d9; }
+.l-tratamientos-nota { font-size: .8rem; color: var(--tinta2); max-width: 520px; margin: 0 auto 24px; }
+
 /* ===== proceso ===== */
 .l-proceso { padding: 56px 22px; text-align: center; }
 .l-titulo-centro { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.9rem; margin: 0 0 36px; }
