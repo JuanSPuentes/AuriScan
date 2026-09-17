@@ -69,7 +69,7 @@ function earSVG(puntos) {
 
 
 const PIE_MARCA = "Dra. Jakeline Caro · Medicina Integrativa y Salud Digital";
-const PIE_CONTACTO = "Medicinaintegrstivadrajakeline@gmail.com";
+const PIE_CONTACTO = "Medicinaintegrativadrajakeline@gmail.com";
 // Cabecera de marca: emblema + nombre tipografiado (el lockup vertical no se lee a tamaño de cabecera).
 const marcaHead = (logo) => `<div class="marca-head">
   ${logo ? `<img class="emblema" src="${logo}" alt="">` : ""}
