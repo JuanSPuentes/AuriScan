@@ -297,7 +297,10 @@ button.enlace {
 }
 .af-icono svg { width: 14px; height: 14px; }
 .af-contacto a:hover .af-icono { background: var(--azul); color: #fff; }
-.af-disclaimer { font-size: .72rem; line-height: 1.5; max-width: 46ch; margin: 0 auto; color: var(--ocre); }
+.af-disclaimer { font-size: .72rem; line-height: 1.5; max-width: 46ch; margin: 8px auto 0; color: var(--ocre); }
+.af-tech { font-size: .7rem; line-height: 1.5; max-width: 46ch; margin: 10px auto 0; color: var(--tinta2); }
+.af-tech a { color: var(--tinta2); text-decoration: underline; }
+.af-tech a:hover { color: var(--azul2); }
 
 @media (max-width: 480px) {
   .segmento { grid-template-columns: 1fr; }

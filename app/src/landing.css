@@ -250,10 +250,12 @@
 .l-footer-contacto a:hover .l-footer-icono { background: var(--azul2); color: #fff; }
 .l-footer-base {
   border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px;
-  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  display: flex; flex-direction: column; gap: 8px;
   font-size: .74rem; color: #7c8ca6;
 }
-.l-footer-base p { margin: 0; max-width: 56ch; line-height: 1.5; }
+.l-footer-base p { margin: 0; max-width: 64ch; line-height: 1.5; }
+.l-footer-tech a { color: #93a4bd; text-decoration: underline; text-decoration-color: rgba(147,164,189,.4); }
+.l-footer-tech a:hover { color: #fff; }
 
 @media (max-width: 860px) {
   .l-hero-inner { grid-template-columns: 1fr; padding-top: 24px; }
