@@ -23,18 +23,24 @@
 }
 .l-nav-inner {
   max-width: 1080px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
   padding-top: 14px; padding-bottom: 14px;
 }
 .l-nav-marca {
   display: flex; align-items: center; gap: 10px; text-decoration: none;
   font-family: "Spectral", Georgia, serif; font-weight: 700; font-size: 1.2rem; color: var(--azul);
+  flex: none;
 }
 .l-nav-cta {
   padding: 9px 18px; border-radius: var(--radio); border: 1.5px solid var(--azul);
   background: var(--azul); color: #fff; text-decoration: none; font-weight: 600; font-size: .88rem;
-  white-space: nowrap;
+  white-space: nowrap; flex: none;
 }
+
+/* ===== enlaces del nav (solo landing) ===== */
+.l-nav-links { display: flex; align-items: center; gap: 26px; flex: 1; justify-content: center; }
+.l-nav-links a { color: var(--tinta2); text-decoration: none; font-size: .88rem; font-weight: 500; }
+.l-nav-links a:hover { color: var(--azul); }
 
 /* ===== botón compartido (landing usa <a>, no <button>) ===== */
 .l-boton {
@@ -50,6 +56,16 @@
   display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center;
   padding-top: 40px; padding-bottom: 56px;
 }
+.l-hero-tag {
+  display: inline-flex; align-items: center; gap: 9px; padding: 6px 16px 6px 6px;
+  border-radius: 999px; background: var(--azulc); border: 1px solid var(--linea);
+  color: var(--azul); font-size: .78rem; font-weight: 600; margin-bottom: 18px;
+}
+.l-hero-tag-dot {
+  display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ocre); color: #fff; flex: none;
+}
+.l-hero-tag-dot svg { width: 12px; height: 12px; }
 .l-hero-texto h1 {
   font-family: "Spectral", Georgia, serif; font-size: 2.5rem; line-height: 1.15;
   color: var(--tinta); margin: 0 0 16px; letter-spacing: -.01em;
@@ -67,7 +83,16 @@
 }
 .l-hero-badges svg { width: 15px; height: 15px; color: var(--azul2); flex: none; }
 
-.l-hero-ilustracion svg { width: 100%; height: auto; max-height: 420px; }
+/* círculo con marco -- mismo lugar que la foto de retrato en referencias de este estilo,
+   aquí la ilustración de la oreja (no hay fotos de pacientes/doctora para esto) */
+.l-hero-ilustracion { display: flex; justify-content: center; }
+.l-hero-circulo {
+  position: relative; width: min(380px, 100%); aspect-ratio: 1 / 1; border-radius: 50%;
+  display: grid; place-items: center; padding: 14%;
+  background: radial-gradient(circle at 38% 32%, #fff, var(--azulc) 72%);
+  border: 2px solid #fff; box-shadow: 0 0 0 3px var(--azulc), 0 20px 50px -20px rgba(31,78,121,.4);
+}
+.l-hero-circulo svg { position: relative; width: 100%; height: auto; max-height: 420px; }
 @media (prefers-reduced-motion: no-preference) {
   .l-punto circle { transform-origin: center; animation: l-pulso 2.4s ease-in-out infinite; animation-delay: var(--r); }
 }
@@ -88,11 +113,11 @@
 }
 .l-doctora-marco {
   flex: none; width: 148px; height: 148px; border-radius: 50%;
-  display: grid; place-items: center;
+  overflow: hidden;
   background: radial-gradient(circle at 34% 30%, #eef4fb, var(--azulc) 72%);
   border: 2px solid #fff; box-shadow: 0 0 0 3px var(--azulc), 0 6px 20px -6px rgba(31,78,121,.35);
 }
-.l-doctora-emblema { width: 78px; height: 78px; }
+.l-doctora-foto { width: 100%; height: 100%; object-fit: cover; display: block; }
 .l-doctora-texto { max-width: 640px; }
 .l-doctora h2 { font-family: "Spectral", serif; color: var(--azul); margin: 0 0 2px; font-size: 1.6rem; }
 .l-doctora-sub {
@@ -108,9 +133,19 @@
 
 /* ===== metodología / cartografía auricular ===== */
 .l-metodologia { background: var(--papel); padding-top: 56px; padding-bottom: 56px; }
-.l-metodologia-cab { max-width: 680px; margin: 0 auto 36px; text-align: center; }
-.l-metodologia h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.8rem; margin: 0 0 14px; }
+/* título como etiqueta a la izquierda, párrafo ocupando el resto del ancho -- mismo patrón
+   de dos columnas que el footer de /app, en vez de todo centrado en una columna angosta */
+.l-metodologia-cab {
+  display: grid; grid-template-columns: 1fr 1.6fr; gap: 32px; align-items: start;
+  margin: 0 0 36px; text-align: left;
+}
+.l-metodologia h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.8rem; margin: 0; }
 .l-metodologia-cab p { color: var(--tinta2); line-height: 1.65; margin: 0; }
+
+@media (max-width: 700px) {
+  .l-metodologia-cab { grid-template-columns: 1fr; gap: 10px; }
+  .l-tratamientos-cab { grid-template-columns: 1fr; gap: 10px; }
+}
 .l-metodo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .l-metodo-card {
   background: #fff; border: 1.5px solid var(--linea); border-radius: var(--radio); padding: 24px 20px;
@@ -133,22 +168,26 @@
 .l-feto-diagrama svg { width: 100%; height: auto; max-height: 480px; }
 
 /* ===== tratamientos ===== */
-.l-tratamientos { background: var(--papel); text-align: center; padding-top: 56px; padding-bottom: 56px; }
-.l-tratamientos h2 {
-  font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem;
-  max-width: 640px; margin: 0 auto 14px;
+.l-tratamientos { background: var(--papel); padding-top: 56px; padding-bottom: 56px; }
+/* mismo patrón de cabecera en dos columnas que .l-metodologia-cab: título como etiqueta a la
+   izquierda, párrafo a la derecha -- nada centrado */
+.l-tratamientos-cab {
+  display: grid; grid-template-columns: 1fr 1.6fr; gap: 32px; align-items: start; margin: 0 0 32px;
 }
-.l-tratamientos-sub { color: var(--tinta2); max-width: 620px; margin: 0 auto 28px; line-height: 1.6; }
+.l-tratamientos h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem; margin: 0; }
+.l-tratamientos-sub { color: var(--tinta2); line-height: 1.6; margin: 0; }
+/* grilla real (no flex-wrap centrado) -- así las filas quedan alineadas en vez de dejar un
+   chip suelto centrado en la última fila */
 .l-chips {
-  list-style: none; margin: 0 auto 22px; padding: 0; max-width: 820px;
-  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  list-style: none; margin: 0 0 22px; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;
 }
 .l-chips li {
-  padding: 9px 18px; border-radius: 999px; border: 1.5px solid var(--azul);
+  padding: 9px 16px; border-radius: 999px; border: 1.5px solid var(--azul); text-align: center;
   color: var(--azul); background: var(--azulc); font-size: .88rem; font-weight: 600;
 }
 .l-chips li.l-chip-ocre { border-color: var(--ocre); color: var(--ocre); background: #f1e3d9; }
-.l-tratamientos-nota { font-size: .8rem; color: var(--tinta2); max-width: 520px; margin: 0 auto 24px; }
+.l-tratamientos-nota { font-size: .8rem; color: var(--tinta2); max-width: 520px; margin: 0 0 24px; }
 
 /* ===== proceso ===== */
 .l-proceso { background: #fff; padding-top: 56px; padding-bottom: 56px; text-align: center; }
@@ -210,19 +249,33 @@
 .l-doc-mock-chip { padding: 4px 10px; border-radius: 999px; background: var(--azulc); color: var(--azul); font-size: .68rem; font-weight: 700; }
 .l-doc-mock-chip.ocre { background: #f1e3d9; color: var(--ocre); }
 
-/* ===== disclaimer band ===== */
-.l-disclaimer { background: var(--azulc); padding-top: 28px; padding-bottom: 28px; }
-.l-disclaimer p { max-width: 720px; margin: 0 auto; text-align: center; color: var(--tinta); font-size: .9rem; line-height: 1.6; }
-
-/* ===== cta final ===== */
-.l-cta-final { background: var(--tinta); text-align: center; padding-top: 64px; padding-bottom: 64px; }
-.l-cta-final h2 { font-family: "Spectral", serif; color: #fff; font-size: 1.9rem; margin: 0 0 10px; }
-.l-cta-final p { color: #b9c6da; margin: 0 0 26px; }
+/* ===== cta final + footer: un solo bloque continuo (mismo fondo #0d1b2e). El disclaimer ya
+   no es una torre centrada arriba del CTA -- va como nota a la derecha, mismo patrón de
+   columnas que .af-col/.af-col-nota y .l-metodologia-cab ===== */
+.l-cta-final { background: #0d1b2e; padding-top: 56px; padding-bottom: 56px; }
+.l-cta-final-inner {
+  display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: center; text-align: left;
+}
+.l-cta-final-principal h2 { font-family: "Spectral", serif; color: #fff; font-size: 1.9rem; margin: 0 0 10px; }
+.l-cta-final-principal p { color: #b9c6da; margin: 0 0 26px; }
 .l-cta-final .l-boton { background: #fff; color: var(--tinta); border-color: #fff; }
 .l-cta-final .l-boton:hover { background: var(--azulc); border-color: var(--azulc); }
+.l-cta-final-nota {
+  color: #93a4bd; font-size: .84rem; line-height: 1.6; margin: 0;
+  border-left: 1px solid rgba(255,255,255,.15); padding-left: 28px;
+}
+.l-cta-final-nota b { color: #dbe8f4; }
+
+@media (max-width: 700px) {
+  .l-cta-final-inner { grid-template-columns: 1fr; text-align: center; }
+  .l-cta-final-nota { border-left: 0; border-top: 1px dashed rgba(255,255,255,.15); padding-left: 0; padding-top: 18px; }
+}
 
 /* ===== footer ===== */
-.l-footer { background: #0d1b2e; color: #b9c6da; padding-top: 48px; padding-bottom: 24px; }
+.l-footer {
+  background: #0d1b2e; color: #b9c6da; padding-top: 32px; padding-bottom: 24px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
 .l-footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 40px; padding-bottom: 32px; }
 .l-footer-marca { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-bottom: 12px; }
 .l-footer-marca img { width: 30px; height: 30px; }
@@ -258,8 +311,10 @@
 .l-footer-tech a:hover { color: #fff; }
 
 @media (max-width: 860px) {
-  .l-hero-inner { grid-template-columns: 1fr; padding-top: 24px; }
-  .l-hero-ilustracion { order: -1; max-width: 260px; margin: 0 auto; }
+  .l-nav-links { display: none; }
+  .l-hero-inner { grid-template-columns: 1fr; padding-top: 28px; }
+  .l-hero-ilustracion { order: -1; margin: 0 auto 8px; }
+  .l-hero-circulo { width: 220px; }
   .l-hero-texto h1 { font-size: 1.9rem; }
   .l-pasos { grid-template-columns: 1fr 1fr; }
   .l-doctora-inner { flex-direction: column; text-align: center; }

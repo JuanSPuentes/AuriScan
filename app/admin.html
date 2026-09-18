@@ -10,8 +10,19 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" />
   <link rel="stylesheet" href="/src/styles.css" />
+  <link rel="stylesheet" href="/src/landing.css" />
 </head>
 <body>
+  <div class="app-shell">
+    <header class="l-nav">
+      <div class="l-nav-inner">
+        <a class="l-nav-marca" href="/">
+          <img src="/logo-emblema.png" alt="" width="34" height="34" />
+          <span>AuriScan</span>
+        </a>
+        <a class="l-nav-cta" href="/app">Ir a la herramienta</a>
+      </div>
+    </header>
   <main class="app">
     <header class="top">
       <h1>AuriScan</h1>
@@ -20,6 +31,9 @@
     </header>
 
     <section class="login-gate" id="login-gate">
+      <span class="login-gate-icono" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.5 3 7.4 7.5 9 4.5-1.6 7.5-4.5 7.5-9V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>
+      </span>
       <p>Inicia sesión para continuar.</p>
       <button class="primario" id="btn-login">Iniciar sesión con Google</button>
     </section>
@@ -44,7 +58,29 @@
         <table class="tabla-metricas" id="t-puntos"></table>
       </section>
     </div>
+
+    <footer class="app-footer">
+      <div class="af-col">
+        <p class="af-nombre">AuriScan</p>
+        <p class="af-sub">Panel interno de métricas</p>
+        <ul class="af-contacto">
+          <li>
+            <a href="/app">
+              <span class="af-icono">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+              Ir a la herramienta
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="af-col af-col-nota">
+        <p class="af-disclaimer">Acceso restringido -- este panel no es visible para pacientes ni
+          para la doctora fuera de la lista de administradores.</p>
+      </div>
+    </footer>
   </main>
+  </div>
 
   <script type="module" src="/src/admin.mjs"></script>
 </body>

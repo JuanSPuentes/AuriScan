@@ -18,7 +18,14 @@ body {
   line-height: 1.5;
 }
 .app-shell { min-height: 100vh; background: var(--papel); }
-.app { max-width: 720px; margin: 0 auto; padding: 32px 18px 64px; }
+.app { max-width: 960px; margin: 0 auto; padding: 32px 18px 64px; }
+
+/* en pantallas grandes, algunos bloques (no los que son texto de lectura larga como .tips o
+   .consent) pueden respirar más que el ancho de lectura -- los pasos 2 y 3 quedan más cómodos
+   con botones más anchos en vez de dejar el resto de la página vacío a los lados */
+@media (min-width: 640px) {
+  .app { padding-left: 32px; padding-right: 32px; }
+}
 
 .marca-logo {
   display: block;
@@ -41,7 +48,7 @@ body {
   color: var(--azul2);
   margin: 0 0 10px;
 }
-.top p { color: var(--tinta2); font-size: .92rem; margin: 0 0 8px; }
+.top p { color: var(--tinta2); font-size: .92rem; margin: 0 0 8px; max-width: 62ch; }
 
 .paso { margin-top: 26px; }
 /* clase aparte (no ".paso" a secas): /admin también usa ".paso" para sus 3 bloques de
@@ -107,6 +114,7 @@ body {
   background: #faf3ee;
   border-left: 3px solid var(--ocre);
   border-radius: 0 8px 8px 0;
+  max-width: 62ch;
 }
 .tips li { margin: 3px 0; }
 
@@ -123,6 +131,7 @@ body {
   cursor: pointer;
 }
 .consent input { margin-top: 2px; flex: none; width: 18px; height: 18px; accent-color: var(--azul); }
+.consent span { max-width: 68ch; }
 .consent:has(input:checked) { border-color: var(--azul); background: var(--azulc); }
 .privacidad { margin-top: 8px; font-size: .8rem; color: var(--tinta2); }
 .privacidad summary { cursor: pointer; color: var(--azul2); }
@@ -211,14 +220,20 @@ button.secundario.chico { width: auto; padding: 10px 14px; font-size: .85rem; }
 /* sesión (Clerk, solo Google) */
 .login-gate {
   margin-top: 24px;
-  padding: 20px;
-  border: 1.5px dashed var(--linea);
+  padding: 30px 22px;
+  border: 1.5px solid var(--linea);
   border-radius: var(--radio);
   text-align: center;
   background: #fff;
+  box-shadow: 0 16px 40px -28px rgba(18,36,59,.25);
 }
-.login-gate p { color: var(--tinta2); margin: 0 0 12px; }
-.login-gate .primario { width: auto; padding: 12px 24px; }
+.login-gate-icono {
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--azulc); color: var(--azul); margin: 0 auto 16px;
+}
+.login-gate-icono svg { width: 22px; height: 22px; }
+.login-gate p { color: var(--tinta2); margin: 0 0 18px; max-width: 40ch; margin-left: auto; margin-right: auto; }
+.login-gate .primario { width: auto; padding: 12px 26px; }
 .user-button {
   position: absolute; top: 24px; right: 18px;
   display: flex; align-items: center; gap: 8px;
@@ -260,18 +275,22 @@ button.enlace {
 }
 .hist-del:hover { background: #f1e3d9; color: var(--ocre); }
 
-/* pie de página con los datos de la doctora */
+/* pie de página con los datos de la doctora -- dos columnas: doctora+contactos a la
+   izquierda, disclaimer/créditos a la derecha, en vez de un único bloque centrado */
 .app-footer {
   margin-top: 48px;
-  padding-top: 18px;
-  border-top: 1px solid var(--linea);
-  text-align: center;
+  padding: 28px 26px;
+  border: 1.5px solid var(--linea);
+  border-radius: var(--radio);
   color: var(--tinta2);
+  background: #fff;
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px;
 }
+.af-col-nota { border-left: 1px solid var(--linea); padding-left: 32px; align-self: center; }
 .af-nombre {
   font-family: "Spectral", Georgia, serif;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: var(--azul);
   margin: 0;
 }
@@ -280,27 +299,36 @@ button.enlace {
   font-size: .72rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  margin: 2px 0 10px;
+  color: var(--azul2);
+  margin: 3px 0 16px;
 }
+/* fila de contactos como chips -- mismo lenguaje que los chips de tratamientos del landing,
+   en vez de una lista vertical de párrafos que se sentía como un bloque largo de texto */
 .af-contacto {
-  list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 10px;
-  max-width: 320px; margin-left: auto; margin-right: auto;
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 10px;
 }
 .af-contacto a {
-  display: flex; align-items: center; gap: 10px; color: var(--tinta2); text-decoration: none;
-  font-size: .82rem; text-align: left;
+  display: flex; align-items: center; gap: 8px; color: var(--tinta2); text-decoration: none;
+  font-size: .8rem; font-weight: 500; padding: 6px 14px 6px 6px;
+  border: 1.5px solid var(--linea); border-radius: 999px; background: var(--papel);
 }
-.af-contacto a:hover { color: var(--azul2); }
+.af-contacto a:hover { color: var(--azul); border-color: var(--azul2); background: var(--azulc); }
 .af-icono {
   display: grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 50%;
   background: var(--azulc); color: var(--azul);
 }
 .af-icono svg { width: 14px; height: 14px; }
 .af-contacto a:hover .af-icono { background: var(--azul); color: #fff; }
-.af-disclaimer { font-size: .72rem; line-height: 1.5; max-width: 46ch; margin: 8px auto 0; color: var(--ocre); }
-.af-tech { font-size: .7rem; line-height: 1.5; max-width: 46ch; margin: 10px auto 0; color: var(--tinta2); }
+.af-disclaimer { font-size: .76rem; line-height: 1.55; margin: 0; color: var(--ocre); }
+.af-tech { font-size: .72rem; line-height: 1.5; margin: 10px 0 0; color: var(--tinta2); }
 .af-tech a { color: var(--tinta2); text-decoration: underline; }
 .af-tech a:hover { color: var(--azul2); }
+
+@media (max-width: 620px) {
+  .app-footer { grid-template-columns: 1fr; text-align: left; }
+  .af-col-nota { border-left: 0; padding-left: 0; border-top: 1px dashed var(--linea); padding-top: 18px; }
+}
 
 @media (max-width: 480px) {
   .segmento { grid-template-columns: 1fr; }
