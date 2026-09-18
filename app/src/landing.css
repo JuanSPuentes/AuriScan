@@ -168,30 +168,28 @@
 
 /* ===== tratamientos ===== */
 .l-tratamientos { background: var(--papel); padding-top: 56px; padding-bottom: 56px; }
-/* dos partes (zonas), sin caja/tarjeta -- solo la distribución en dos columnas para la
-   cabecera y el bloque centrado para los chips, sobre el mismo fondo de la sección */
-.l-tratamientos-cab {
-  display: grid; grid-template-columns: 1fr 1.6fr; gap: 32px; align-items: center; margin: 0 0 36px;
-}
-.l-tratamientos h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem; margin: 0; }
+/* dos bloques lado a lado (izquierda / derecha) -- sin tarjeta, sin centrar nada. Contenedor
+   más ancho que el resto de la página (que usa .l-inner a 1080px): en pantallas anchas quedaba
+   mucho margen vacío a los lados mientras las dos columnas se apretaban en el centro. */
+.l-tratamientos-grid { max-width: 1500px; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+.l-tratamientos h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem; margin: 0 0 14px; }
 .l-tratamientos-sub { color: var(--tinta2); line-height: 1.6; margin: 0; }
 
-.l-tratamientos-caja { text-align: center; }
-/* chips centrados como bloque, cada uno de una sola línea (nowrap) -- el ancho lo da el texto,
+/* chips a la izquierda, cada uno de una sola línea (nowrap) -- el ancho lo da el texto,
    no una columna fija de grilla, así "Dolor de espalda, articular y migraña" no se parte en dos */
 .l-chips {
-  list-style: none; margin: 0 auto 22px; padding: 0; max-width: 900px;
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  list-style: none; margin: 0 0 22px; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 10px;
 }
 .l-chips li {
   padding: 9px 18px; border-radius: 999px; border: 1.5px solid var(--azul); white-space: nowrap;
   color: var(--azul); background: var(--azulc); font-size: .88rem; font-weight: 600;
 }
 .l-chips li.l-chip-ocre { border-color: var(--ocre); color: var(--ocre); background: #f1e3d9; }
-.l-tratamientos-nota { font-size: .8rem; color: var(--tinta2); max-width: 520px; margin: 0 auto 24px; }
+.l-tratamientos-nota { font-size: .8rem; color: var(--tinta2); margin: 0 0 20px; }
 
 @media (max-width: 700px) {
-  .l-tratamientos-cab { grid-template-columns: 1fr; gap: 10px; text-align: left; }
+  .l-tratamientos-grid { grid-template-columns: 1fr; gap: 28px; }
 }
 
 /* ===== proceso ===== */
