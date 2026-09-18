@@ -1,16 +1,30 @@
 /* Landing page -- usa las variables de :root que ya define styles.css (--azul, --tinta, etc.) */
 
 .landing { overflow-x: hidden; }
-/* ojo: solo el padding horizontal va acá -- el shorthand "padding" también pondría
-   top/bottom en 0, y como ".landing section" (clase+elemento) pesa más que una clase
-   sola como ".l-incluye", le ganaría al padding-top/bottom que cada sección define
-   abajo (exactamente el choque de especificidad que advierte la guía de diseño). */
-.landing section, .landing header { max-width: 1080px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
 
-/* ===== nav ===== */
+/* ===== patrón de banda completa ===============================================
+   Cada <section>/<header> ocupa el 100% del ancho (fondo de borde a borde) y NO
+   lleva max-width -- eso vive en un div interno ".l-inner" (o el "-inner" propio
+   de cada sección) con max-width + margin:0 auto. Así el fondo siempre es full-bleed
+   y el contenido siempre queda centrado y legible, sin que ninguna regla compartida
+   compita por max-width/padding con las reglas propias de cada sección (el choque
+   de especificidad que ya mordió esta página dos veces: una clase+elemento como
+   ".landing section" pesa más que una clase sola, y el shorthand "padding" pone
+   top/bottom en 0 aunque cada sección declare los suyos por separado). Por eso el
+   único padding que se comparte aquí es horizontal, en longhand. */
+.landing section, .landing header { padding-left: 22px; padding-right: 22px; }
+.l-inner { max-width: 1080px; margin: 0 auto; }
+
+/* ===== nav (también la usa /app) ===== */
 .l-nav {
+  background: #fff; border-bottom: 1px solid var(--linea);
+  padding-left: 22px; padding-right: 22px;
+  position: sticky; top: 0; z-index: 10;
+}
+.l-nav-inner {
+  max-width: 1080px; margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
-  padding-top: 18px; padding-bottom: 18px;
+  padding-top: 14px; padding-bottom: 14px;
 }
 .l-nav-marca {
   display: flex; align-items: center; gap: 10px; text-decoration: none;
@@ -19,6 +33,7 @@
 .l-nav-cta {
   padding: 9px 18px; border-radius: var(--radio); border: 1.5px solid var(--azul);
   background: var(--azul); color: #fff; text-decoration: none; font-weight: 600; font-size: .88rem;
+  white-space: nowrap;
 }
 
 /* ===== botón compartido (landing usa <a>, no <button>) ===== */
@@ -30,19 +45,27 @@
 .l-boton:hover { background: var(--azul2); border-color: var(--azul2); }
 
 /* ===== hero ===== */
-.l-hero {
+.l-hero { background: linear-gradient(180deg, #eef4fb 0%, var(--papel) 100%); padding-top: 0; padding-bottom: 0; }
+.l-hero-inner {
   display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: center;
-  padding-top: 32px; padding-bottom: 56px;
+  padding-top: 40px; padding-bottom: 56px;
 }
 .l-hero-texto h1 {
-  font-family: "Spectral", Georgia, serif; font-size: 2.4rem; line-height: 1.15;
+  font-family: "Spectral", Georgia, serif; font-size: 2.5rem; line-height: 1.15;
   color: var(--tinta); margin: 0 0 16px; letter-spacing: -.01em;
 }
-.l-hero-sub { font-size: 1.02rem; color: var(--tinta2); line-height: 1.6; margin: 0 0 24px; max-width: 46ch; }
-.l-hero-botones { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+.l-hero-sub { font-size: 1.04rem; color: var(--tinta2); line-height: 1.6; margin: 0 0 24px; max-width: 48ch; }
+.l-hero-botones { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 18px; }
 .l-enlace-secundario { color: var(--azul2); font-weight: 600; text-decoration: none; font-size: .92rem; }
 .l-enlace-secundario:hover { text-decoration: underline; }
-.l-hero-nota { font-size: .8rem; color: var(--tinta2); }
+.l-hero-nota { font-size: .8rem; color: var(--tinta2); margin: 0 0 18px; }
+
+.l-hero-badges { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 20px; }
+.l-hero-badges li {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .82rem; color: var(--tinta2); font-weight: 500;
+}
+.l-hero-badges svg { width: 15px; height: 15px; color: var(--azul2); flex: none; }
 
 .l-hero-ilustracion svg { width: 100%; height: auto; max-height: 420px; }
 @media (prefers-reduced-motion: no-preference) {
@@ -59,31 +82,58 @@
 }
 
 /* ===== sobre la doctora ===== */
-/* .landing antepuesto: sube la especificidad por encima de ".landing section" de arriba,
-   así el max-width:none (banda de borde a borde) sí gana. */
-.landing .l-doctora {
-  padding: 44px 22px;
-  background: #fff; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
-  max-width: none;
-}
-/* el contenido se centra aparte, como grupo -- ".l-doctora > *" antes topaba cada hijo por
-   separado sin centrar el conjunto, dejando el bloque pegado a la izquierda en pantallas anchas. */
+.l-doctora { background: #fff; border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea); padding-top: 48px; padding-bottom: 48px; }
 .l-doctora-inner {
-  display: flex; gap: 24px; align-items: center; justify-content: center;
-  max-width: 1080px; margin: 0 auto;
+  display: flex; gap: 36px; align-items: center; justify-content: center;
 }
-.l-doctora-emblema { width: 84px; height: 84px; flex: none; }
-.l-doctora h2 { font-family: "Spectral", serif; color: var(--azul); margin: 0 0 2px; font-size: 1.5rem; }
+.l-doctora-marco {
+  flex: none; width: 148px; height: 148px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 34% 30%, #eef4fb, var(--azulc) 72%);
+  border: 2px solid #fff; box-shadow: 0 0 0 3px var(--azulc), 0 6px 20px -6px rgba(31,78,121,.35);
+}
+.l-doctora-emblema { width: 78px; height: 78px; }
+.l-doctora-texto { max-width: 640px; }
+.l-doctora h2 { font-family: "Spectral", serif; color: var(--azul); margin: 0 0 2px; font-size: 1.6rem; }
 .l-doctora-sub {
   font-family: "IBM Plex Sans", sans-serif; font-size: .74rem; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--azul2); margin: 0 0 10px;
+  text-transform: uppercase; color: var(--azul2); margin: 0 0 12px;
 }
-.l-doctora p:last-child { color: var(--tinta2); line-height: 1.6; max-width: 62ch; margin: 0; }
+.l-doctora-texto > p { color: var(--tinta2); line-height: 1.65; margin: 0 0 16px; }
+.l-doctora-focos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.l-doctora-focos li {
+  padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--linea);
+  color: var(--tinta2); font-size: .78rem; font-weight: 600; background: var(--papel);
+}
+
+/* ===== metodología / cartografía auricular ===== */
+.l-metodologia { background: var(--papel); padding-top: 56px; padding-bottom: 56px; }
+.l-metodologia-cab { max-width: 680px; margin: 0 auto 36px; text-align: center; }
+.l-metodologia h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.8rem; margin: 0 0 14px; }
+.l-metodologia-cab p { color: var(--tinta2); line-height: 1.65; margin: 0; }
+.l-metodo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.l-metodo-card {
+  background: #fff; border: 1.5px solid var(--linea); border-radius: var(--radio); padding: 24px 20px;
+}
+.l-metodo-icono {
+  display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px;
+  background: var(--azulc); color: var(--azul); margin-bottom: 14px;
+}
+.l-metodo-icono svg { width: 22px; height: 22px; }
+.l-metodo-card h3 { font-family: "Spectral", serif; color: var(--azul); font-size: 1.08rem; margin: 0 0 8px; }
+.l-metodo-card p { font-size: .88rem; color: var(--tinta2); line-height: 1.55; margin: 0; }
+
+/* ===== feto invertido ===== */
+.l-feto { background: #fff; padding-top: 56px; padding-bottom: 56px; }
+.l-feto-inner { display: grid; grid-template-columns: 1fr 1.15fr; gap: 48px; align-items: center; }
+.l-feto-texto h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.8rem; margin: 0 0 16px; }
+.l-feto-texto p { color: var(--tinta2); line-height: 1.65; margin: 0 0 14px; }
+.l-feto-texto p:last-child { margin-bottom: 0; }
+.l-feto-nota { font-size: .8rem; color: var(--tinta2); font-style: italic; }
+.l-feto-diagrama svg { width: 100%; height: auto; max-height: 480px; }
 
 /* ===== tratamientos ===== */
-.landing .l-tratamientos {
-  text-align: center; padding: 56px 22px; max-width: none;
-}
+.l-tratamientos { background: var(--papel); text-align: center; padding-top: 56px; padding-bottom: 56px; }
 .l-tratamientos h2 {
   font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem;
   max-width: 640px; margin: 0 auto 14px;
@@ -101,11 +151,12 @@
 .l-tratamientos-nota { font-size: .8rem; color: var(--tinta2); max-width: 520px; margin: 0 auto 24px; }
 
 /* ===== proceso ===== */
-.l-proceso { padding: 56px 22px; text-align: center; }
-.l-titulo-centro { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.9rem; margin: 0 0 36px; }
+.l-proceso { background: #fff; padding-top: 56px; padding-bottom: 56px; text-align: center; }
+.l-titulo-centro { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.9rem; margin: 0 0 12px; }
+.l-proceso-sub { color: var(--tinta2); max-width: 580px; margin: 0 auto 36px; line-height: 1.6; }
 .l-pasos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: left; }
 .l-paso {
-  background: #fff; border: 1.5px solid var(--linea); border-radius: var(--radio); padding: 22px 18px;
+  background: var(--papel); border: 1.5px solid var(--linea); border-radius: var(--radio); padding: 22px 18px;
 }
 /* mismo trato que las insignias numeradas del informe PDF (report.mjs .num) -- no un ícono
    genérico, el número de punto/paso es literalmente el mismo lenguaje que ya ve el usuario ahí. */
@@ -117,33 +168,111 @@
 .l-paso h3 { font-family: "Spectral", serif; color: var(--azul); font-size: 1.05rem; margin: 0 0 6px; }
 .l-paso p { font-size: .88rem; color: var(--tinta2); line-height: 1.5; margin: 0; }
 
+.l-metodo-ia {
+  margin-top: 32px; text-align: left; display: grid; gap: 14px;
+  background: var(--azulc); border-radius: var(--radio); padding: 24px 26px;
+  grid-template-columns: auto 1fr;
+}
+.l-metodo-ia h3 {
+  grid-column: 1 / -1; font-family: "Spectral", serif; color: var(--azul); font-size: 1.15rem; margin: 0 0 4px;
+}
+.l-metodo-ia-paso { display: contents; }
+.l-metodo-ia-num {
+  display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; color: var(--azul); font-size: .78rem; font-weight: 700; border: 1.5px solid var(--azul);
+}
+.l-metodo-ia-paso p { margin: 0; font-size: .88rem; color: var(--tinta); line-height: 1.5; align-self: center; }
+
 /* ===== qué incluye ===== */
-.l-incluye { padding: 32px 22px 56px; }
-.l-incluye h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.7rem; margin: 0 0 20px; max-width: 30ch; }
-.l-lista-check { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-width: 52ch; }
+.l-incluye { background: var(--papel); padding-top: 56px; padding-bottom: 56px; }
+.l-incluye-inner { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+.l-incluye h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.8rem; margin: 0 0 10px; }
+.l-incluye-sub { color: var(--tinta2); line-height: 1.6; margin: 0 0 22px; }
+.l-lista-check { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
 .l-lista-check li { position: relative; padding-left: 30px; color: var(--tinta2); line-height: 1.5; }
 .l-lista-check li::before {
   content: "✓"; position: absolute; left: 0; top: -1px; width: 20px; height: 20px; border-radius: 50%;
   background: var(--ok, #2c6a4b); color: #fff; font-size: .72rem; font-weight: 700; display: grid; place-items: center;
 }
 
+/* maqueta decorativa del PDF -- solo CSS, sin depender de una captura real */
+.l-doc-mock {
+  background: #fff; border: 1.5px solid var(--linea); border-radius: var(--radio);
+  box-shadow: 0 16px 40px -18px rgba(18,36,59,.35); padding: 18px; max-width: 300px; margin: 0 auto;
+}
+.l-doc-mock-cab { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.l-doc-mock-punto { width: 22px; height: 22px; border-radius: 50%; background: var(--azul); flex: none; }
+.l-doc-mock-linea { height: 8px; border-radius: 4px; background: var(--linea); }
+.l-doc-mock-linea.corta { width: 55%; }
+.l-doc-mock-cab .l-doc-mock-linea { flex: 1; height: 10px; }
+.l-doc-mock-body { display: grid; gap: 8px; margin-bottom: 16px; }
+.l-doc-mock-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.l-doc-mock-chip { padding: 4px 10px; border-radius: 999px; background: var(--azulc); color: var(--azul); font-size: .68rem; font-weight: 700; }
+.l-doc-mock-chip.ocre { background: #f1e3d9; color: var(--ocre); }
+
 /* ===== disclaimer band ===== */
-.landing .l-disclaimer { max-width: none; background: var(--azulc); padding: 28px 22px; }
+.l-disclaimer { background: var(--azulc); padding-top: 28px; padding-bottom: 28px; }
 .l-disclaimer p { max-width: 720px; margin: 0 auto; text-align: center; color: var(--tinta); font-size: .9rem; line-height: 1.6; }
 
 /* ===== cta final ===== */
-.l-cta-final { text-align: center; padding: 64px 22px; }
-.l-cta-final h2 { font-family: "Spectral", serif; color: var(--tinta); font-size: 1.9rem; margin: 0 0 22px; }
+.l-cta-final { background: var(--tinta); text-align: center; padding-top: 64px; padding-bottom: 64px; }
+.l-cta-final h2 { font-family: "Spectral", serif; color: #fff; font-size: 1.9rem; margin: 0 0 10px; }
+.l-cta-final p { color: #b9c6da; margin: 0 0 26px; }
+.l-cta-final .l-boton { background: #fff; color: var(--tinta); border-color: #fff; }
+.l-cta-final .l-boton:hover { background: var(--azulc); border-color: var(--azulc); }
+
+/* ===== footer ===== */
+.l-footer { background: #0d1b2e; color: #b9c6da; padding-top: 48px; padding-bottom: 24px; }
+.l-footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 40px; padding-bottom: 32px; }
+.l-footer-marca { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-bottom: 12px; }
+.l-footer-marca img { width: 30px; height: 30px; }
+.l-footer-marca span {
+  font-family: "Spectral", Georgia, serif; font-weight: 700; font-size: 1.1rem; color: #fff;
+}
+.l-footer-desc { font-size: .84rem; line-height: 1.6; max-width: 34ch; margin: 0; color: #93a4bd; }
+.l-footer h4 {
+  color: #fff; font-family: "IBM Plex Sans", sans-serif; font-size: .78rem; letter-spacing: .1em;
+  text-transform: uppercase; margin: 0 0 14px; font-weight: 600;
+}
+.l-footer-enlaces { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.l-footer-enlaces a { color: #b9c6da; text-decoration: none; font-size: .88rem; }
+.l-footer-enlaces a:hover { color: #fff; text-decoration: underline; }
+.l-footer-contacto { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.l-footer-contacto a {
+  display: flex; align-items: center; gap: 10px; color: #b9c6da; text-decoration: none; font-size: .86rem;
+}
+.l-footer-contacto a:hover { color: #fff; }
+.l-footer-icono {
+  display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.08); color: #dbe8f4;
+}
+.l-footer-icono svg { width: 16px; height: 16px; }
+.l-footer-contacto a:hover .l-footer-icono { background: var(--azul2); color: #fff; }
+.l-footer-base {
+  border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px;
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  font-size: .74rem; color: #7c8ca6;
+}
+.l-footer-base p { margin: 0; max-width: 56ch; line-height: 1.5; }
 
 @media (max-width: 860px) {
-  .l-hero { grid-template-columns: 1fr; padding-top: 20px; }
+  .l-hero-inner { grid-template-columns: 1fr; padding-top: 24px; }
   .l-hero-ilustracion { order: -1; max-width: 260px; margin: 0 auto; }
   .l-hero-texto h1 { font-size: 1.9rem; }
   .l-pasos { grid-template-columns: 1fr 1fr; }
   .l-doctora-inner { flex-direction: column; text-align: center; }
-  .l-doctora p:last-child { margin: 0 auto; }
+  .l-doctora-focos { justify-content: center; }
+  .l-metodo-grid { grid-template-columns: 1fr; }
+  .l-feto-inner { grid-template-columns: 1fr; }
+  .l-feto-diagrama { order: -1; max-width: 340px; margin: 0 auto; }
+  .l-incluye-inner { grid-template-columns: 1fr; }
+  .l-doc-mock { margin-top: 8px; }
+  .l-metodo-ia { grid-template-columns: auto 1fr; }
+  .l-footer-grid { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
 }
 @media (max-width: 520px) {
   .l-pasos { grid-template-columns: 1fr; }
   .l-nav-marca span { display: none; }
+  .l-footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .l-footer-base { flex-direction: column; }
 }

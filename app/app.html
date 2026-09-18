@@ -10,19 +10,26 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" />
   <link rel="stylesheet" href="/src/styles.css" />
+  <link rel="stylesheet" href="/src/landing.css" />
 </head>
 <body>
+  <div class="app-shell">
+    <header class="l-nav">
+      <div class="l-nav-inner">
+        <a class="l-nav-marca" href="/">
+          <img src="/logo-emblema.png" alt="" width="34" height="34" />
+          <span>AuriScan</span>
+        </a>
+        <a class="l-nav-cta" href="/#tratamientos">¿Qué más trata la Dra.?</a>
+      </div>
+    </header>
   <main class="app">
     <header class="top">
-      <a class="marca-enlace" href="/" aria-label="Volver a la portada">
-        <img class="marca-logo" src="/logo.svg" alt="Dra. Jakeline Caro — Medicina Integrativa y Salud Digital"
-             onerror="this.onerror=null; this.src='/logo.png'" />
-      </a>
       <h1>AuriScan</h1>
       <p class="lema">Análisis de pabellón auricular</p>
       <p>Sube la foto de un oído y obtén un informe de auriculoterapia. El informe completo se
         descarga en PDF luego de un pago. Material de apoyo — debe ser corroborado por un
-        profesional experto. <a class="enlace-inline" href="/#tratamientos">¿Qué más trata la Dra. Jakeline?</a></p>
+        profesional experto.</p>
       <div id="user-button" class="user-button"></div>
     </header>
 
@@ -127,18 +134,38 @@
     <footer class="app-footer">
       <p class="af-nombre">Dra. Jakeline Caro</p>
       <p class="af-sub">Medicina Integrativa y Salud Digital</p>
-      <p class="af-contacto">
-        <a href="mailto:Medicinaintegrativadrajakeline@gmail.com">Medicinaintegrativadrajakeline@gmail.com</a>
-        <span>·</span>
-        <a href="tel:+573108178456">+57 310 817 8456</a>
-        <span>·</span>
-        <a href="https://www.tiktok.com/@dra.jakeline.acu" target="_blank" rel="noopener">TikTok @dra.jakeline.acu</a>
-      </p>
+      <ul class="af-contacto">
+        <li>
+          <a href="mailto:Medicinaintegrativadrajakeline@gmail.com">
+            <span class="af-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3.5 6.5 12 13 20.5 6.5"/></svg>
+            </span>
+            Medicinaintegrativadrajakeline@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="https://wa.me/573108178456?text=Hola%20Dra.%20Jakeline%2C%20quiero%20agendar%20una%20consulta." target="_blank" rel="noopener">
+            <span class="af-icono">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.24 2 11.5c0 1.86.54 3.6 1.48 5.08L2 22l5.6-1.43A10.6 10.6 0 0 0 12 21c5.52 0 10-4.24 10-9.5S17.52 2 12 2Zm0 17.2c-1.6 0-3.1-.44-4.38-1.2l-.31-.18-3.32.85.89-3.2-.2-.33A7.9 7.9 0 0 1 3.8 11.5C3.8 7.2 7.46 3.8 12 3.8s8.2 3.4 8.2 7.7-3.66 7.7-8.2 7.7Zm4.46-5.77c-.24-.12-1.44-.7-1.66-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.37-1.94-1.18-.72-.62-1.2-1.39-1.34-1.63-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.28-.74-1.75-.2-.46-.4-.4-.54-.4h-.46c-.16 0-.42.06-.64.3-.22.24-.84.8-.84 1.96 0 1.16.86 2.28.98 2.44.12.16 1.7 2.56 4.12 3.6.58.24 1.02.38 1.38.5.58.18 1.1.16 1.52.1.46-.07 1.44-.58 1.64-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg>
+            </span>
+            WhatsApp: +57 310 817 8456
+          </a>
+        </li>
+        <li>
+          <a href="https://www.tiktok.com/@dra.jakeline.acu" target="_blank" rel="noopener">
+            <span class="af-icono">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.2v13.4a2.7 2.7 0 1 1-2.3-2.67V9.9a5.9 5.9 0 1 0 5.5 5.9V8.53a7.4 7.4 0 0 0 4.3 1.37V6.7a4.2 4.2 0 0 1-4.3-4.2V2Z"/></svg>
+            </span>
+            TikTok @dra.jakeline.acu
+          </a>
+        </li>
+      </ul>
       <p class="af-disclaimer">Material de apoyo de carácter educativo. Debe ser corroborado por un
         profesional experto mediante exploración directa; no constituye un diagnóstico ni sustituye el
         juicio clínico.</p>
     </footer>
   </main>
+  </div>
 
   <script type="module" src="/src/main.mjs"></script>
 </body>

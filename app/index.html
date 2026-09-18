@@ -17,119 +17,289 @@
   <div class="landing">
 
     <header class="l-nav">
-      <a class="l-nav-marca" href="/">
-        <img src="/logo-emblema.png" alt="" width="34" height="34" />
-        <span>AuriScan</span>
-      </a>
-      <a class="l-nav-cta" href="/app">Analizar mi oreja</a>
+      <div class="l-nav-inner">
+        <a class="l-nav-marca" href="/">
+          <img src="/logo-emblema.png" alt="" width="34" height="34" />
+          <span>AuriScan</span>
+        </a>
+        <a class="l-nav-cta" href="/app">Analizar mi oreja</a>
+      </div>
     </header>
 
     <!-- ===== hero ===== -->
     <section class="l-hero">
-      <div class="l-hero-texto">
-        <h1>Tu oreja tiene información sobre tu bienestar.<br>Léela en minutos.</h1>
-        <p class="l-hero-sub">Sube una foto de tu pabellón auricular y recibe un análisis orientativo,
-          basado en la cartografía auricular de Paul Nogier — el primer paso antes de tu consulta
-          con la <b>Dra. Jakeline Caro</b>.</p>
-        <div class="l-hero-botones">
-          <a class="primario l-boton" href="/app">Analizar mi oreja</a>
-          <a class="l-enlace-secundario" href="#proceso">Ver cómo funciona ↓</a>
+      <div class="l-inner l-hero-inner">
+        <div class="l-hero-texto">
+          <h1>Tu oreja tiene información sobre tu bienestar.<br>Léela en minutos.</h1>
+          <p class="l-hero-sub">Sube una foto de tu pabellón auricular y recibe un análisis orientativo,
+            basado en la cartografía auricular de Paul Nogier — el primer paso antes de tu consulta
+            con la <b>Dra. Jakeline Caro</b>.</p>
+          <div class="l-hero-botones">
+            <a class="primario l-boton" href="/app">Analizar mi oreja</a>
+            <a class="l-enlace-secundario" href="#proceso">Ver cómo funciona ↓</a>
+          </div>
+          <p class="l-hero-nota">Material educativo y orientativo — no reemplaza una consulta médica.</p>
+          <ul class="l-hero-badges">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.5 3 7.4 7.5 9 4.5-1.6 7.5-4.5 7.5-9V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>Basado en cartografía auricular</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.5 3 7.4 7.5 9 4.5-1.6 7.5-4.5 7.5-9V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>Respaldo clínico de la Dra. Jakeline Caro</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.5 3 7.4 7.5 9 4.5-1.6 7.5-4.5 7.5-9V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>Informe en PDF, el mismo día</li>
+          </ul>
         </div>
-        <p class="l-hero-nota">Material educativo y orientativo — no reemplaza una consulta médica.</p>
-      </div>
-      <div class="l-hero-ilustracion" aria-hidden="true">
-        <svg viewBox="0 0 360 560" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="l-piel" cx="42%" cy="38%" r="72%">
-              <stop offset="0%" stop-color="#eef4fb" /><stop offset="100%" stop-color="#dae7f4" />
-            </radialGradient>
-          </defs>
-          <path d="M138,26 C78,34 46,110 44,200 C42,286 52,372 84,446 C104,494 142,528 186,522 C232,516 250,470 242,420 C236,388 214,368 214,368 C266,372 288,300 262,252 C286,214 276,132 240,92 C210,58 182,20 138,26 Z"
-            fill="url(#l-piel)" stroke="#1f4e79" stroke-width="3" />
-          <g class="l-punto" style="--r:0s"><circle cx="130" cy="160" r="11" fill="#1f4e79" /></g>
-          <g class="l-punto" style="--r:.6s"><circle cx="195" cy="115" r="9" fill="#2e6da8" /></g>
-          <g class="l-punto" style="--r:1.2s"><circle cx="120" cy="330" r="10" fill="#9c5628" /></g>
-          <g class="l-punto" style="--r:1.8s"><circle cx="225" cy="290" r="8" fill="#2c6a4b" /></g>
-        </svg>
+        <div class="l-hero-ilustracion" aria-hidden="true">
+          <svg viewBox="0 0 360 560" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="l-piel" cx="42%" cy="38%" r="72%">
+                <stop offset="0%" stop-color="#eef4fb" /><stop offset="100%" stop-color="#dae7f4" />
+              </radialGradient>
+            </defs>
+            <path d="M138,26 C78,34 46,110 44,200 C42,286 52,372 84,446 C104,494 142,528 186,522 C232,516 250,470 242,420 C236,388 214,368 214,368 C266,372 288,300 262,252 C286,214 276,132 240,92 C210,58 182,20 138,26 Z"
+              fill="url(#l-piel)" stroke="#1f4e79" stroke-width="3" />
+            <g class="l-punto" style="--r:0s"><circle cx="130" cy="160" r="11" fill="#1f4e79" /></g>
+            <g class="l-punto" style="--r:.6s"><circle cx="195" cy="115" r="9" fill="#2e6da8" /></g>
+            <g class="l-punto" style="--r:1.2s"><circle cx="120" cy="330" r="10" fill="#9c5628" /></g>
+            <g class="l-punto" style="--r:1.8s"><circle cx="225" cy="290" r="8" fill="#2c6a4b" /></g>
+          </svg>
+        </div>
       </div>
     </section>
 
     <!-- ===== sobre la doctora ===== -->
     <section class="l-doctora">
-      <div class="l-doctora-inner">
-        <img class="l-doctora-emblema" src="/logo-emblema.png" alt="" />
-        <div>
+      <div class="l-inner l-doctora-inner">
+        <div class="l-doctora-marco">
+          <img class="l-doctora-emblema" src="/logo-emblema.png" alt="" />
+        </div>
+        <div class="l-doctora-texto">
           <h2>Dra. Jakeline Caro</h2>
           <p class="l-doctora-sub">Medicina Integrativa y Salud Digital</p>
-          <p>Médica especializada en medicina integrativa, que combina la consulta clínica tradicional
-            con herramientas digitales de apoyo — como este análisis auricular — para que cada paciente
-            llegue a su cita con más información sobre su propio cuerpo.</p>
+          <p>Médica con práctica clínica enfocada en medicina integrativa: acupuntura y
+            auriculoterapia, neuromodulación y salud digital. Atiende con frecuencia consultas por
+            ansiedad, dolor y manejo de peso, combinando la exploración clínica tradicional con
+            herramientas digitales — como este análisis — para que cada paciente llegue a su cita
+            con más información sobre su propio cuerpo.</p>
+          <ul class="l-doctora-focos">
+            <li>Medicina integrativa</li>
+            <li>Acupuntura y auriculoterapia</li>
+            <li>Neuromodulación</li>
+            <li>Salud digital</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== metodología / cartografía auricular ===== -->
+    <section class="l-metodologia" id="metodologia">
+      <div class="l-inner">
+        <div class="l-metodologia-cab">
+          <h2>La base clínica del análisis</h2>
+          <p>AuriScan no inventa un método propio. Se apoya en la <b>cartografía auricular</b> que
+            el neurólogo francés Paul Nogier describió a mediados del siglo XX: la observación de que
+            cada zona del pabellón auricular se corresponde con una región o función del cuerpo. Desde
+            entonces, generaciones de auriculoterapeutas han documentado y refinado ese mapa en la
+            práctica clínica — ese es el marco de referencia sobre el que trabaja la IA, no un
+            diagnóstico improvisado.</p>
+        </div>
+        <div class="l-metodo-grid">
+          <div class="l-metodo-card">
+            <div class="l-metodo-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            </div>
+            <h3>Cartografía auricular</h3>
+            <p>El pabellón auricular funciona como un mapa somatotópico: cada relieve, surco y zona se
+              corresponde con una región o sistema del cuerpo — el hallazgo central de Nogier que dio
+              origen a la auriculoterapia moderna.</p>
+          </div>
+          <div class="l-metodo-card">
+            <div class="l-metodo-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Semiología clínica</h3>
+            <p>Color, relieve, textura, descamación y vascularización de cada zona son señales
+              indirectas — no un diagnóstico por sí solas, igual que las observaría un
+              auriculoterapeuta durante la consulta.</p>
+          </div>
+          <div class="l-metodo-card">
+            <div class="l-metodo-icono">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1Z"/><path d="M9 11h6M9 14.5h6M9 17.5h3"/></svg>
+            </div>
+            <h3>Protocolos por condición</h3>
+            <p>Un índice clínico de más de 20 categorías — digestivo, musculoesquelético, hormonal,
+              nervioso y más — conecta cada hallazgo con los puntos que la Dra. Jakeline usaría en
+              consulta.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== feto invertido ===== -->
+    <section class="l-feto" id="feto-invertido">
+      <div class="l-inner l-feto-inner">
+        <div class="l-feto-texto">
+          <h2>¿Por qué la oreja funciona como un mapa del cuerpo?</h2>
+          <p>Nogier describió el pabellón auricular como si contuviera un <b>feto invertido</b>: la
+            cabeza se proyecta hacia el lóbulo, en la parte más baja del oído, la columna recorre el
+            antihélix en el centro, y las extremidades se ubican en las fosas superiores — con los
+            pies y las caderas en la parte más alta.</p>
+          <p>Ese patrón, hoy conocido como <b>somatotopía auricular</b>, es la base geométrica de toda
+            la cartografía: no son puntos sueltos al azar, sino la proyección ordenada de un cuerpo
+            completo sobre la superficie del oído.</p>
+          <p class="l-feto-nota">Esquema orientativo de correspondencia — no reemplaza la exploración
+            clínica.</p>
+        </div>
+        <div class="l-feto-diagrama" aria-hidden="true">
+          <svg viewBox="-110 -20 580 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama del feto invertido sobre el pabellón auricular">
+            <defs>
+              <radialGradient id="l-piel3" cx="42%" cy="38%" r="72%">
+                <stop offset="0%" stop-color="#eef4fb" /><stop offset="100%" stop-color="#dae7f4" />
+              </radialGradient>
+            </defs>
+            <path d="M138,26 C78,34 46,110 44,200 C42,286 52,372 84,446 C104,494 142,528 186,522 C232,516 250,470 242,420 C236,388 214,368 214,368 C266,372 288,300 262,252 C286,214 276,132 240,92 C210,58 182,20 138,26 Z"
+              fill="url(#l-piel3)" stroke="#1f4e79" stroke-width="3" />
+
+            <line x1="158" y1="146" x2="30" y2="60" stroke="#9c5628" stroke-width="1.5" />
+            <circle cx="158" cy="146" r="7" fill="#9c5628" />
+            <text x="22" y="56" text-anchor="end" font-family="IBM Plex Sans, sans-serif" font-size="18" font-weight="600" fill="#12243b">Piernas</text>
+            <text x="22" y="76" text-anchor="end" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#4b5972">fosa triangular</text>
+
+            <line x1="101" y1="196" x2="-40" y2="206" stroke="#2e6da8" stroke-width="1.5" />
+            <circle cx="101" cy="196" r="7" fill="#2e6da8" />
+            <text x="-48" y="202" text-anchor="end" font-family="IBM Plex Sans, sans-serif" font-size="18" font-weight="600" fill="#12243b">Brazo</text>
+            <text x="-48" y="222" text-anchor="end" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#4b5972">fosa escafoidea</text>
+
+            <line x1="151" y1="280" x2="360" y2="250" stroke="#1f4e79" stroke-width="1.5" />
+            <circle cx="151" cy="280" r="7" fill="#1f4e79" />
+            <text x="368" y="246" text-anchor="start" font-family="IBM Plex Sans, sans-serif" font-size="18" font-weight="600" fill="#12243b">Columna</text>
+            <text x="368" y="266" text-anchor="start" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#4b5972">antihélix</text>
+
+            <line x1="166" y1="336" x2="360" y2="370" stroke="#2c6a4b" stroke-width="1.5" />
+            <circle cx="166" cy="336" r="7" fill="#2c6a4b" />
+            <text x="368" y="366" text-anchor="start" font-family="IBM Plex Sans, sans-serif" font-size="18" font-weight="600" fill="#12243b">Vísceras</text>
+            <text x="368" y="386" text-anchor="start" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#4b5972">concha</text>
+
+            <line x1="202" y1="482" x2="360" y2="500" stroke="#9c5628" stroke-width="1.5" />
+            <circle cx="202" cy="482" r="7" fill="#9c5628" />
+            <text x="368" y="496" text-anchor="start" font-family="IBM Plex Sans, sans-serif" font-size="18" font-weight="600" fill="#12243b">Cabeza</text>
+            <text x="368" y="516" text-anchor="start" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="#4b5972">lóbulo</text>
+          </svg>
         </div>
       </div>
     </section>
 
     <!-- ===== tratamientos ===== -->
     <section class="l-tratamientos" id="tratamientos">
-      <h2>Motivos de consulta frecuentes en auriculoterapia</h2>
-      <p class="l-tratamientos-sub">Además del análisis con IA, la Dra. Jakeline Caro atiende en
-        consulta con auriculoterapia como parte de un enfoque integrativo. Algunos de los motivos
-        más comunes:</p>
-      <ul class="l-chips">
-        <li>Estrés, ansiedad y sueño</li>
-        <li class="l-chip-ocre">Dolor de espalda, articular y migraña</li>
-        <li>Salud digestiva</li>
-        <li class="l-chip-ocre">Alergias, piel y cabello</li>
-        <li>Salud hormonal y femenina</li>
-        <li class="l-chip-ocre">Dejar de fumar y control de peso</li>
-        <li>Respiración, nariz y garganta</li>
-        <li class="l-chip-ocre">Corazón y circulación</li>
-        <li>Oído, vista y equilibrio</li>
-        <li class="l-chip-ocre">Sistema nervioso</li>
-        <li>Riñones y vías urinarias</li>
-      </ul>
-      <p class="l-tratamientos-nota">Cada tratamiento se define en consulta, según tu caso — esta
-        lista es orientativa y no sustituye la valoración médica.</p>
-      <a class="l-boton" href="https://wa.me/573108178456?text=Hola%20Dra.%20Jakeline%2C%20quiero%20agendar%20una%20consulta." target="_blank" rel="noopener">Agenda tu consulta</a>
+      <div class="l-inner">
+        <h2>Motivos de consulta frecuentes en auriculoterapia</h2>
+        <p class="l-tratamientos-sub">Además del análisis con IA, la Dra. Jakeline Caro atiende en
+          consulta con auriculoterapia como parte de un enfoque integrativo. Algunos de los motivos
+          más comunes:</p>
+        <ul class="l-chips">
+          <li>Estrés, ansiedad y sueño</li>
+          <li class="l-chip-ocre">Dolor de espalda, articular y migraña</li>
+          <li>Salud digestiva</li>
+          <li class="l-chip-ocre">Alergias, piel y cabello</li>
+          <li>Salud hormonal y femenina</li>
+          <li class="l-chip-ocre">Dejar de fumar y control de peso</li>
+          <li>Respiración, nariz y garganta</li>
+          <li class="l-chip-ocre">Corazón y circulación</li>
+          <li>Oído, vista y equilibrio</li>
+          <li class="l-chip-ocre">Sistema nervioso</li>
+          <li>Riñones y vías urinarias</li>
+        </ul>
+        <p class="l-tratamientos-nota">Cada tratamiento se define en consulta, según tu caso — esta
+          lista es orientativa y no sustituye la valoración médica.</p>
+        <a class="l-boton" href="https://wa.me/573108178456?text=Hola%20Dra.%20Jakeline%2C%20quiero%20agendar%20una%20consulta." target="_blank" rel="noopener">Agenda tu consulta</a>
+      </div>
     </section>
 
     <!-- ===== proceso ===== -->
     <section class="l-proceso" id="proceso">
-      <h2 class="l-titulo-centro">Cuatro pasos, unos minutos</h2>
+      <div class="l-inner">
+        <h2 class="l-titulo-centro">Cuatro pasos, unos minutos</h2>
+        <p class="l-proceso-sub">Del primer clic al PDF en tu correo, sin salas de espera.</p>
 
-      <div class="l-pasos">
-        <div class="l-paso">
-          <span class="l-paso-num">1</span>
-          <h3>Sube tu foto</h3>
-          <p>Una foto lateral de tu oído, con buena luz. Te decimos si hace falta más nitidez antes de analizar.</p>
+        <div class="l-pasos">
+          <div class="l-paso">
+            <span class="l-paso-num">1</span>
+            <h3>Sube tu foto</h3>
+            <p>Una foto lateral de tu oído, con buena luz. Te decimos si hace falta más nitidez antes de analizar.</p>
+          </div>
+          <div class="l-paso">
+            <span class="l-paso-num">2</span>
+            <h3>La IA la examina</h3>
+            <p>Recorre color, relieve y textura de cada zona, cruzándolo con la cartografía auricular de Nogier.</p>
+          </div>
+          <div class="l-paso">
+            <span class="l-paso-num">3</span>
+            <h3>Recibes tu resumen</h3>
+            <p>Un diagnóstico orientativo y los sistemas del cuerpo implicados, al instante en pantalla.</p>
+          </div>
+          <div class="l-paso">
+            <span class="l-paso-num">4</span>
+            <h3>Descarga y agenda</h3>
+            <p>El informe completo en PDF, con puntos y protocolo — y un enlace directo para agendar tu cita.</p>
+          </div>
         </div>
-        <div class="l-paso">
-          <span class="l-paso-num">2</span>
-          <h3>La IA la examina</h3>
-          <p>Recorre color, relieve y textura de cada zona, cruzándolo con la cartografía auricular de Nogier.</p>
-        </div>
-        <div class="l-paso">
-          <span class="l-paso-num">3</span>
-          <h3>Recibes tu resumen</h3>
-          <p>Un diagnóstico orientativo y los sistemas del cuerpo implicados, al instante en pantalla.</p>
-        </div>
-        <div class="l-paso">
-          <span class="l-paso-num">4</span>
-          <h3>Descarga y agenda</h3>
-          <p>El informe completo en PDF, con puntos y protocolo — y un enlace directo para agendar tu cita.</p>
+
+        <div class="l-metodo-ia">
+          <h3>¿Cómo llega la IA a un resultado?</h3>
+          <div class="l-metodo-ia-paso">
+            <span class="l-metodo-ia-num">1</span>
+            <p>Examina la imagen de forma sistemática, zona por zona — hélix, antihélix, concha,
+              trago, lóbulo — igual que lo haría un ojo clínico entrenado.</p>
+          </div>
+          <div class="l-metodo-ia-paso">
+            <span class="l-metodo-ia-num">2</span>
+            <p>Identifica señales visuales — cambios de color, relieve, textura o marcas puntuales —
+              sin nombrar puntos de acupuntura todavía.</p>
+          </div>
+          <div class="l-metodo-ia-paso">
+            <span class="l-metodo-ia-num">3</span>
+            <p>Cruza esas señales con la cartografía y la semiología de referencia para proponer qué
+              sistemas del cuerpo podrían estar implicados.</p>
+          </div>
+          <div class="l-metodo-ia-paso">
+            <span class="l-metodo-ia-num">4</span>
+            <p>Redacta el resumen y el protocolo sugerido siempre como hipótesis orientativa — nunca
+              como un diagnóstico cerrado.</p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ===== qué incluye ===== -->
     <section class="l-incluye">
-      <div>
-        <h2>Qué vas a encontrar en tu PDF</h2>
-        <ul class="l-lista-check">
-          <li>Diagnóstico orientativo y sistemas del cuerpo implicados</li>
-          <li>Puntos auriculares observados o propuestos, con su ubicación</li>
-          <li>Mapa de referencia de la oreja analizada</li>
-          <li>Pronóstico estimado y sugerencias de seguimiento</li>
-        </ul>
+      <div class="l-inner l-incluye-inner">
+        <div>
+          <h2>Qué vas a encontrar en tu PDF</h2>
+          <p class="l-incluye-sub">El mismo criterio con el que la Dra. Jakeline trabaja en consulta,
+            en un documento que puedes llevar contigo o mostrarle a tu médico.</p>
+          <ul class="l-lista-check">
+            <li>Diagnóstico orientativo, con el o los sistemas del cuerpo implicados y el nivel de
+              confianza de cada hallazgo</li>
+            <li>Mapa esquemático de tu oreja, con cada punto numerado y ubicado</li>
+            <li>Tabla de puntos observados o propuestos, con su código de referencia y ubicación</li>
+            <li>Hallazgos probables por sistema — digestivo, musculoesquelético, hormonal, nervioso y
+              otros</li>
+            <li>Pronóstico estimado y sugerencias de seguimiento</li>
+          </ul>
+        </div>
+        <div class="l-doc-mock" aria-hidden="true">
+          <div class="l-doc-mock-cab">
+            <div class="l-doc-mock-punto"></div>
+            <div class="l-doc-mock-linea"></div>
+          </div>
+          <div class="l-doc-mock-body">
+            <div class="l-doc-mock-linea"></div>
+            <div class="l-doc-mock-linea corta"></div>
+            <div class="l-doc-mock-chips">
+              <span class="l-doc-mock-chip">Digestivo</span>
+              <span class="l-doc-mock-chip ocre">Musculoesquelético</span>
+            </div>
+            <div class="l-doc-mock-linea"></div>
+            <div class="l-doc-mock-linea"></div>
+            <div class="l-doc-mock-linea corta"></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -143,23 +313,70 @@
 
     <!-- ===== cta final ===== -->
     <section class="l-cta-final">
-      <h2>¿Lista o listo para ver qué dice tu oreja?</h2>
-      <a class="primario l-boton" href="/app">Analizar mi oreja ahora</a>
+      <div class="l-inner">
+        <h2>¿Lista o listo para ver qué dice tu oreja?</h2>
+        <p>Sube tu foto ahora y recibe tu resumen orientativo en minutos.</p>
+        <a class="primario l-boton" href="/app">Analizar mi oreja ahora</a>
+      </div>
     </section>
 
-    <footer class="app-footer">
-      <p class="af-nombre">Dra. Jakeline Caro</p>
-      <p class="af-sub">Medicina Integrativa y Salud Digital</p>
-      <p class="af-contacto">
-        <a href="mailto:Medicinaintegrativadrajakeline@gmail.com">Medicinaintegrativadrajakeline@gmail.com</a>
-        <span>·</span>
-        <a href="tel:+573108178456">+57 310 817 8456</a>
-        <span>·</span>
-        <a href="https://www.tiktok.com/@dra.jakeline.acu" target="_blank" rel="noopener">TikTok @dra.jakeline.acu</a>
-      </p>
-      <p class="af-disclaimer">Material de apoyo de carácter educativo. Debe ser corroborado por un
-        profesional experto mediante exploración directa; no constituye un diagnóstico ni sustituye el
-        juicio clínico.</p>
+    <footer class="l-footer">
+      <div class="l-inner">
+        <div class="l-footer-grid">
+          <div>
+            <a class="l-footer-marca" href="/">
+              <img src="/logo-emblema.png" alt="" width="30" height="30" />
+              <span>AuriScan</span>
+            </a>
+            <p class="l-footer-desc">Análisis orientativo de pabellón auricular con IA, de la mano de
+              la Dra. Jakeline Caro — Medicina Integrativa y Salud Digital.</p>
+          </div>
+          <div>
+            <h4>Explorar</h4>
+            <ul class="l-footer-enlaces">
+              <li><a href="/">Inicio</a></li>
+              <li><a href="/#metodologia">Metodología</a></li>
+              <li><a href="/#tratamientos">Tratamientos</a></li>
+              <li><a href="/app">Analizar mi oreja</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Contacto</h4>
+            <ul class="l-footer-contacto">
+              <li>
+                <a href="mailto:Medicinaintegrativadrajakeline@gmail.com">
+                  <span class="l-footer-icono">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3.5 6.5 12 13 20.5 6.5"/></svg>
+                  </span>
+                  Medicinaintegrativadrajakeline@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="https://wa.me/573108178456?text=Hola%20Dra.%20Jakeline%2C%20quiero%20agendar%20una%20consulta." target="_blank" rel="noopener">
+                  <span class="l-footer-icono">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.24 2 11.5c0 1.86.54 3.6 1.48 5.08L2 22l5.6-1.43A10.6 10.6 0 0 0 12 21c5.52 0 10-4.24 10-9.5S17.52 2 12 2Zm0 17.2c-1.6 0-3.1-.44-4.38-1.2l-.31-.18-3.32.85.89-3.2-.2-.33A7.9 7.9 0 0 1 3.8 11.5C3.8 7.2 7.46 3.8 12 3.8s8.2 3.4 8.2 7.7-3.66 7.7-8.2 7.7Zm4.46-5.77c-.24-.12-1.44-.7-1.66-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.37-1.94-1.18-.72-.62-1.2-1.39-1.34-1.63-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.28-.74-1.75-.2-.46-.4-.4-.54-.4h-.46c-.16 0-.42.06-.64.3-.22.24-.84.8-.84 1.96 0 1.16.86 2.28.98 2.44.12.16 1.7 2.56 4.12 3.6.58.24 1.02.38 1.38.5.58.18 1.1.16 1.52.1.46-.07 1.44-.58 1.64-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg>
+                  </span>
+                  WhatsApp: +57 310 817 8456
+                </a>
+              </li>
+              <li>
+                <a href="https://www.tiktok.com/@dra.jakeline.acu" target="_blank" rel="noopener">
+                  <span class="l-footer-icono">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.2v13.4a2.7 2.7 0 1 1-2.3-2.67V9.9a5.9 5.9 0 1 0 5.5 5.9V8.53a7.4 7.4 0 0 0 4.3 1.37V6.7a4.2 4.2 0 0 1-4.3-4.2V2Z"/></svg>
+                  </span>
+                  TikTok @dra.jakeline.acu
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="l-footer-base">
+          <p>Material de apoyo de carácter educativo. Debe ser corroborado por un profesional experto
+            mediante exploración directa; no constituye un diagnóstico ni sustituye el juicio
+            clínico.</p>
+          <p>© 2026 Dra. Jakeline Caro · AuriScan</p>
+        </div>
+      </div>
     </footer>
   </div>
 </body>
