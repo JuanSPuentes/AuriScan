@@ -177,23 +177,30 @@ function actualizarBotonDescarga(pagado) {
 
 $("#descargar").addEventListener("click", async () => {
   if (!informeIdActual) return;
-  if (!$("#descargar").dataset.pagado) return iniciarPago();
-  await descargarPdf();
+  const btn = $("#descargar");
+  if (!btn.dataset.pagado) return iniciarPago(informeIdActual, btn);
+  await descargarPdf(informeIdActual, btn, resumenActual?.caso_id);
 });
 
-async function iniciarPago() {
-  const btn = $("#descargar");
+// informeId y btn son explícitos (no el "actual" del módulo) para poder llamarse también
+// desde cada fila del historial, no solo desde el botón grande de "Informe".
+async function iniciarPago(informeId, btn) {
   btn.disabled = true;
   setEstado("Preparando el pago…");
   try {
     const r = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json", ...(await authHeaders()) },
-      body: JSON.stringify({ informe_id: informeIdActual }),
+      body: JSON.stringify({ informe_id: informeId }),
     });
     const data = await r.json();
     if (!r.ok) throw new Error(data.error || `Error ${r.status}`);
-    if (data.ya_pagado) { actualizarBotonDescarga(true); await descargarPdf(); return; }
+    if (data.ya_pagado) {
+      if (informeId === informeIdActual) actualizarBotonDescarga(true);
+      await descargarPdf(informeId, btn);
+      renderHistorial();
+      return;
+    }
     window.location.href = data.url; // redirige a Wompi
   } catch (err) {
     setEstado("No se pudo iniciar el pago: " + err.message, true);
@@ -201,15 +208,14 @@ async function iniciarPago() {
   }
 }
 
-async function descargarPdf() {
-  const btn = $("#descargar");
+async function descargarPdf(informeId, btn, nombreSugerido) {
   btn.disabled = true;
   setEstado("Generando el PDF…");
   try {
     const r = await fetch("/api/pdf", {
       method: "POST",
       headers: { "Content-Type": "application/json", ...(await authHeaders()) },
-      body: JSON.stringify({ informe_id: informeIdActual }),
+      body: JSON.stringify({ informe_id: informeId }),
     });
     if (!r.ok) {
       const data = await r.json().catch(() => ({}));
@@ -219,7 +225,7 @@ async function descargarPdf() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${(resumenActual?.caso_id || "informe-auricular").replace(/[^\w.-]/g, "")}.pdf`;
+    a.download = `${(nombreSugerido || "informe-auricular").replace(/[^\w.-]/g, "")}.pdf`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -253,7 +259,7 @@ async function revisarRetornoDePago() {
       actualizarBotonDescarga(true);
       $("#resultado").hidden = false;
       setEstado("Pago aprobado. Descargando el PDF…");
-      await descargarPdf();
+      await descargarPdf(informeIdActual, $("#descargar"), resumenActual?.caso_id);
       renderHistorial();
     } else {
       setEstado("El pago no se aprobó (" + (data.estado_wompi || "desconocido") + "). Intenta de nuevo.", true);
@@ -284,10 +290,16 @@ async function renderHistorial() {
     const items = data.informes || [];
     sec.hidden = items.length === 0;
     ul.innerHTML = items.map((it) => `
-      <li data-id="${it.id}" data-pagado="${it.pagado ? "1" : ""}">
+      <li data-id="${it.id}" data-caso="${it.caso_id || it.id}" data-pagado="${it.pagado ? "1" : ""}">
         <button class="hist-abrir" type="button">
-          <span class="hist-tit">${it.titulo || "Informe auricular"}</span>
-          <span class="hist-meta">${fmtFecha(it.creado_en)} · ${it.modo === "con_agujas" ? "con agujas" : "oreja limpia"} · ${it.pagado ? "pagado" : "sin pagar"}</span>
+          <span class="hist-fila-tit">
+            <span class="hist-tit">${it.titulo || "Informe auricular"}</span>
+            <span class="hist-badge ${it.pagado ? "pagado" : "sinpagar"}">${it.pagado ? "Pagado" : "Sin pagar"}</span>
+          </span>
+          <span class="hist-meta">${fmtFecha(it.creado_en)} · ${it.modo === "con_agujas" ? "con agujas" : "oreja limpia"}</span>
+        </button>
+        <button class="hist-pago" type="button" data-accion="${it.pagado ? "descargar" : "pagar"}">
+          ${it.pagado ? "Descargar" : "Pagar"}
         </button>
       </li>`).join("");
   } catch { sec.hidden = true; }
@@ -295,9 +307,18 @@ async function renderHistorial() {
 
 $("#hist-lista").addEventListener("click", async (e) => {
   const li = e.target.closest("li");
-  if (!li || !e.target.closest(".hist-abrir")) return;
+  if (!li) return;
+
+  const btnPago = e.target.closest(".hist-pago");
+  if (btnPago) {
+    if (btnPago.dataset.accion === "pagar") await iniciarPago(li.dataset.id, btnPago);
+    else await descargarPdf(li.dataset.id, btnPago, li.dataset.caso);
+    return;
+  }
+
+  if (!e.target.closest(".hist-abrir")) return;
   informeIdActual = li.dataset.id;
-  resumenActual = { caso_id: li.dataset.id };
+  resumenActual = { caso_id: li.dataset.caso };
   actualizarBotonDescarga(!!li.dataset.pagado);
   $("#resumen-titulo").textContent = li.querySelector(".hist-tit").textContent;
   $("#resumen-sistemas").innerHTML = "";

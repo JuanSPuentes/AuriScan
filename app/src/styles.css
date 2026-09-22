@@ -267,8 +267,24 @@ button.enlace {
   padding: 11px 14px; border: 0; background: none; font: inherit; cursor: pointer;
 }
 .hist-abrir:hover { background: var(--azulc); }
+.hist-fila-tit { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .hist-tit { font-weight: 600; color: var(--tinta); font-size: .92rem; }
 .hist-meta { font-size: .78rem; color: var(--tinta2); }
+.hist-badge {
+  flex: none; padding: 2px 9px; border-radius: 999px;
+  font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+}
+.hist-badge.pagado { background: #e1f0e8; color: var(--ok, #2c6a4b); }
+.hist-badge.sinpagar { background: #f1e3d9; color: var(--ocre); }
+.hist-pago {
+  flex: none; border: 0; border-left: 1px solid var(--linea);
+  background: none; font: inherit; font-weight: 700; font-size: .82rem; cursor: pointer;
+  padding: 0 16px; color: var(--azul); white-space: nowrap;
+}
+.hist-pago:hover { background: var(--azulc); }
+.hist-pago[data-accion="descargar"] { color: var(--ok, #2c6a4b); }
+.hist-pago[data-accion="descargar"]:hover { background: #e1f0e8; }
+.hist-pago:disabled { opacity: .5; cursor: default; }
 .hist-del {
   flex: none; width: 42px; border: 0; border-left: 1px solid var(--linea);
   background: none; color: var(--tinta2); font-size: 1rem; cursor: pointer;

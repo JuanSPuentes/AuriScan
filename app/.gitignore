@@ -10,3 +10,4 @@ scripts/e2e-informe.*
 .vercel
 .env*
 !.env.example
+.tools/
