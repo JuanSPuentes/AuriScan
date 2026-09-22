@@ -10,6 +10,8 @@ let consentimiento = false;
 let consentimientoInvestigacion = false;
 let informeIdActual = null;
 let resumenActual = null;
+let historialPedido = false; // clerk.addListener puede disparar varias veces (refresco de
+                              // token, etc.) sin que cambie la sesión -- solo se pide una vez.
 
 const LADO_MIN = 600; // px del lado mayor de la foto original
 
@@ -34,7 +36,14 @@ function actualizarSesion() {
     ? `<span class="user-email">${clerk.user.primaryEmailAddress?.emailAddress || ""}</span>
        <button type="button" id="btn-logout" class="enlace">Cerrar sesión</button>`
     : "";
-  if (conectado) $("#btn-logout").addEventListener("click", () => clerk.signOut());
+  if (conectado) {
+    $("#btn-logout").addEventListener("click", () => clerk.signOut());
+    // el historial vive en el servidor: hay que pedirlo también al entrar con una sesión ya
+    // iniciada, no solo tras analizar o pagar en esta visita.
+    if (!historialPedido) { historialPedido = true; renderHistorial(); }
+  } else {
+    historialPedido = false;
+  }
 }
 clerk.addListener(actualizarSesion);
 actualizarSesion();
