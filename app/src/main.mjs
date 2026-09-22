@@ -247,12 +247,13 @@ async function descargarPdf(informeId, btn, nombreSugerido) {
   }
 }
 
-// --- vuelta desde Wompi: /?informe_id=...&id=<transaccion>&env=... -----
+// --- vuelta desde Wompi: /app?id=<transaccion>&env=... -----
+// No dependemos de un informe_id propio en esta URL (checkout.mjs ya no lo manda): el
+// backend resuelve el informe a partir de la referencia guardada junto con el pago.
 async function revisarRetornoDePago() {
   const qs = new URLSearchParams(location.search);
-  const informeId = qs.get("informe_id");
   const transaccionId = qs.get("id");
-  if (!informeId || !transaccionId) return;
+  if (!transaccionId) return;
   history.replaceState({}, "", location.pathname); // limpia la URL
 
   setEstado("Confirmando el pago…");

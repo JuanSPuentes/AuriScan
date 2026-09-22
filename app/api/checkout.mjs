@@ -27,8 +27,13 @@ export default async function handler(req, res) {
     const referencia = `pdf-${informe_id}-${randomBytes(4).toString("hex")}`;
     const origen = process.env.APP_ORIGIN;
     if (!origen) throw new Error("Falta APP_ORIGIN.");
-    // vuelve a /app (la herramienta), no a "/" -- ahí es donde vive el manejo del retorno de pago.
-    const redirectUrl = `${origen}/app?informe_id=${informe_id}`;
+    // vuelve a /app (la herramienta) SIN query string propio -- la doc de Wompi solo muestra
+    // cómo agrega "?id=<transaccion>" cuando el redirect-url no trae ya un "?"; no dice qué
+    // hace si ya existe uno (podría terminar en "...?informe_id=x?id=y", donde "id" deja de
+    // ser una clave real del query string y pago-estado.mjs nunca ve el id de transacción).
+    // No hace falta mandar informe_id acá: pago-estado.mjs ya lo recupera de la base a partir
+    // de la referencia del pago, que sí viaja intacta en el propio registro de Wompi.
+    const redirectUrl = `${origen}/app`;
 
     const { url, montoCentavos, moneda } = urlCheckout({ referencia, redirectUrl });
 
