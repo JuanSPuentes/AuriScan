@@ -70,6 +70,12 @@ body {
   color: var(--azul2);
   margin: 0 0 10px;
 }
+/* fila cabecera+acción dentro de un .paso -- no reutiliza .acciones (esa sí trae su propio
+   estilo de h2, pensado para el título grande del resultado, no para el h2 mono/uppercase
+   de .paso) para no repetir el choque de especificidad que ya mordió esta app antes. */
+.paso-cab-fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.paso-cab-fila h2 { margin: 0; }
+
 .paso-num {
   flex: none;
   display: grid;

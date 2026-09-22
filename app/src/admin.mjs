@@ -29,6 +29,36 @@ actualizarSesion();
 
 $("#btn-login").addEventListener("click", () => clerk.redirectToSignIn({ redirectUrl: window.location.href }));
 
+$("#btn-excel").addEventListener("click", async () => {
+  const btn = $("#btn-excel");
+  btn.disabled = true;
+  const textoOriginal = btn.textContent;
+  btn.textContent = "Generando…";
+  try {
+    const r = await fetch("/api/admin-metricas-excel", { headers: await authHeaders() });
+    if (!r.ok) {
+      const data = await r.json().catch(() => ({}));
+      throw new Error(data.error || `Error ${r.status}`);
+    }
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const cd = r.headers.get("Content-Disposition") || "";
+    const nombre = /filename="([^"]+)"/.exec(cd)?.[1] || "auriscan-metricas.xlsx";
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nombre;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  } catch (err) {
+    alert("No se pudo descargar el Excel: " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = textoOriginal;
+  }
+});
+
 function tabla(el, filas, cols) {
   el.innerHTML = `<thead><tr>${cols.map((c) => `<th>${c}</th>`).join("")}</tr></thead>
     <tbody>${filas.length ? filas.map((f) => `<tr>${f.map((v) => `<td>${v}</td>`).join("")}</tr>`).join("")

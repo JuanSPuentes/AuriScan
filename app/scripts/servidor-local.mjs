@@ -31,7 +31,7 @@ if (!existsSync(DIST)) {
   process.exit(1);
 }
 
-const [analizar, pdf, checkout, pagoEstado, pagoWebhook, misInformes, adminMetricas] = await Promise.all([
+const [analizar, pdf, checkout, pagoEstado, pagoWebhook, misInformes, adminMetricas, adminMetricasExcel] = await Promise.all([
   import("../api/analizar.mjs").then((m) => m.default),
   import("../api/pdf.mjs").then((m) => m.default),
   import("../api/checkout.mjs").then((m) => m.default),
@@ -39,11 +39,13 @@ const [analizar, pdf, checkout, pagoEstado, pagoWebhook, misInformes, adminMetri
   import("../api/pago-webhook.mjs").then((m) => m.default),
   import("../api/mis-informes.mjs").then((m) => m.default),
   import("../api/admin-metricas.mjs").then((m) => m.default),
+  import("../api/admin-metricas-excel.mjs").then((m) => m.default),
 ]);
 const RUTAS = {
   "/api/analizar": analizar, "/api/pdf": pdf, "/api/checkout": checkout,
   "/api/pago-estado": pagoEstado, "/api/pago-webhook": pagoWebhook,
   "/api/mis-informes": misInformes, "/api/admin-metricas": adminMetricas,
+  "/api/admin-metricas-excel": adminMetricasExcel,
 };
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",

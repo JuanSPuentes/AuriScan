@@ -28,7 +28,7 @@ for (const v of REQUERIDAS) {
   if (!process.env[v]) console.error(`⚠  Falta ${v} en el entorno.`);
 }
 
-const [analizar, pdf, checkout, pagoEstado, pagoWebhook, misInformes, adminMetricas] = await Promise.all([
+const [analizar, pdf, checkout, pagoEstado, pagoWebhook, misInformes, adminMetricas, adminMetricasExcel] = await Promise.all([
   import("../api/analizar.mjs").then((m) => m.default),
   import("../api/pdf.mjs").then((m) => m.default),
   import("../api/checkout.mjs").then((m) => m.default),
@@ -36,6 +36,7 @@ const [analizar, pdf, checkout, pagoEstado, pagoWebhook, misInformes, adminMetri
   import("../api/pago-webhook.mjs").then((m) => m.default),
   import("../api/mis-informes.mjs").then((m) => m.default),
   import("../api/admin-metricas.mjs").then((m) => m.default),
+  import("../api/admin-metricas-excel.mjs").then((m) => m.default),
 ]);
 
 const RUTAS = {
@@ -46,6 +47,7 @@ const RUTAS = {
   "/api/pago-webhook": pagoWebhook,
   "/api/mis-informes": misInformes,
   "/api/admin-metricas": adminMetricas,
+  "/api/admin-metricas-excel": adminMetricasExcel,
 };
 
 // nginx ya pone client_max_body_size 20m delante, pero este servidor también puede recibir
