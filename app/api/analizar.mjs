@@ -8,6 +8,7 @@ import { chat, imageContent, parseJsonLoose, costo } from "./_lib/alibaba.mjs";
 import { recuperar } from "./_lib/retrieve.mjs";
 import { PROMPT_VISION, SEMIOLOGIA_REF, promptInforme } from "./_lib/prompts.mjs";
 import { validar, avisosVault, sellar, schema } from "./_lib/validate.mjs";
+import { normalizarInforme } from "./_lib/normalizar.mjs";
 import { exigirUsuario } from "./_lib/auth.mjs";
 import { guardarInforme, resumenPublico } from "./_lib/guardar-informe.mjs";
 import { query } from "./_lib/db.mjs";
@@ -121,6 +122,7 @@ export default async function handler(req, res) {
       debug.tiempos[`informe${intento}_ms`] = g.ms;
       try { informe = parseJsonLoose(g.text); corte = false; }
       catch (e) { errores = [String(e.message)]; corte = true; continue; }
+      normalizarInforme(informe);
       const r = validar(informe);
       if (r.ok) { errores = []; break; }
       errores = r.errors;
