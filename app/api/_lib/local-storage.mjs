@@ -4,6 +4,7 @@
 
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { join, dirname, extname } from "node:path";
+import { decodificarFotoDataUrl } from "./imagen.mjs";
 
 const RAIZ = process.env.LOCAL_STORAGE_DIR || "/app/data";
 
@@ -11,12 +12,6 @@ const MIME_POR_EXT = {
   ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png",
   ".webp": "image/webp", ".pdf": "application/pdf",
 };
-
-function bufferDeDataUrl(dataUrl) {
-  const m = /^data:([^;]+);base64,(.+)$/.exec(dataUrl || "");
-  if (!m) throw new Error("dataUrl inválida.");
-  return { buffer: Buffer.from(m[2], "base64"), mime: m[1] };
-}
 
 async function guardar(key, buffer) {
   const ruta = join(RAIZ, key);
@@ -26,8 +21,7 @@ async function guardar(key, buffer) {
 }
 
 export async function subirFoto(informeId, dataUrl) {
-  const { buffer, mime } = bufferDeDataUrl(dataUrl);
-  const ext = mime.split("/")[1] || "jpg";
+  const { buffer, ext } = decodificarFotoDataUrl(dataUrl);
   return guardar(`fotos/${informeId}.${ext}`, buffer);
 }
 

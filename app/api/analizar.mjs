@@ -12,6 +12,8 @@ import { normalizarInforme } from "./_lib/normalizar.mjs";
 import { exigirUsuario } from "./_lib/auth.mjs";
 import { guardarInforme, resumenPublico } from "./_lib/guardar-informe.mjs";
 import { query } from "./_lib/db.mjs";
+import { decodificarFotoDataUrl } from "./_lib/imagen.mjs";
+import { errorInterno } from "./_lib/errores.mjs";
 
 const SCHEMA_TEXT = JSON.stringify(schema, null, 2);
 
@@ -32,7 +34,11 @@ export default async function handler(req, res) {
 
     const { imagen, modo, oreja, consentimiento, consentimientoInvestigacion } =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-    if (!imagen?.startsWith("data:image/")) return res.status(400).json({ error: "Falta 'imagen' (data URL)." });
+    // valida y descarta el MIME/tamaño ANTES de gastar la llamada a la IA -- solo se usa
+    // para validar acá; analizar.mjs sigue mandando el data URL completo (imagen) a
+    // imageContent()/guardarInforme(), decodificarFotoDataUrl() lo vuelve a correr ahí.
+    try { decodificarFotoDataUrl(imagen); }
+    catch (e) { return res.status(400).json({ error: e.message }); }
     if (!["con_agujas", "oreja_limpia"].includes(modo)) return res.status(400).json({ error: "'modo' inválido." });
     if (consentimiento !== true) return res.status(400).json({ error: "Falta el consentimiento para procesar la imagen." });
     if (consentimientoInvestigacion !== true)
@@ -142,7 +148,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ informe_id: informeId, resumen: resumenPublico(informe) });
   } catch (e) {
-    return res.status(500).json({ error: String(e.message || e) });
+    return errorInterno(res, e);
   }
 }
 

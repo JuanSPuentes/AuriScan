@@ -2,6 +2,7 @@
 //   OSS_REGION (ej. "oss-us-east-1"), OSS_BUCKET, OSS_AK_ID, OSS_AK_SECRET
 
 import OSS from "ali-oss";
+import { decodificarFotoDataUrl } from "./imagen.mjs";
 
 let _client;
 function client() {
@@ -19,17 +20,13 @@ function client() {
   return _client;
 }
 
-// dataUrl: "data:image/jpeg;base64,...." o similar -- lo que ya maneja el frontend.
-function bufferDeDataUrl(dataUrl) {
-  const m = /^data:([^;]+);base64,(.+)$/.exec(dataUrl || "");
-  if (!m) throw new Error("dataUrl inválida.");
-  return { buffer: Buffer.from(m[2], "base64"), mime: m[1] };
-}
-
 // Sube una foto (data URL) bajo fotos/<informeId>.<ext> -- devuelve la key guardada.
+// mime ya viene validado contra una lista cerrada (decodificarFotoDataUrl) antes de usarse
+// como Content-Type: si no se validara, un dataUrl con un mime falso ("text/html", etc.)
+// quedaría servible con ese Content-Type desde el bucket -- riesgo de XSS si el objeto se
+// abre directo con una URL firmada.
 export async function subirFoto(informeId, dataUrl) {
-  const { buffer, mime } = bufferDeDataUrl(dataUrl);
-  const ext = mime.split("/")[1] || "jpg";
+  const { buffer, mime, ext } = decodificarFotoDataUrl(dataUrl);
   const key = `fotos/${informeId}.${ext}`;
   await client().put(key, buffer, { headers: { "Content-Type": mime } });
   return key;

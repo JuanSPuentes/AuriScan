@@ -12,6 +12,7 @@ import { construirDocumentoHTML } from "../src/report.mjs";
 import { exigirUsuario } from "./_lib/auth.mjs";
 import { one } from "./_lib/db.mjs";
 import { obtenerComoDataUrl, subirPdf } from "./_lib/storage.mjs";
+import { errorInterno } from "./_lib/errores.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -113,7 +114,7 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "no-store");
     return res.status(200).send(buffer);
   } catch (e) {
-    return res.status(500).json({ error: "No se pudo generar el PDF: " + String(e.message || e) });
+    return errorInterno(res, e, "No se pudo generar el PDF. Intenta de nuevo en unos minutos.");
   } finally {
     if (browser) { try { await browser.close(); } catch {} }
   }

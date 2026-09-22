@@ -3,6 +3,7 @@
 
 import { exigirAdmin } from "./_lib/auth.mjs";
 import { query } from "./_lib/db.mjs";
+import { errorInterno } from "./_lib/errores.mjs";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Usa GET." });
@@ -33,6 +34,6 @@ export default async function handler(req, res) {
       pagos_aprobados: pagos.rows[0],
     });
   } catch (e) {
-    return res.status(500).json({ error: String(e.message || e) });
+    return errorInterno(res, e);
   }
 }

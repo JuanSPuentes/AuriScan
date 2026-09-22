@@ -5,6 +5,7 @@ import { randomBytes } from "node:crypto";
 import { exigirUsuario } from "./_lib/auth.mjs";
 import { one, query } from "./_lib/db.mjs";
 import { urlCheckout } from "./_lib/wompi.mjs";
+import { errorInterno } from "./_lib/errores.mjs";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Usa POST." });
@@ -39,6 +40,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ url, referencia });
   } catch (e) {
-    return res.status(500).json({ error: String(e.message || e) });
+    return errorInterno(res, e);
   }
 }
