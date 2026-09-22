@@ -210,6 +210,12 @@ async function iniciarPago(informeId, btn) {
       renderHistorial();
       return;
     }
+    // sessionStorage porque el viaje a Wompi y de vuelta recarga la página (se pierde
+    // cualquier variable del módulo) pero sigue siendo la misma pestaña -- así
+    // revisarRetornoDePago() sabe si abrir la tarjeta "Informe" (se pagó desde ahí) o
+    // solo actualizar la fila del historial (se pagó desde "Mis informes"), en vez de
+    // mostrar siempre esa tarjeta aunque esté vacía.
+    sessionStorage.setItem("auriscan_pago_origen", btn === $("#descargar") ? "resultado" : "historial");
     window.location.href = data.url; // redirige a Wompi
   } catch (err) {
     setEstado("No se pudo iniciar el pago: " + err.message, true);
@@ -265,11 +271,22 @@ async function revisarRetornoDePago() {
     });
     const data = await r.json();
     if (data.aprobado) {
-      informeIdActual = data.informe_id;
-      actualizarBotonDescarga(true);
-      $("#resultado").hidden = false;
-      setEstado("Pago aprobado. Descargando el PDF…");
-      await descargarPdf(informeIdActual, $("#descargar"), resumenActual?.caso_id);
+      const origenPago = sessionStorage.getItem("auriscan_pago_origen");
+      sessionStorage.removeItem("auriscan_pago_origen");
+      setEstado("Pago aprobado. Descargando tu informe…");
+      if (origenPago === "resultado") {
+        // se pagó desde la tarjeta "Informe" (un análisis hecho en esta misma visita):
+        // sigue mostrándola, ya con el botón en "Descargar".
+        informeIdActual = data.informe_id;
+        actualizarBotonDescarga(true);
+        $("#resultado").hidden = false;
+        await descargarPdf(informeIdActual, $("#descargar"), resumenActual?.caso_id);
+      } else {
+        // se pagó desde una fila de "Mis informes" -- no hay nada que mostrar en la
+        // tarjeta "Informe" (nunca se cargó ningún resumen ahí en esta visita), así
+        // que se queda oculta; solo se descarga el PDF y se refresca la fila.
+        await descargarPdf(data.informe_id, $("#descargar"));
+      }
       renderHistorial();
     } else {
       setEstado("El pago no se aprobó (" + (data.estado_wompi || "desconocido") + "). Intenta de nuevo.", true);
