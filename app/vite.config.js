@@ -34,8 +34,14 @@ export default defineConfig({
         ]
       },
       workbox: {
-        // La app necesita red para /api/analizar; solo cacheamos el shell.
-        navigateFallbackDenylist: [/^\/api\//],
+        // Esto NO es una SPA de una sola página: index.html/app.html/admin.html son 3
+        // páginas reales que nginx sirve por separado (ver nginx.conf). El navigateFallback
+        // de Workbox es un "app shell" pensado para SPAs -- sin excluir /app y /admin,
+        // intercepta CUALQUIER navegación (login con Google, retorno de pago de Wompi, un
+        // refresh...) y sirve el index.html cacheado de la landing en vez de la página real,
+        // una vez el service worker ya está activo (no en la primera visita, que todavía no
+        // lo tiene registrado -- por eso el bug solo se veía "a veces").
+        navigateFallbackDenylist: [/^\/api\//, /^\/app(\?|$)/, /^\/admin(\?|$)/],
         runtimeCaching: [{
           urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\//,
           handler: "CacheFirst",
