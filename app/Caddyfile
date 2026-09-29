@@ -1,0 +1,11 @@
+# HTTPS delante del contenedor "frontend" (nginx) -- Caddy saca y renueva el certificado de
+# Let's Encrypt solo, sin configuración manual. Cambia el dominio si algún día es otro.
+{
+	# opcional pero recomendado: correo de contacto para avisos de Let's Encrypt (expiración,
+	# problemas de renovación). Descomenta y pon un correo real si quieres esos avisos.
+	# email tu-correo@ejemplo.com
+}
+
+auriscan-ia.com, www.auriscan-ia.com {
+	reverse_proxy frontend:80
+}

@@ -41,18 +41,35 @@ nano .env   # llena TODAS las variables -- ver la lista abajo
    bucket (región `us-east-1` para que quede cerca del resto) → RAM → crea un usuario con
    AccessKey y la política `AliyunOSSFullAccess` acotada a ese bucket → pon `STORAGE_DRIVER=oss`
    + las `OSS_*` en el `.env`.
-4. **APP_ORIGIN** — la URL final donde va a vivir la app (ej. `https://auriscan.tudominio.com`
-   si le pones dominio y HTTPS con Certbot/Caddy delante, o `http://<ip-de-la-vm>` mientras
-   tanto). Wompi redirige ahí después del pago -- tiene que ser accesible desde afuera.
+4. **APP_ORIGIN** — la URL final donde va a vivir la app, con HTTPS
+   (ej. `https://auriscan.tudominio.com`). Wompi redirige ahí después del pago, y su firewall
+   **rechaza** cualquier `redirect-url` que apunte a una IP pelada o a `localhost` -- hace
+   falta el dominio con certificado (ver "Caddy / HTTPS" más abajo) antes de poder probar un
+   pago real, aunque el resto de la app (login, análisis) sí funciona sin eso.
 
 ## 5 · Levantar todo
 
 ```bash
 docker compose up -d --build
-docker compose logs -f   # confirma que los 4 contenedores arrancan sin error
+docker compose logs -f   # confirma que los 5 contenedores arrancan sin error
 ```
 
-La base se crea sola la primera vez (aplica `db/schema.sql`). El sitio queda en el puerto 80.
+La base se crea sola la primera vez (aplica `db/schema.sql`).
+
+## 5.1 · Caddy / HTTPS
+
+El compose incluye un servicio `caddy` que saca y renueva el certificado de Let's Encrypt
+solo -- no hay que hacer nada manual, con dos condiciones:
+
+1. El dominio (`APP_ORIGIN` sin el `https://`) tiene que estar en el `Caddyfile` -- ya viene
+   con `auriscan-ia.com` y `www.auriscan-ia.com`; si el dominio cambia, edita ese archivo.
+2. El registro DNS del dominio tiene que apuntar a la IP de la VM **antes** de levantar
+   `caddy` (Let's Encrypt valida el dominio pidiéndole al servidor real, por HTTP, así que si
+   el DNS todavía no resuelve, falla la emisión del certificado).
+3. El firewall de la instancia tiene que tener el puerto **443** abierto además del 80 y el 22.
+
+`frontend` (nginx) ya no publica el puerto 80 al host -- el único punto de entrada público es
+`caddy`, en 80 (redirige a https) y 443.
 
 ## 6 · Quién ve el panel de métricas (`/admin`)
 
@@ -78,9 +95,6 @@ docker compose exec postgres psql -U auriscan -d auriscan \
 
 ## Notas
 
-- HTTPS no viene incluido -- si vas a cobrar de verdad, pon un proxy con Caddy o Nginx +
-  Certbot delante del puerto 80, o usa el balanceador/CDN de Alibaba. Sin HTTPS, Google y
-  Wompi igual pueden bloquear el flujo en producción.
 - El respaldo diario sube a `respaldos/auriscan-<fecha>.dump` en el mismo bucket de OSS.
   Restaurar: `pg_restore --dbname=$DATABASE_URL archivo.dump`.
 - Migrar la base a RDS más adelante: solo cambia `DATABASE_URL` a la del RDS y quita el
