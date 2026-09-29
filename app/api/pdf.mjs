@@ -98,7 +98,10 @@ export default async function handler(req, res) {
     });
     const buffer = Buffer.from(pdf);
 
-    // Queda guardado en OSS para no tener que regenerarlo si lo vuelve a pedir.
+    // Queda guardado (OSS o local según STORAGE_DRIVER) para no tener que regenerarlo si lo
+    // vuelve a pedir. No bloquea la descarga si falla -- la persona ya pagó, no se le puede
+    // negar el PDF por un problema nuestro de guardado -- pero SÍ se registra el error; antes
+    // se tragaba en silencio y un fallo de credenciales/bucket de OSS pasaba desapercibido.
     try {
       const key = await subirPdf(informe_id, buffer);
       await one(
@@ -106,7 +109,9 @@ export default async function handler(req, res) {
          on conflict do nothing returning id`,
         [informe_id, key]
       );
-    } catch { /* no bloquea la descarga si falla el guardado */ }
+    } catch (e) {
+      console.error(`[pdf] no se pudo guardar el PDF de ${informe_id}:`, e.message || e);
+    }
 
     const nombre = String(informe.meta?.caso_id || "informe-auricular").replace(/[^\w.-]/g, "") + ".pdf";
     res.setHeader("Content-Type", "application/pdf");
