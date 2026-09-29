@@ -273,6 +273,11 @@ async function revisarRetornoDePago() {
     if (data.aprobado) {
       const origenPago = sessionStorage.getItem("auriscan_pago_origen");
       sessionStorage.removeItem("auriscan_pago_origen");
+      // primero se refleja el pago (botón/insignia en "Pagado"), y SOLO DESPUÉS se genera
+      // el PDF -- eso sí tarda (Chromium renderizando), y si el orden fuera al revés la
+      // persona ve "sin pagar" varios segundos justo después de pagar, como si no hubiera
+      // funcionado. Confirmar rápido primero, descargar después.
+      renderHistorial();
       setEstado("Pago aprobado. Descargando tu informe…");
       if (origenPago === "resultado") {
         // se pagó desde la tarjeta "Informe" (un análisis hecho en esta misma visita):
@@ -284,10 +289,9 @@ async function revisarRetornoDePago() {
       } else {
         // se pagó desde una fila de "Mis informes" -- no hay nada que mostrar en la
         // tarjeta "Informe" (nunca se cargó ningún resumen ahí en esta visita), así
-        // que se queda oculta; solo se descarga el PDF y se refresca la fila.
+        // que se queda oculta; solo se descarga el PDF.
         await descargarPdf(data.informe_id, $("#descargar"));
       }
-      renderHistorial();
     } else {
       setEstado("El pago no se aprobó (" + (data.estado_wompi || "desconocido") + "). Intenta de nuevo.", true);
     }
