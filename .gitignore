@@ -28,10 +28,14 @@ app/dist/
 app/dev-dist/
 rag/vault-index.json
 rag/context-*.md
-app/api/_lib/vault-index.json
-app/api/_lib/informe.schema.json
-app/api/_lib/coordenadas-oreja.json
-app/public/ejemplo-*.json
+# app/api/_lib/vault-index.json, informe.schema.json, coordenadas-oreja.json y
+# app/public/ejemplo-*.json SÍ van a git (dejaron de estar acá) -- prepare.mjs los regenera
+# desde ../rag y ../contrato en dev local, pero el build de Docker usa un contexto acotado a
+# app/ (docker-compose.yml: context: .) y Dockerfile.backend no corre prepare.mjs, así que en
+# un git clone limpio + docker compose up esos archivos nunca se generaban -- el backend
+# crasheaba con ERR_MODULE_NOT_FOUND en el primer despliegue real. Son deterministas y chicos;
+# si cambia el contenido de rag/ o contrato/, hay que correr `npm run build` local y commitear
+# la diferencia.
 app/scripts/muestra*
 app/scripts/e2e-informe.*
 app/scripts/arq-*
