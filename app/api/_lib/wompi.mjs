@@ -43,18 +43,41 @@ export function urlCheckout({ referencia, redirectUrl }) {
 // esté fijo y no sea explotable como SSRF: igual podría inyectar segmentos de ruta raros).
 const RE_TRANSACCION_ID = /^[A-Za-z0-9-]{1,100}$/;
 
+const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
+
 // Consulta el estado real de una transacción contra la API de Wompi (nunca confiar solo
 // en el parámetro `id` que trae la redirección del navegador).
-export async function consultarTransaccion(transaccionId) {
+//
+// Reintenta solo las fallas del lado de Wompi (5xx o la petición misma fallando por red):
+// ya pasó en producción que Wompi respondió un 500 pasajero justo cuando el navegador volvía
+// del pago, y sin reintento eso le negaba el PDF a alguien que sí había pagado -- quedaba un
+// pago "pendiente" huérfano que solo se podía arreglar a mano. Un 4xx (llave inválida, id mal
+// formado, etc.) no se reintenta: reintentarlo no lo arregla, solo demora el error real.
+export async function consultarTransaccion(transaccionId, intentos = 3) {
   if (!RE_TRANSACCION_ID.test(transaccionId || ""))
     throw new Error("Identificador de transacción inválido.");
   const { WOMPI_PRIVATE_KEY } = process.env;
-  const r = await fetch(`${API_BASE()}/transactions/${transaccionId}`, {
-    headers: WOMPI_PRIVATE_KEY ? { Authorization: `Bearer ${WOMPI_PRIVATE_KEY}` } : {},
-  });
-  if (!r.ok) throw new Error(`Wompi respondió ${r.status} consultando la transacción.`);
-  const { data } = await r.json();
-  return data; // { id, status: "APPROVED"|"DECLINED"|"VOIDED"|"ERROR"|"PENDING", reference, amount_in_cents, ... }
+  let ultimoError;
+  for (let intento = 1; intento <= intentos; intento++) {
+    let r;
+    try {
+      r = await fetch(`${API_BASE()}/transactions/${transaccionId}`, {
+        headers: WOMPI_PRIVATE_KEY ? { Authorization: `Bearer ${WOMPI_PRIVATE_KEY}` } : {},
+      });
+    } catch (e) {
+      ultimoError = e; // falla de red -- sí se reintenta
+      if (intento < intentos) await dormir(400 * intento); // 400ms, 800ms
+      continue;
+    }
+    if (r.ok) {
+      const { data } = await r.json();
+      return data; // { id, status: "APPROVED"|"DECLINED"|"VOIDED"|"ERROR"|"PENDING", reference, amount_in_cents, ... }
+    }
+    if (r.status < 500) throw new Error(`Wompi respondió ${r.status} consultando la transacción.`); // no se reintenta
+    ultimoError = new Error(`Wompi respondió ${r.status} consultando la transacción.`);
+    if (intento < intentos) await dormir(400 * intento);
+  }
+  throw ultimoError;
 }
 
 // comparación en tiempo constante -- un "===" normal filtra por temporización cuánto del
