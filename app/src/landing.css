@@ -336,3 +336,26 @@
   .l-footer-grid { grid-template-columns: 1fr; gap: 28px; }
   .l-footer-base { flex-direction: column; }
 }
+
+/* ===== página legal (política de privacidad, términos) =====
+   Reusa .l-hero para la cabecera (tag + título + intro) -- solo recorta su alto, porque
+   aquí no hay ilustración ni botones. El cuerpo es prosa simple: misma tipografía y
+   colores del resto del sitio, sin tarjetas ni grillas nuevas. */
+.l-legal-hero { padding-bottom: 28px; }
+.l-legal-titulo { font-family: "Spectral", serif; color: var(--tinta); font-size: 2.4rem; margin: 14px 0 10px; line-height: 1.15; }
+.l-legal-fecha { color: var(--tinta2); font-size: .88rem; margin-top: 18px; }
+
+.l-legal-cuerpo { padding-top: 8px; padding-bottom: 64px; }
+.l-legal-contenido { max-width: 760px; }
+.l-legal-contenido h2 {
+  font-family: "Spectral", serif; color: var(--azul); font-size: 1.3rem;
+  margin: 40px 0 14px;
+}
+.l-legal-contenido h2:first-of-type { margin-top: 28px; }
+.l-legal-contenido p { color: var(--tinta); line-height: 1.7; margin: 0 0 14px; }
+.l-legal-contenido ul { margin: 0 0 14px; padding-left: 22px; display: grid; gap: 8px; }
+.l-legal-contenido li { color: var(--tinta); line-height: 1.6; }
+.l-legal-contenido a { color: var(--azul2); }
+@media (max-width: 520px) {
+  .l-legal-titulo { font-size: 1.9rem; }
+}

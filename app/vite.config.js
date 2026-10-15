@@ -12,7 +12,7 @@ export default defineConfig({
   },
   build: {
     target: "es2022",
-    rollupOptions: { input: { landing: "index.html", app: "app.html", admin: "admin.html" } },
+    rollupOptions: { input: { landing: "index.html", app: "app.html", admin: "admin.html", privacidad: "privacidad.html" } },
   },
   plugins: [
     VitePWA({
