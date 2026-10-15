@@ -255,6 +255,17 @@ button.secundario.chico { width: auto; padding: 10px 14px; font-size: .85rem; }
 }
 .tabla-metricas th { background: var(--azulc); color: var(--azul); font-weight: 600; }
 
+.paso-nota { color: var(--tinta2); font-size: .88rem; margin: 0 0 10px; line-height: 1.55; }
+
+/* panel de métricas: formulario para verificar/resolver un pago a mano */
+.form-admin-pago { display: grid; gap: 12px; max-width: 420px; }
+.form-admin-pago label { display: grid; gap: 4px; font-size: .85rem; color: var(--tinta2); font-weight: 500; }
+.form-admin-pago input {
+  font: inherit; padding: 10px 12px; border: 1.5px solid var(--linea); border-radius: 8px; color: var(--tinta);
+}
+.form-admin-pago input:focus { outline: none; border-color: var(--azul2); }
+.form-admin-pago button { width: auto; justify-self: start; }
+
 /* historial */
 .historial { margin-top: 40px; }
 .hist-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }

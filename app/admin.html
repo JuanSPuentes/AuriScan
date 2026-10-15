@@ -60,6 +60,32 @@
         <h2>Puntos más frecuentes</h2>
         <table class="tabla-metricas" id="t-puntos"></table>
       </section>
+
+      <section class="paso">
+        <h2>Pagos pendientes hace más de 15 minutos</h2>
+        <p class="paso-nota">Casi siempre es normal (la persona sigue en el checkout de Wompi
+          o nunca llegó a pagar). Pero si un paciente avisa que <b>sí pagó</b> y no puede
+          descargar su PDF, revisa su fila acá, busca esa <b>referencia</b> en el dashboard de
+          Wompi (comercios.wompi.co → Transacciones) y usa el formulario de abajo con el ID de
+          transacción que te muestre Wompi.</p>
+        <table class="tabla-metricas" id="t-pagos-pendientes"></table>
+      </section>
+
+      <section class="paso">
+        <h2>Verificar / resolver un pago</h2>
+        <p class="paso-nota">Vuelve a consultar el estado real en Wompi antes de cambiar nada
+          acá -- nunca se confía a ciegas en lo que se escriba en este formulario.</p>
+        <form id="form-verificar-pago" class="form-admin-pago">
+          <label>Referencia del pago
+            <input type="text" id="vp-referencia" placeholder="pdf-xxxxxxxx-xxxxxxxx" required />
+          </label>
+          <label>ID de transacción en Wompi
+            <input type="text" id="vp-transaccion" placeholder="ID que muestra el dashboard de Wompi" required />
+          </label>
+          <button type="submit" class="secundario chico">Verificar</button>
+        </form>
+        <p id="vp-resultado" class="estado" hidden></p>
+      </section>
     </div>
 
     <footer class="app-footer">

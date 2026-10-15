@@ -65,6 +65,63 @@ function tabla(el, filas, cols) {
       : `<tr><td colspan="${cols.length}">Sin datos todavía.</td></tr>`}</tbody>`;
 }
 
+function escapar(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+async function cargarPagosPendientes() {
+  try {
+    const r = await fetch("/api/admin-pagos-pendientes", { headers: await authHeaders() });
+    if (!r.ok) return;
+    const data = await r.json();
+    const filas = (data.pagos || []).map((p) => [
+      new Date(p.creado_en).toLocaleString("es-CO"),
+      escapar(p.email),
+      `<code>${escapar(p.referencia)}</code>`,
+      `${(p.monto_centavos / 100).toLocaleString("es-CO")} ${escapar(p.moneda)}`,
+      escapar(p.caso_id || p.informe_id),
+    ]);
+    tabla($("#t-pagos-pendientes"), filas, ["Desde", "Paciente", "Referencia", "Monto", "Informe"]);
+  } catch {
+    // el resto del panel no depende de esto -- si falla, simplemente no se llena la tabla.
+  }
+}
+
+$("#form-verificar-pago").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const referencia = $("#vp-referencia").value.trim();
+  const transaccion_id = $("#vp-transaccion").value.trim();
+  const btn = e.target.querySelector("button[type=submit]");
+  const out = $("#vp-resultado");
+  btn.disabled = true;
+  out.hidden = false;
+  out.classList.remove("error");
+  out.textContent = "Consultando a Wompi…";
+  try {
+    const r = await fetch("/api/admin-pago-verificar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+      body: JSON.stringify({ referencia, transaccion_id }),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || `Error ${r.status}`);
+
+    if (data.estado_nuevo === "aprobado" && data.estado_anterior !== "aprobado") {
+      out.textContent = `Pago confirmado y actualizado a "aprobado". El paciente ya puede descargar su PDF (informe ${data.informe_id}).`;
+    } else if (data.estado_nuevo === data.estado_anterior) {
+      out.textContent = `Wompi dice que esa transacción está en estado "${data.estado_wompi}" -- no cambió nada acá (ya estaba en "${data.estado_anterior}").`;
+    } else {
+      out.textContent = `Actualizado de "${data.estado_anterior}" a "${data.estado_nuevo}" (Wompi: ${data.estado_wompi}).`;
+    }
+    cargarPagosPendientes();
+  } catch (err) {
+    out.classList.add("error");
+    out.textContent = "No se pudo verificar: " + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 async function cargarMetricas() {
   try {
     const r = await fetch("/api/admin-metricas", { headers: await authHeaders() });
@@ -84,6 +141,7 @@ async function cargarMetricas() {
 
     tabla($("#t-sistemas"), data.sistemas_implicados.map((s) => [s.sistema, s.n]), ["Sistema", "Informes"]);
     tabla($("#t-puntos"), data.puntos_mas_frecuentes.map((p) => [p.nombre, p.estado, p.n]), ["Punto", "Estado", "Veces"]);
+    cargarPagosPendientes();
   } catch (err) {
     $("#m-totales").textContent = "Error cargando métricas: " + err.message;
   }
