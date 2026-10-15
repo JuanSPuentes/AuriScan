@@ -45,6 +45,18 @@ const RE_TRANSACCION_ID = /^[A-Za-z0-9-]{1,100}$/;
 
 const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Un intento de GET /transactions/{id} con una llave dada. Devuelve { data } en éxito,
+// o lanza con r.status pegado al error (para que el que llama decida si reintenta).
+async function intentoConsulta(transaccionId, llave) {
+  const r = await fetch(`${API_BASE()}/transactions/${transaccionId}`, {
+    headers: llave ? { Authorization: `Bearer ${llave}` } : {},
+  });
+  if (r.ok) return (await r.json()).data;
+  const e = new Error(`Wompi respondió ${r.status} consultando la transacción.`);
+  e.status = r.status;
+  throw e;
+}
+
 // Consulta el estado real de una transacción contra la API de Wompi (nunca confiar solo
 // en el parámetro `id` que trae la redirección del navegador).
 //
@@ -53,29 +65,41 @@ const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
 // del pago, y sin reintento eso le negaba el PDF a alguien que sí había pagado -- quedaba un
 // pago "pendiente" huérfano que solo se podía arreglar a mano. Un 4xx (llave inválida, id mal
 // formado, etc.) no se reintenta: reintentarlo no lo arregla, solo demora el error real.
+//
+// RESPALDO TEMPORAL (15 oct 2026): la WOMPI_PRIVATE_KEY de producción le hace dar 500 a este
+// endpoint de forma consistente y reproducible (confirmado con curl directo, llave recopiada
+// del dashboard dos veces) -- es un bug del lado de Wompi específico de esta cuenta, reportado
+// a su soporte. Mientras lo arreglan, si los 3 intentos con la privada fallan por 5xx, se
+// reintenta UNA vez con la WOMPI_PUBLIC_KEY (que sí funciona). No afloja la seguridad: quien
+// llama a esto siempre revalida reference/amount_in_cents contra lo guardado antes de aprobar
+// nada, sin importar qué llave trajo los datos. Borrar este respaldo (y el log de aviso) en
+// cuanto Wompi confirme que arregló la llave privada.
 export async function consultarTransaccion(transaccionId, intentos = 3) {
   if (!RE_TRANSACCION_ID.test(transaccionId || ""))
     throw new Error("Identificador de transacción inválido.");
-  const { WOMPI_PRIVATE_KEY } = process.env;
+  const { WOMPI_PRIVATE_KEY, WOMPI_PUBLIC_KEY } = process.env;
   let ultimoError;
   for (let intento = 1; intento <= intentos; intento++) {
-    let r;
     try {
-      r = await fetch(`${API_BASE()}/transactions/${transaccionId}`, {
-        headers: WOMPI_PRIVATE_KEY ? { Authorization: `Bearer ${WOMPI_PRIVATE_KEY}` } : {},
-      });
+      return await intentoConsulta(transaccionId, WOMPI_PRIVATE_KEY);
     } catch (e) {
-      ultimoError = e; // falla de red -- sí se reintenta
+      ultimoError = e;
+      if (e.status && e.status < 500) break; // no se reintenta más veces, pero sí se prueba el respaldo de abajo
       if (intento < intentos) await dormir(400 * intento); // 400ms, 800ms
-      continue;
     }
-    if (r.ok) {
-      const { data } = await r.json();
-      return data; // { id, status: "APPROVED"|"DECLINED"|"VOIDED"|"ERROR"|"PENDING", reference, amount_in_cents, ... }
+  }
+  if (WOMPI_PUBLIC_KEY) {
+    try {
+      const data = await intentoConsulta(transaccionId, WOMPI_PUBLIC_KEY);
+      console.error(
+        `[wompi] RESPALDO: la llave privada falló ${intentos} veces para ${transaccionId}; ` +
+        `se usó la llave pública como último recurso. Revisar con soporte de Wompi por qué ` +
+        `la privada está dando 500 -- esto no debería ser permanente.`
+      );
+      return data;
+    } catch {
+      // si también falla con la pública, se reporta el error original de la privada (más útil).
     }
-    if (r.status < 500) throw new Error(`Wompi respondió ${r.status} consultando la transacción.`); // no se reintenta
-    ultimoError = new Error(`Wompi respondió ${r.status} consultando la transacción.`);
-    if (intento < intentos) await dormir(400 * intento);
   }
   throw ultimoError;
 }
